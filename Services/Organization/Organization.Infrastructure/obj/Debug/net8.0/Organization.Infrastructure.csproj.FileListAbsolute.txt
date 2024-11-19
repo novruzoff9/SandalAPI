@@ -1,0 +1,17 @@
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\obj\Debug\net8.0\Organization.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\obj\Debug\net8.0\Organization.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\obj\Debug\net8.0\Organization.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\obj\Debug\net8.0\Organization.Infrastructure.AssemblyInfo.cs
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\obj\Debug\net8.0\Organization.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\bin\Debug\net8.0\Organization.Infrastructure.deps.json
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\bin\Debug\net8.0\Organization.Infrastructure.dll
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\bin\Debug\net8.0\Organization.Infrastructure.pdb
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\bin\Debug\net8.0\Organization.Application.dll
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\bin\Debug\net8.0\Organization.Domain.dll
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\bin\Debug\net8.0\Organization.Application.pdb
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\bin\Debug\net8.0\Organization.Domain.pdb
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\obj\Debug\net8.0\Organiza.5C5F5D15.Up2Date
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\obj\Debug\net8.0\Organization.Infrastructure.dll
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\obj\Debug\net8.0\refint\Organization.Infrastructure.dll
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\obj\Debug\net8.0\Organization.Infrastructure.pdb
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Infrastructure\obj\Debug\net8.0\ref\Organization.Infrastructure.dll

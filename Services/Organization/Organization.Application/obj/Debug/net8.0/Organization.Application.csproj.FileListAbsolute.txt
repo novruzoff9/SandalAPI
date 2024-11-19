@@ -1,0 +1,12 @@
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\bin\Debug\net8.0\Organization.Application.deps.json
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\bin\Debug\net8.0\Organization.Application.dll
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\bin\Debug\net8.0\Organization.Application.pdb
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\obj\Debug\net8.0\Organization.Application.csproj.AssemblyReference.cache
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\obj\Debug\net8.0\Organization.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\obj\Debug\net8.0\Organization.Application.AssemblyInfoInputs.cache
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\obj\Debug\net8.0\Organization.Application.AssemblyInfo.cs
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\obj\Debug\net8.0\Organization.Application.csproj.CoreCompileInputs.cache
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\obj\Debug\net8.0\Organization.Application.dll
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\obj\Debug\net8.0\refint\Organization.Application.dll
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\obj\Debug\net8.0\Organization.Application.pdb
+C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Application\obj\Debug\net8.0\ref\Organization.Application.dll
