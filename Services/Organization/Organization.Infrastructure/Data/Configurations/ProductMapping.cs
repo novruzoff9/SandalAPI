@@ -17,4 +17,3 @@ public class ProductMapping : BaseEntityMapping<Product>
     }
 }
 
-

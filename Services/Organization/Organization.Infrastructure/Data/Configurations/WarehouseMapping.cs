@@ -9,8 +9,8 @@ public class WarehouseMapping : BaseEntityMapping<Warehouse>
     {
         base.Configure(builder);
         builder.Property(e => e.Name).HasMaxLength(256).IsRequired();
-        builder.Property(e => e.Address).HasMaxLength(256).IsRequired();
         builder.Property(e => e.CompanyID).HasMaxLength(36).IsRequired();
+
 
         builder.HasOne(e => e.Company)
             .WithMany(e => e.Warehouses)

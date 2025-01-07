@@ -8,5 +8,4 @@ public class Shelf : BaseEntity
     public string WarehouseID { get; set; }
     public Warehouse Warehouse { get; set; }
     public List<ShelfProduct> ShelfProducts { get; set; }
-    public int ItemsCount => this.ShelfProducts.Count();
 }

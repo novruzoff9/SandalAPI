@@ -13,7 +13,8 @@ public class ShelfMapping : BaseEntityMapping<Shelf>
 
         builder.HasOne(e => e.Warehouse)
             .WithMany(e => e.Shelves)
-            .HasForeignKey(e => e.WarehouseID);
+            .HasForeignKey(e => e.WarehouseID)
+            .OnDelete(Microsoft.EntityFrameworkCore.DeleteBehavior.NoAction);
     }
 }
 

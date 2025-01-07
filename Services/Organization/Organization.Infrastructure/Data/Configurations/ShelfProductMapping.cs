@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Organization.Domain.Entities;
 
 namespace Organization.Infrastructure.Data.Configurations;
@@ -12,13 +13,17 @@ public class ShelfProductMapping : BaseEntityMapping<ShelfProduct>
         builder.Property(e => e.ProductID).HasMaxLength(36).IsRequired();
         builder.Property(e => e.Quantity).IsRequired();
 
-        builder.HasOne(e => e.Shelf)
-            .WithMany(e => e.ShelfProducts)
-            .HasForeignKey(e => e.ShelfID);
+        builder
+            .HasOne(sp => sp.Shelf)
+            .WithMany(s => s.ShelfProducts)
+            .HasForeignKey(sp => sp.ShelfID)
+            .OnDelete(DeleteBehavior.NoAction);
 
-        builder.HasOne(e => e.Product)
-            .WithMany(e => e.ShelfProducts)
-            .HasForeignKey(e => e.ProductID);
+        builder
+            .HasOne(sp => sp.Product)
+            .WithMany(p => p.ShelfProducts)
+            .HasForeignKey(sp => sp.ProductID)
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }
 

@@ -1,11 +1,12 @@
 {
   "Version": 1,
-  "Hash": "IJB1YUvJIDBqz9+xYqWqth36KIe/RfnfYj3MHvsabY8=",
+  "Hash": "Yb0MvHXLNMQr8D5i0IT8uawwlKaJGxZH4dGO9iNYOlY=",
   "Source": "Organization.WebAPI",
   "BasePath": "_content/Organization.WebAPI",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
   "DiscoveryPatterns": [],
-  "Assets": []
+  "Assets": [],
+  "Endpoints": []
 }

@@ -10,3 +10,16 @@ C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Domain
 C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Domain\obj\Debug\net8.0\refint\Organization.Domain.dll
 C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Domain\obj\Debug\net8.0\Organization.Domain.pdb
 C:\Users\Novruzoff\source\repos\Sandal\Services\Organization\Organization.Domain\obj\Debug\net8.0\ref\Organization.Domain.dll
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\bin\Debug\net8.0\Organization.Domain.deps.json
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\bin\Debug\net8.0\Organization.Domain.dll
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\bin\Debug\net8.0\Organization.Domain.pdb
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\obj\Debug\net8.0\Organization.Domain.csproj.AssemblyReference.cache
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\obj\Debug\net8.0\Organization.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\obj\Debug\net8.0\Organization.Domain.AssemblyInfoInputs.cache
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\obj\Debug\net8.0\Organization.Domain.AssemblyInfo.cs
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\obj\Debug\net8.0\Organization.Domain.csproj.CoreCompileInputs.cache
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\obj\Debug\net8.0\Organization.Domain.sourcelink.json
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\obj\Debug\net8.0\Organization.Domain.dll
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\obj\Debug\net8.0\refint\Organization.Domain.dll
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\obj\Debug\net8.0\Organization.Domain.pdb
+C:\Users\User\Source\Repos\SandalAPI\Services\Organization\Organization.Domain\obj\Debug\net8.0\ref\Organization.Domain.dll
