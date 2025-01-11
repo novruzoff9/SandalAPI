@@ -12,7 +12,16 @@ GET {{base}}/api/employee
 Accept: application/json
 Authorization: Bearer {{token}}
 
-
-
 ###
+
+POST http://localhost:5002/api/product/importfile
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=boundary123
+
+--boundary123
+Content-Disposition: form-data; name="file"; filename="example.xlsx"
+Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+
+< C:\Users\User\Desktop\sandal-impoert-products.xlsx
+--boundary123--
 

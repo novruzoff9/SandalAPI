@@ -21,7 +21,7 @@ public class EditProductCommandHandler : IRequestHandler<EditProduct, bool>
         var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (product == null) { return false; }
-        if (_sharedIdentityService.GetCompanyId != product.CompanyID) { return false; }
+        if (_sharedIdentityService.GetCompanyId != product.CompanyId) { return false; }
 
         product = new Product
         {

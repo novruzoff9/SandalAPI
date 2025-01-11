@@ -3,32 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\User\\source\\repos\\SandalAPI\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.webapi\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|solutionrelative:services\\organization\\organization.webapi\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.webapi\\controllers\\shelfcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|solutionrelative:services\\organization\\organization.webapi\\controllers\\shelfcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.application\\products\\commands\\createproductcommand\\createproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|solutionrelative:services\\organization\\organization.application\\products\\commands\\createproductcommand\\createproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.application\\common\\services\\randomidservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|solutionrelative:services\\organization\\organization.application\\common\\services\\randomidservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.application\\shelves\\queries\\getshelvesquery\\getshelves.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|solutionrelative:services\\organization\\organization.application\\shelves\\queries\\getshelvesquery\\getshelves.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.application\\shelves\\queries\\productsofshelf\\getproductsbyshelf.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|solutionrelative:services\\organization\\organization.application\\shelves\\queries\\productsofshelf\\getproductsbyshelf.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.application\\common\\models\\shelf\\shelfdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|solutionrelative:services\\organization\\organization.application\\common\\models\\shelf\\shelfdto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.webapi\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|solutionrelative:services\\organization\\organization.webapi\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +18,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -46,88 +26,28 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "RandomIdService.cs",
-              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Common\\Services\\RandomIdService.cs",
-              "RelativeDocumentMoniker": "Services\\Organization\\Organization.Application\\Common\\Services\\RandomIdService.cs",
-              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Common\\Services\\RandomIdService.cs",
-              "RelativeToolTip": "Services\\Organization\\Organization.Application\\Common\\Services\\RandomIdService.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAYwAgAAAAjAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "ProductController.cs",
+              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\ProductController.cs",
+              "RelativeDocumentMoniker": "Services\\Organization\\Organization.WebAPI\\Controllers\\ProductController.cs",
+              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\ProductController.cs",
+              "RelativeToolTip": "Services\\Organization\\Organization.WebAPI\\Controllers\\ProductController.cs",
+              "ViewState": "AgIAAFAAAAAAAAAAAAAuwF0AAAAEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-25T20:59:19.56Z"
+              "WhenOpened": "2025-01-10T11:44:15.077Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "CreateProduct.cs",
-              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Products\\Commands\\CreateProductCommand\\CreateProduct.cs",
-              "RelativeDocumentMoniker": "Services\\Organization\\Organization.Application\\Products\\Commands\\CreateProductCommand\\CreateProduct.cs",
-              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Products\\Commands\\CreateProductCommand\\CreateProduct.cs",
-              "RelativeToolTip": "Services\\Organization\\Organization.Application\\Products\\Commands\\CreateProductCommand\\CreateProduct.cs",
-              "ViewState": "AgIAAAsAAAAAAAAAAAA1wBcAAAA2AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-25T20:53:09.11Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ShelfDto.cs",
-              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Common\\Models\\Shelf\\ShelfDto.cs",
-              "RelativeDocumentMoniker": "Services\\Organization\\Organization.Application\\Common\\Models\\Shelf\\ShelfDto.cs",
-              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Common\\Models\\Shelf\\ShelfDto.cs",
-              "RelativeToolTip": "Services\\Organization\\Organization.Application\\Common\\Models\\Shelf\\ShelfDto.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAZAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-25T19:36:17.026Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "OrderController.cs",
-              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\OrderController.cs",
-              "RelativeDocumentMoniker": "Services\\Organization\\Organization.WebAPI\\Controllers\\OrderController.cs",
-              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\OrderController.cs",
-              "RelativeToolTip": "Services\\Organization\\Organization.WebAPI\\Controllers\\OrderController.cs",
-              "ViewState": "AgIAAD4AAAAAAAAAAAAAAFkAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T19:26:56.795Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "GetShelves.cs",
-              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Shelves\\Queries\\GetShelvesQuery\\GetShelves.cs",
-              "RelativeDocumentMoniker": "Services\\Organization\\Organization.Application\\Shelves\\Queries\\GetShelvesQuery\\GetShelves.cs",
-              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Shelves\\Queries\\GetShelvesQuery\\GetShelves.cs",
-              "RelativeToolTip": "Services\\Organization\\Organization.Application\\Shelves\\Queries\\GetShelvesQuery\\GetShelves.cs",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAQwBsAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-09T21:40:06.197Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "GetProductsByShelf.cs",
-              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Shelves\\Queries\\ProductsofShelf\\GetProductsByShelf.cs",
-              "RelativeDocumentMoniker": "Services\\Organization\\Organization.Application\\Shelves\\Queries\\ProductsofShelf\\GetProductsByShelf.cs",
-              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Shelves\\Queries\\ProductsofShelf\\GetProductsByShelf.cs",
-              "RelativeToolTip": "Services\\Organization\\Organization.Application\\Shelves\\Queries\\ProductsofShelf\\GetProductsByShelf.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAQwBMAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-09T21:39:34.966Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "ShelfController.cs",
               "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\ShelfController.cs",
               "RelativeDocumentMoniker": "Services\\Organization\\Organization.WebAPI\\Controllers\\ShelfController.cs",
               "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\ShelfController.cs",
               "RelativeToolTip": "Services\\Organization\\Organization.WebAPI\\Controllers\\ShelfController.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABYAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-09T17:24:36.098Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-09T17:24:36.098Z"
             }
           ]
         }

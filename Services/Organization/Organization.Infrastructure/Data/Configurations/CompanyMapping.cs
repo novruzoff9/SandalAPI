@@ -17,7 +17,7 @@ public class CompanyMapping : BaseEntityMapping<Company>
 
         builder.HasMany(e => e.Products)
             .WithOne(e => e.Company)
-            .HasForeignKey(e => e.CompanyID);
+            .HasForeignKey(e => e.CompanyId);
     }
 }
 

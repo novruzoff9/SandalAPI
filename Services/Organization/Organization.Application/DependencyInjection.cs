@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Organization.Application.Common.Services;
 using Shared.Services;
 using System.Reflection;
 
@@ -19,6 +20,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<ISharedIdentityService, SharedIdentityService>();
+        services.AddScoped<IExcelService, ExcelService>();
 
         return services;
     }

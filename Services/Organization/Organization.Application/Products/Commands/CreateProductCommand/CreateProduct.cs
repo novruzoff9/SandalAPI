@@ -2,7 +2,9 @@ using Organization.Application.Common.Services;
 
 namespace Organization.Application.Products.Commands.CreateProductCommand;
 
-public record CreateProduct(string Name, string Description) : IRequest<bool>;
+public record CreateProduct(
+    string Name, string Description, decimal PurchasePrice, decimal SellPrice, int Quantity, string? ImageUrl
+    ) : IRequest<bool>;
 
 public class CreateProductCommandHandler : IRequestHandler<CreateProduct, bool>
 {
@@ -24,7 +26,11 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProduct, bool>
             Id = RandomIdService.GenerateRandomCode(16),
             Name = request.Name,
             Description = request.Description,
-            CompanyID = _sharedIdentityService.GetCompanyId,
+            CompanyId = _sharedIdentityService.GetCompanyId,
+            PurchasePrice = request.PurchasePrice,
+            SellPrice = request.SellPrice,
+            Quantity = request.Quantity,
+            ImageUrl = request.ImageUrl
         };
 
         await _context.Products.AddAsync(product, cancellationToken);

@@ -314,6 +314,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Organization.WebAPI.Controllers.ProductController",
+    "Method": "ExportProducts",
+    "RelativePath": "api/Product/export-file",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Organization.WebAPI.Controllers.ProductController",
+    "Method": "ImportProducts",
+    "RelativePath": "api/Product/import-file",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Organization.WebAPI.Controllers.ShelfController",
     "Method": "Get",
     "RelativePath": "api/Shelf",

@@ -1,6 +1,6 @@
 is_global = true
 build_property.RootNamespace = Shared
-build_property.ProjectDir = C:\Users\User\source\repos\SandalAPI\Shared\Shared\
+build_property.ProjectDir = C:\Users\User\Source\Repos\SandalAPI\Shared\Shared\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.CsWinRTUseWindowsUIXamlProjections = false

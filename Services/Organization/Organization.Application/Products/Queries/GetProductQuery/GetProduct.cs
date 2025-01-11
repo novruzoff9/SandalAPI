@@ -17,7 +17,7 @@ public class GetProductQueryHandler : IRequestHandler<GetProduct, Product>
     public async Task<Product> Handle(GetProduct request, CancellationToken cancellationToken)
     {
         string companyId = _sharedIdentityService.GetCompanyId;
-        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == request.Id && x.CompanyID == companyId, cancellationToken);
+        var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == request.Id && x.CompanyId == companyId, cancellationToken);
         return product;
     }
 }

@@ -13,7 +13,7 @@ public class ProductMapping : BaseEntityMapping<Product>
 
         builder.HasOne(e => e.Company)
             .WithMany(e => e.Products)
-            .HasForeignKey(e => e.CompanyID);
+            .HasForeignKey(e => e.CompanyId);
     }
 }
 

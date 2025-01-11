@@ -19,7 +19,7 @@ public class GetProductsQueryHandler : IRequestHandler<GetProducts, List<Product
     public async Task<List<Product>> Handle(GetProducts request, CancellationToken cancellationToken)
     {
         string companyId = _sharedIdentityService.GetCompanyId;
-        var products = await _context.Products.Where(x=>x.CompanyID == companyId).ToListAsync(cancellationToken);
+        var products = await _context.Products.Where(x=>x.CompanyId == companyId).ToListAsync(cancellationToken);
 
         return products;
     }
