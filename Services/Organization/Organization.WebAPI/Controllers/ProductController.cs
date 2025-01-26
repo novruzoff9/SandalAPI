@@ -7,6 +7,8 @@ using Organization.Application.Products.Commands.EditProductCommand;
 using Organization.Application.Products.Queries.GetProductQuery;
 using Organization.Application.Products.Queries.GetProductsQuery;
 using Organization.Domain.Entities;
+using Organization.WebAPI.DTOs.General;
+using Organization.WebAPI.DTOs.Product;
 using Shared.ResultTypes;
 using Shared.Services;
 
@@ -71,8 +73,7 @@ public class ProductController : BaseController
     [HttpPost("import-file")]
     public async Task<IActionResult> ImportProducts(IFormFile file)
     {
-        //string companyId = _sharedIdentityService.GetCompanyId;
-        string companyId = "1e5dc749-5d62-43dd-8760-a9b5e2afe427";
+        string companyId = _sharedIdentityService.GetCompanyId;
         var products = await _excelService.ImportProducts(file, companyId);
         foreach (var product in products)
         {
@@ -90,10 +91,19 @@ public class ProductController : BaseController
     }
 
     [HttpGet("export-file")]
-    public async Task<IActionResult> ExportProducts()
+    public async Task<IActionResult> ExportProducts([FromBody] DateTimePeriod period)
     {
-        var products = await Mediator.Send(new GetProducts());
-        string path = await _excelService.ExportToExcel(products);
+        var products = await Mediator.Send(new GetProductsWithOrder(period.Start, period.End));
+        var detailedProducts = products.Select(x => new ExportProductDto
+        {
+            Name = x.Name,
+            Description = x.Description,
+            PurchasePrice = x.PurchasePrice,
+            SellPrice = x.SellPrice,
+            Quantity = x.Quantity,
+            Ordered = x.OrderItems.Sum(x=>x.Quantity)
+        });
+        string path = await _excelService.ExportToExcel(detailedProducts);
         return Ok(path);
     }
 }

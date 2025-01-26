@@ -1,7 +1,8 @@
 
 namespace Organization.Application.Products.Commands.EditProductCommand;
 
-public record EditProduct(string Id, string Name, string Description) : IRequest<bool>;
+public record EditProduct(string Id, string Name, string Description, decimal PurchasePrice, decimal SellPrice, int Quantity, string? ImageUrl
+    ) : IRequest<bool>;
 
 public class EditProductCommandHandler : IRequestHandler<EditProduct, bool>
 {
@@ -23,11 +24,15 @@ public class EditProductCommandHandler : IRequestHandler<EditProduct, bool>
         if (product == null) { return false; }
         if (_sharedIdentityService.GetCompanyId != product.CompanyId) { return false; }
 
-        product = new Product
-        {
-            Name = request.Name,
-            Description = request.Description
-        };
+
+        product.Name = request.Name;
+        product.Description = request.Description;
+        product.CompanyId = _sharedIdentityService.GetCompanyId;
+        product.PurchasePrice = request.PurchasePrice;
+        product.SellPrice = request.SellPrice;
+        product.Quantity = request.Quantity;
+        product.ImageUrl = request.ImageUrl;
+
 
         _context.Products.Update(product);
 

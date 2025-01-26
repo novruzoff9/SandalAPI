@@ -81,8 +81,8 @@ namespace IdentityServer
                         IdentityServerConstants.StandardScopes.OfflineAccess
                     },
                     AccessTokenType = AccessTokenType.Jwt,
-                    AccessTokenLifetime = 2 * 60 * 60,
-                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(30) - DateTime.Now).TotalSeconds,
+                    AccessTokenLifetime = 24 * 60 * 60,
+                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(1) - DateTime.Now).TotalSeconds,
                     RefreshTokenUsage = TokenUsage.ReUse
                 },
             };

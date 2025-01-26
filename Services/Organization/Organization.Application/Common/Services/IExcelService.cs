@@ -41,7 +41,8 @@ public class ExcelService : IExcelService
             }
 
             // Save the file
-            var filePath = Path.Combine(Path.GetTempPath(), $"exported_data.xlsx");
+            var filePath = Path.Combine(Path.GetTempPath(), $"exported_{typeof(T).Name}_data.xlsx");
+            //var filePath = Path.Combine(Path.GetTempPath(), $"exported___data.xlsx");
             package.SaveAs(new FileInfo(filePath));
             return Task.FromResult(filePath);
         }

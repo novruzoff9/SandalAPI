@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\User\\source\\repos\\SandalAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.application\\products\\commands\\createproductcommand\\createproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|solutionrelative:services\\organization\\organization.application\\products\\commands\\createproductcommand\\createproduct.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.webapi\\controllers\\warehousecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|solutionrelative:services\\organization\\organization.webapi\\controllers\\warehousecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.application\\common\\services\\iexcelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|solutionrelative:services\\organization\\organization.application\\common\\services\\iexcelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.webapi\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|solutionrelative:services\\organization\\organization.webapi\\controllers\\ordercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.webapi\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -17,6 +17,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.webapi\\controllers\\shelfcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{521920A9-53CE-4190-B2D2-8B2F7D052F5C}|Services\\Organization\\Organization.WebAPI\\Organization.WebAPI.csproj|solutionrelative:services\\organization\\organization.webapi\\controllers\\shelfcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.application\\products\\queries\\getproductsquery\\getproducts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|solutionrelative:services\\organization\\organization.application\\products\\queries\\getproductsquery\\getproducts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|c:\\users\\user\\source\\repos\\sandalapi\\services\\organization\\organization.application\\common\\services\\iexcelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{572309EA-3B10-4CEE-A535-8E893914F4DE}|Services\\Organization\\Organization.Application\\Organization.Application.csproj|solutionrelative:services\\organization\\organization.application\\common\\services\\iexcelservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,11 +34,61 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "WarehouseController.cs",
+              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\WarehouseController.cs",
+              "RelativeDocumentMoniker": "Services\\Organization\\Organization.WebAPI\\Controllers\\WarehouseController.cs",
+              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\WarehouseController.cs",
+              "RelativeToolTip": "Services\\Organization\\Organization.WebAPI\\Controllers\\WarehouseController.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABMAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-25T10:41:34.34Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "GetProducts.cs",
+              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Products\\Queries\\GetProductsQuery\\GetProducts.cs",
+              "RelativeDocumentMoniker": "Services\\Organization\\Organization.Application\\Products\\Queries\\GetProductsQuery\\GetProducts.cs",
+              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Products\\Queries\\GetProductsQuery\\GetProducts.cs",
+              "RelativeToolTip": "Services\\Organization\\Organization.Application\\Products\\Queries\\GetProductsQuery\\GetProducts.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAA4wDcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-15T21:01:01.238Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IExcelService.cs",
+              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Common\\Services\\IExcelService.cs",
+              "RelativeDocumentMoniker": "Services\\Organization\\Organization.Application\\Common\\Services\\IExcelService.cs",
+              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Common\\Services\\IExcelService.cs",
+              "RelativeToolTip": "Services\\Organization\\Organization.Application\\Common\\Services\\IExcelService.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAswCsAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-15T19:46:20.978Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "OrderController.cs",
+              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\OrderController.cs",
+              "RelativeDocumentMoniker": "Services\\Organization\\Organization.WebAPI\\Controllers\\OrderController.cs",
+              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\OrderController.cs",
+              "RelativeToolTip": "Services\\Organization\\Organization.WebAPI\\Controllers\\OrderController.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAA0wC4AAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-01-11T20:24:32.136Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -40,34 +98,9 @@
               "RelativeDocumentMoniker": "Services\\Organization\\Organization.WebAPI\\Controllers\\ProductController.cs",
               "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\ProductController.cs",
               "RelativeToolTip": "Services\\Organization\\Organization.WebAPI\\Controllers\\ProductController.cs",
-              "ViewState": "AgIAAFAAAAAAAAAAAAAuwF0AAAAEAAAAAAAAAA==",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAawEwAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-10T11:44:15.077Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "IExcelService.cs",
-              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Common\\Services\\IExcelService.cs",
-              "RelativeDocumentMoniker": "Services\\Organization\\Organization.Application\\Common\\Services\\IExcelService.cs",
-              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Common\\Services\\IExcelService.cs",
-              "RelativeToolTip": "Services\\Organization\\Organization.Application\\Common\\Services\\IExcelService.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAkwBQAAAAPAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-10T11:15:18.721Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CreateProduct.cs",
-              "DocumentMoniker": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Products\\Commands\\CreateProductCommand\\CreateProduct.cs",
-              "RelativeDocumentMoniker": "Services\\Organization\\Organization.Application\\Products\\Commands\\CreateProductCommand\\CreateProduct.cs",
-              "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.Application\\Products\\Commands\\CreateProductCommand\\CreateProduct.cs",
-              "RelativeToolTip": "Services\\Organization\\Organization.Application\\Products\\Commands\\CreateProductCommand\\CreateProduct.cs",
-              "ViewState": "AgIAABAAAAAAAAAAAAAYwCAAAAAnAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-25T20:53:09.11Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -77,7 +110,7 @@
               "RelativeDocumentMoniker": "Services\\Organization\\Organization.WebAPI\\Controllers\\ShelfController.cs",
               "ToolTip": "C:\\Users\\User\\source\\repos\\SandalAPI\\Services\\Organization\\Organization.WebAPI\\Controllers\\ShelfController.cs",
               "RelativeToolTip": "Services\\Organization\\Organization.WebAPI\\Controllers\\ShelfController.cs",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABYAAAAcAAAAAAAAAA==",
+              "ViewState": "AgIAADIAAAAAAAAAAAAswEcAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-09T17:24:36.098Z"
             }
