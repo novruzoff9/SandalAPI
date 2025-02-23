@@ -1,6 +1,7 @@
 
 using Organization.Application.Common.Interfaces;
 using Organization.Domain.Entities;
+using Shared.ResultTypes;
 
 namespace Organization.Application.Companies.Queries.GetCompaniesQuery;
 
@@ -17,7 +18,7 @@ public class GetCompaniesQueryHandler : IRequestHandler<GetCompanies, List<Compa
 
     public async Task<List<Company>> Handle(GetCompanies request, CancellationToken cancellationToken)
     {
-        var companies = await _context.Companies.ToListAsync(cancellationToken);
+        var companies = await _context.Companies.Include(x=>x.Warehouses).ToListAsync(cancellationToken);
         return companies;
     }
 }

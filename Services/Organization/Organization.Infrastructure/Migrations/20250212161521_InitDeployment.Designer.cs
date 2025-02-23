@@ -12,8 +12,8 @@ using Organization.Infrastructure.Data;
 namespace Organization.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250110115510_updatedProductEntity")]
-    partial class updatedProductEntity
+    [Migration("20250212161521_InitDeployment")]
+    partial class InitDeployment
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

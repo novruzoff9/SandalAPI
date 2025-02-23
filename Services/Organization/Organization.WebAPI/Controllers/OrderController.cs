@@ -49,15 +49,17 @@ public class OrderController : ControllerBase
     {
         //string companyId = _sharedIdentityService.GetCompanyId;
         var orders = await _dbContext.Orders.Include(x => x.Warehouse)
+            .Where(x => x.Closed == null)
             .Select(x => new OrderShowDto
             {
                 Id = x.Id,
                 Warehouse = x.Warehouse.Name,
-                Opened = x.Opened,
-                Closed = x.Closed,
+                Opened = x.Opened.ToString("dd/MM/yyyy"),
+                Closed = x.Closed.HasValue ? x.Closed.Value.ToString("dd/MM/yyyy") : "N/A",
                 Status = "gozleyir"
             })
-            .Where(x => x.Closed == null).ToListAsync();
+            .OrderByDescending(x => x.Opened)
+            .ToListAsync();
         var response = Response<List<OrderShowDto>>.Success(orders, 200);
         return Ok(response);
     }
@@ -67,15 +69,17 @@ public class OrderController : ControllerBase
     {
         string companyId = _sharedIdentityService.GetCompanyId;
         var orders = await _dbContext.Orders.Include(x => x.Warehouse)
+            .Where(x => x.Closed != null)
             .Select(x => new OrderShowDto
             {
                 Id = x.Id,
                 Warehouse = x.Warehouse.Name,
-                Opened = x.Opened,
-                Closed = x.Closed,
+                Opened = x.Opened.ToString("dd/MM/yyyy"),
+                Closed = x.Closed.HasValue ? x.Closed.Value.ToString("dd/MM/yyyy") : "N/A",
                 Status = "Hazir"
             })
-            .Where(x => x.Closed != null).ToListAsync();
+            .OrderByDescending(x => x.Opened)
+            .ToListAsync();
         var response = Response<List<OrderShowDto>>.Success(orders, 200);
         return Ok(response);
     }
@@ -184,7 +188,7 @@ public class OrderController : ControllerBase
 
         var detailedOrders = orders.Select(x => new
         {
-            Warehouse = x.Warehouse?.Name ?? "Unknown Warehouse", // x.Warehouse null ise
+            Warehouse = x.Warehouse?.Name ?? "Unknown Warehouse", 
             Opened = x.Opened,
             Closed = x.Closed,
             Products = x.Products != null
@@ -195,5 +199,17 @@ public class OrderController : ControllerBase
         });
         string path = await _excelService.ExportToExcel(detailedOrders);
         return Ok(path);
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(string id)
+    {
+        var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == id);
+        if (order != null)
+        {
+            _dbContext.Orders.Remove(order);
+        }
+        _dbContext.SaveChanges();
+        return Ok();
     }
 }

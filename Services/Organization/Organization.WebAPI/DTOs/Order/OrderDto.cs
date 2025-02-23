@@ -16,8 +16,8 @@ public class OrderShowDto
 {
     public string Id { get; set; }
     public string Warehouse { get; set; }
-    public DateTime Opened { get; set; }
-    public DateTime? Closed { get; set; }
+    public string Opened { get; set; }
+    public string? Closed { get; set; }
     public string Status { get; set; }
 }
 

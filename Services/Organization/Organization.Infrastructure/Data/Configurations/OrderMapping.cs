@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Organization.Domain.Entities;
 
 namespace Organization.Infrastructure.Data.Configurations;
@@ -15,7 +16,8 @@ public class OrderMapping : BaseEntityMapping<Order>
 
         builder.HasOne(e => e.Warehouse)
             .WithMany(e => e.Orders)
-            .HasForeignKey(e => e.WarehouseId);
+            .HasForeignKey(e => e.WarehouseId)
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(e => e.Products)
             .WithOne(e => e.Order)

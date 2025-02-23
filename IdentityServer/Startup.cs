@@ -35,7 +35,7 @@ namespace IdentityServer
             services.AddControllersWithViews();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(Configuration.GetConnectionString("MsSql")));
 
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
@@ -46,7 +46,9 @@ namespace IdentityServer
                 options.AddPolicy("AllowAllOrigins",
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
+                        builder
+                            //.WithOrigins("https://gleaming-frangipane-f06b21.netlify.app")
+                            .AllowAnyOrigin()
                             .AllowAnyHeader()
                             .AllowAnyMethod();
                     });

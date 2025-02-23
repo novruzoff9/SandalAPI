@@ -20,7 +20,7 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProduct, bool>
 
         var product = await _context.Products.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
         if (product == null) { return false; }
-        if (_sharedIdentityService.GetCompanyId != request.Id) { return false; }
+        if (_sharedIdentityService.GetCompanyId != product.CompanyId) { return false; }
         _context.Products.Remove(product);
 
         await _context.SaveChangesAsync(cancellationToken);

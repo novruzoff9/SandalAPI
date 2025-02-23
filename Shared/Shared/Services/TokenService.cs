@@ -34,7 +34,7 @@ namespace Shared.Services
             };
 
             var content = new FormUrlEncodedContent(formData);
-            var response = await _httpClient.PostAsync("http://localhost:5001/connect/token", content);
+            var response = await _httpClient.PostAsync("http://104.248.36.17:5001/connect/token", content);
 
             if (!response.IsSuccessStatusCode)
             {

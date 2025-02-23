@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace IdentityServer.Migrations
 {
-    public partial class Init : Migration
+    public partial class InitDeployment : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,7 +41,7 @@ namespace IdentityServer.Migrations
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
                     CompanyId = table.Column<string>(nullable: true),
-                    BranchId = table.Column<string>(nullable: true)
+                    WarehouseId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

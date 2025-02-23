@@ -11,6 +11,7 @@ namespace Shared.Services
         public string GetUserId { get; }
         public string GetCompanyId { get; }
         public string GetWarehouseId { get; }
+        public ClaimsPrincipal GetUser { get; }
     }
 
     public class SharedIdentityService : ISharedIdentityService
@@ -21,6 +22,8 @@ namespace Shared.Services
         {
             _httpContextAccessor = httpContextAccessor;
         }
+
+        public ClaimsPrincipal GetUser => _httpContextAccessor.HttpContext.User;
 
         public string GetUserId => _httpContextAccessor.HttpContext.User.FindFirst("sub").Value;
         public string GetCompanyId => _httpContextAccessor.HttpContext.User.FindFirst("company").Value;

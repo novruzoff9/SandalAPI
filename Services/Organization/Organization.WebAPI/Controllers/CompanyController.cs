@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Organization.Application.Companies.Commands.CreateCompanyCommand;
@@ -6,6 +7,8 @@ using Organization.Application.Companies.Commands.DeleteCompanyCommand;
 using Organization.Application.Companies.Commands.EditCompanyCommand;
 using Organization.Application.Companies.Queries.GetCompaniesQuery;
 using Organization.Application.Companies.Queries.GetCompanyQuery;
+using Organization.WebAPI.DTOs.Company;
+using Shared.ResultTypes;
 
 namespace Organization.WebAPI.Controllers;
 
@@ -17,12 +20,26 @@ public class BaseController : ControllerBase
     private IMediator _mediator;
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
 }
+
+[Authorize(Roles="admin")]
 public class CompanyController : BaseController
 {
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var response = await Mediator.Send(new GetCompanies());
+        var companies = await Mediator.Send(new GetCompanies());
+        List<CompanyDto> companiesDto = new();
+        foreach (var company in companies)
+        {
+            CompanyDto companyDto = new()
+            {
+                Id = company.Id,
+                Name = company.Name,
+                Warehouses = company.Warehouses.Count
+            };
+            companiesDto.Add(companyDto);
+        }
+        var response = Response<List<CompanyDto>>.Success(companiesDto, 200);
         return Ok(response);
     }
 

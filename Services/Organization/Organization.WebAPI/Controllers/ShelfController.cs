@@ -8,7 +8,9 @@ using Organization.Application.Shelves.Queries.GetShelfQuery;
 using Organization.Application.Shelves.Queries.GetShelvesQuery;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using Organization.Application.Common.Models.ShelfProducts;
-using Organization.WebAPI.DTOs.Shelf;
+using Organization.Application.Common.Models.Shelf;
+using Organization.Domain.Entities;
+using Shared.ResultTypes;
 
 namespace Organization.WebAPI.Controllers;
 
@@ -19,7 +21,8 @@ public class ShelfController : BaseController
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var response = await Mediator.Send(new GetShelves());
+        var shelves = await Mediator.Send(new GetShelves());
+        var response = Response<List<ShelfDTO>>.Success(shelves, 200);
         return Ok(response);
     }
 

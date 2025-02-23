@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Shared.Services;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -17,10 +18,12 @@ namespace IdentityServer.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ISharedIdentityService _identityService;
 
-        public UsersController(UserManager<ApplicationUser> userManager)
+        public UsersController(UserManager<ApplicationUser> userManager, ISharedIdentityService identityService)
         {
             _userManager = userManager;
+            _identityService = identityService;
         }
 
         [HttpPost]
@@ -61,6 +64,34 @@ namespace IdentityServer.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(userIdClaims.Value);
+
+            if (user == null)
+            {
+                return BadRequest();
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new UserDto
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                CompanyId = user.CompanyId,
+                Roles = roles.ToList() ?? Array.Empty<string>().ToList()
+            });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(string Id)
+        {
+
+            if (Id == null)
+            {
+                return BadRequest("Id degeri tapilmadi");
+            }
+
+            var user = await _userManager.FindByIdAsync(Id);
 
             if (user == null)
             {

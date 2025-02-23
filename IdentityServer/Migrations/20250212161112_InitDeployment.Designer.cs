@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IdentityServer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241122185732_Init")]
-    partial class Init
+    [Migration("20250212161112_InitDeployment")]
+    partial class InitDeployment
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -55,9 +55,6 @@ namespace IdentityServer.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("BranchId")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CompanyId")
                         .HasColumnType("nvarchar(max)");
@@ -105,6 +102,9 @@ namespace IdentityServer.Migrations
                     b.Property<string>("UserName")
                         .HasColumnType("nvarchar(256)")
                         .HasMaxLength(256);
+
+                    b.Property<string>("WarehouseId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
