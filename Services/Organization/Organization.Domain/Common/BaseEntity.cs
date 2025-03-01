@@ -1,7 +1,7 @@
-namespace Organization.Domain.Common
+namespace Organization.Domain.Common;
+
+public class BaseEntity
 {
-    public class BaseEntity
-    {
-        public string Id { get; set; }
-    }
+    public string Id { get; set; }
 }
+

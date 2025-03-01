@@ -35,7 +35,7 @@ namespace IdentityServer
             services.AddControllersWithViews();
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("MsSql")));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();

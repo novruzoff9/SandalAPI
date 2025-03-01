@@ -8,6 +8,7 @@ using Organization.Domain.Entities;
 using Organization.Infrastructure.Data;
 using Organization.WebAPI.DTOs.General;
 using Organization.WebAPI.DTOs.Order;
+using Organization.WebAPI.DTOs.User;
 using Shared.ResultTypes;
 using Shared.Services;
 
@@ -20,12 +21,16 @@ public class OrderController : ControllerBase
     private readonly ApplicationDbContext _dbContext;
     private readonly ISharedIdentityService _sharedIdentityService;
     private readonly IExcelService _excelService;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IConfiguration _configuration;
 
-    public OrderController(ApplicationDbContext dbContext, ISharedIdentityService sharedIdentityService, IExcelService excelService)
+    public OrderController(ApplicationDbContext dbContext, ISharedIdentityService sharedIdentityService, IExcelService excelService, IHttpClientFactory httpClientFactory, IConfiguration configuration)
     {
         _dbContext = dbContext;
         _sharedIdentityService = sharedIdentityService;
         _excelService = excelService;
+        _httpClientFactory = httpClientFactory;
+        _configuration = configuration;
     }
 
     [HttpGet("company")]
@@ -50,6 +55,7 @@ public class OrderController : ControllerBase
         //string companyId = _sharedIdentityService.GetCompanyId;
         var orders = await _dbContext.Orders.Include(x => x.Warehouse)
             .Where(x => x.Closed == null)
+            .OrderByDescending(x => x.Opened)
             .Select(x => new OrderShowDto
             {
                 Id = x.Id,
@@ -58,7 +64,6 @@ public class OrderController : ControllerBase
                 Closed = x.Closed.HasValue ? x.Closed.Value.ToString("dd/MM/yyyy") : "N/A",
                 Status = "gozleyir"
             })
-            .OrderByDescending(x => x.Opened)
             .ToListAsync();
         var response = Response<List<OrderShowDto>>.Success(orders, 200);
         return Ok(response);
@@ -70,6 +75,7 @@ public class OrderController : ControllerBase
         string companyId = _sharedIdentityService.GetCompanyId;
         var orders = await _dbContext.Orders.Include(x => x.Warehouse)
             .Where(x => x.Closed != null)
+            .OrderByDescending(x => x.Opened)
             .Select(x => new OrderShowDto
             {
                 Id = x.Id,
@@ -78,14 +84,40 @@ public class OrderController : ControllerBase
                 Closed = x.Closed.HasValue ? x.Closed.Value.ToString("dd/MM/yyyy") : "N/A",
                 Status = "Hazir"
             })
-            .OrderByDescending(x => x.Opened)
             .ToListAsync();
         var response = Response<List<OrderShowDto>>.Success(orders, 200);
         return Ok(response);
     }
 
-    [HttpGet("{id}/products")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
+    {
+        var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == id);
+        if (order == null)
+        {
+            return NotFound();
+        }
+        string companyId = _sharedIdentityService.GetCompanyId;
+        if (order.CompanyId != companyId)
+        {
+            return Unauthorized();
+        }
+        var client = _httpClientFactory.CreateClient("products");
+        var identityService = _configuration["Services:IdentityService"];
+        var orderOpenedBy = client.GetAsync($"{identityService}/api/Users/{order.OpenedBy}");
+        var user = await orderOpenedBy.Result.Content.ReadFromJsonAsync<UserDto>();
+        order.OpenedBy = user.UserName;
+        if (order.ClosedBy != null)
+        {
+            var orderClosedBy = client.GetAsync($"{identityService}/api/Users/{order.ClosedBy}");
+            var userClosed = await orderClosedBy.Result.Content.ReadFromJsonAsync<UserDto>();
+            order.ClosedBy = userClosed.UserName;
+        }
+        return Ok(order);
+    }
+
+    [HttpGet("{id}/products")]
+    public async Task<IActionResult> GetProductsById(string id)
     {
         var order = await _dbContext.Orders.Include(x => x.Products)
             .ThenInclude(x => x.Product)
@@ -95,18 +127,18 @@ public class OrderController : ControllerBase
 
         var orderProducts = order.Products.Select(x => new OrderItemShowDto
         {
-            ProductId = x.ProductId,
+            Id = x.ProductId,
             Quantity = x.Quantity,
-            ProductName = x.Product.Name
+            Name = x.Product.Name
             //ShelfCode = x.Product.ShelfProducts.FirstOrDefault().Shelf.Code
         }).ToList();
 
-        string warehouseId = _sharedIdentityService.GetWarehouseId;
-        if (order.WarehouseId != warehouseId)
+        string companyId = _sharedIdentityService.GetCompanyId;
+        if (order.CompanyId != companyId)
         {
             return Unauthorized();
         }
-        var shelves = await _dbContext.Shelves.Where(x => x.WarehouseID == warehouseId)
+        var shelves = await _dbContext.Shelves.Where(x => x.WarehouseID == order.WarehouseId)
             .Include(x => x.ShelfProducts)
             .ThenInclude(x => x.Product).ToListAsync();
 
@@ -118,6 +150,7 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> Create(OrderDto order)
     {
         var companyId = _sharedIdentityService.GetCompanyId;
+        var userId = _sharedIdentityService.GetUserId;
 
         Order newOrder = new()
         {
@@ -130,7 +163,8 @@ public class OrderController : ControllerBase
                 ProductId = x.ProductId,
                 Quantity = x.Quantity
             }).ToList(),
-            Opened = DateTime.Now
+            Opened = DateTime.Now,
+            OpenedBy = userId
         };
         _dbContext.Orders.Add(newOrder);
         await _dbContext.SaveChangesAsync();
@@ -141,6 +175,7 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> Close(string id, List<Product> products)
     {
         var order = await _dbContext.Orders.Include(x => x.Products).FirstOrDefaultAsync(x => x.Id == id);
+        var userId = _sharedIdentityService.GetUserId;
         if (order == null)
         {
             return NotFound();
@@ -152,9 +187,9 @@ public class OrderController : ControllerBase
             {
                 return BadRequest();
             }
-
         }
         order.Closed = DateTime.Now;
+        order.ClosedBy = userId;
         await _dbContext.SaveChangesAsync();
         return Ok("success");
     }
@@ -188,14 +223,14 @@ public class OrderController : ControllerBase
 
         var detailedOrders = orders.Select(x => new
         {
-            Warehouse = x.Warehouse?.Name ?? "Unknown Warehouse", 
+            Warehouse = x.Warehouse?.Name ?? "Unknown Warehouse",
             Opened = x.Opened,
             Closed = x.Closed,
             Products = x.Products != null
                 ? string.Join(", ", x.Products
-                    .Where(p => p.Product != null) 
+                    .Where(p => p.Product != null)
                     .Select(p => $"{p.Product.Name ?? "Unnamed Product"} ({p.Quantity})"))
-        :       "No Products" 
+        : "No Products"
         });
         string path = await _excelService.ExportToExcel(detailedOrders);
         return Ok(path);

@@ -23,8 +23,8 @@ public class OrderShowDto
 
 public class OrderItemShowDto
 {
-    public string ProductId { get; set; }
+    public string Id { get; set; }
     public int Quantity { get; set; }
-    public string ProductName { get; set; }
+    public string Name { get; set; }
     public string ShelfCode { get; set; }
 }
