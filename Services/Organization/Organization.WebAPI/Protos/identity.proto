@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option csharp_namespace = "IdentityServer.Protos";
+
+package IdentityServer;
+
+service Identity {
+  rpc GetEmployees (GetEmployeesRequest) returns (GetEmployeesResponse);
+}
+
+message GetEmployeesRequest {
+  string companyId = 1;
+}
+
+message GetEmployeesResponse {
+  repeated Employee employees = 1;
+}
+
+message Employee {
+  string id = 1;
+  string name = 2;
+  string email = 3;
+  string companyId = 4;
+  string warehouseId = 5;
+  string warehouseName = 6;
+  string role = 7;
+}

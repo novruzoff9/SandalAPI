@@ -8,6 +8,9 @@ using Organization.Application.DTOs.User;
 using Shared.ResultTypes;
 using Shared.Services;
 using System.Text;
+using Grpc.Net.Client;
+using IdentityServer.Protos;
+using Grpc.Core;
 
 namespace Organization.WebAPI.Controllers;
 
@@ -18,27 +21,38 @@ public class EmployeeController : BaseController
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ISharedIdentityService _sharedIdentityService;
     private readonly IConfiguration _configuration;
-    private readonly string identityService;
+    private readonly string _identityService;
+    private readonly string _identityGrpcService;
 
     public EmployeeController(IHttpClientFactory httpClientFactory, ISharedIdentityService sharedIdentityService, IConfiguration configuration)
     {
         _httpClientFactory = httpClientFactory;
         _sharedIdentityService = sharedIdentityService;
         _configuration = configuration;
-        identityService = _configuration["Services:IdentityService"] ?? "http://localhost:5001";
+        _identityService = _configuration["Services:IdentityService"] ?? "http://localhost:5001";
+        _identityGrpcService = _configuration["Services:IdentityGrpcService"] ?? "http://localhost:5003";
     }
 
     [HttpGet]
     public async Task<IActionResult> GetEmployees()
     {
-        var client = _httpClientFactory.CreateClient("emp");
-        string companyId = _sharedIdentityService.GetCompanyId;
-        var response = await client.GetAsync($"{identityService}/api/Employees?companyId={companyId}");
-
-        var employees = await response.Content.ReadFromJsonAsync<List<UserDto>>();
-        foreach (var employee in employees)
+        string companyId = _sharedIdentityService.GetCompanyId; 
+        var channel = GrpcChannel.ForAddress($"{_identityGrpcService}", new GrpcChannelOptions
         {
-            if(employee.WarehouseId != null)
+            Credentials = ChannelCredentials.Insecure
+        });
+
+        var identityClient = new Identity.IdentityClient(channel);
+
+        GetEmployeesResponse response = await identityClient.GetEmployeesAsync(new GetEmployeesRequest
+        {
+            CompanyId = companyId
+        });
+
+
+        foreach (var employee in response.Employees)
+        {
+            if (employee.WarehouseId != "N/A")
             {
                 employee.WarehouseName = (await Mediator.Send(new GetWarehouse(employee.WarehouseId))).Name;
             }
@@ -47,7 +61,7 @@ public class EmployeeController : BaseController
                 employee.WarehouseName = "N/A";
             }
         }
-        var result = Response<List<UserDto>>.Success(employees, 200);
+        var result = Response<List<Employee>>.Success(response.Employees.ToList(), 200);
         return Ok(result);
     }
 
@@ -56,7 +70,7 @@ public class EmployeeController : BaseController
     {
         string id = _sharedIdentityService.GetUserId;
         var client = _httpClientFactory.CreateClient("employees");
-        var response = await client.GetAsync($"{identityService}/api/Users/{id}");
+        var response = await client.GetAsync($"{_identityService}/api/Users/{id}");
         var employee = await response.Content.ReadFromJsonAsync<UserDto>();
         if (employee.WarehouseId != null)
         {
@@ -76,7 +90,7 @@ public class EmployeeController : BaseController
         var client = _httpClientFactory.CreateClient("employees");
         var jsondata = JsonConvert.SerializeObject(request);
         StringContent stringContent = new StringContent(jsondata, Encoding.UTF8, "application/json");
-        var response = await client.PostAsync($"{identityService}/api/Employees?companyId={_sharedIdentityService.GetCompanyId}", stringContent);
+        var response = await client.PostAsync($"{_identityService}/api/Employees?companyId={_sharedIdentityService.GetCompanyId}", stringContent);
 
         Response<Shared.ResultTypes.NoContent> result;
         if (response.IsSuccessStatusCode)
@@ -95,7 +109,7 @@ public class EmployeeController : BaseController
     {
         var client = _httpClientFactory.CreateClient();
         string companyId = _sharedIdentityService.GetCompanyId;
-        var response = await client.PostAsync($"{identityService}/api/Roles/assign-role?userid={userId}&roleId={roleId}", null);
+        var response = await client.PostAsync($"{_identityService}/api/Roles/assign-role?userid={userId}&roleId={roleId}", null);
 
         Response<Shared.ResultTypes.NoContent> result;
 
@@ -115,7 +129,7 @@ public class EmployeeController : BaseController
     public async Task<IActionResult> UpdateBranch(string userId, string branchId)
     {
         var client = _httpClientFactory.CreateClient("employees");
-        var response = await client.PostAsync($"{identityService}/api/users/UpdateBranch?userId={userId}&branchId={branchId}", null);
+        var response = await client.PostAsync($"{_identityService}/api/users/UpdateBranch?userId={userId}&branchId={branchId}", null);
 
         Response<Shared.ResultTypes.NoContent> result;
 

@@ -101,6 +101,8 @@ namespace IdentityServer
                         .AllowAnyMethod();
                     });
             });
+
+            services.AddGrpc();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -121,6 +123,8 @@ namespace IdentityServer
             app.UseCors("AllowAllOrigins");
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapGrpcService<ProtoServices.IdentityService>()
+                    .RequireHost("localhost:5003");
                 endpoints.MapDefaultControllerRoute();
             });
         }
