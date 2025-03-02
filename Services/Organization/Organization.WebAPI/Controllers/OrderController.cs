@@ -4,33 +4,39 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Organization.Application.Common.Services;
 using Organization.Application.Products.Queries.GetProductsQuery;
+using Organization.Application.Warehouses.Queries.GetWarehouseQuery;
 using Organization.Domain.Entities;
 using Organization.Infrastructure.Data;
-using Organization.WebAPI.DTOs.General;
-using Organization.WebAPI.DTOs.Order;
-using Organization.WebAPI.DTOs.User;
+using Organization.Application.DTOs.General;
+using Organization.Application.DTOs.User;
+using Organization.Application.DTOs.Order;
 using Shared.ResultTypes;
 using Shared.Services;
+using AutoMapper;
 
 namespace Organization.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class OrderController : ControllerBase
+public class OrderController : BaseController
 {
     private readonly ApplicationDbContext _dbContext;
     private readonly ISharedIdentityService _sharedIdentityService;
     private readonly IExcelService _excelService;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _configuration;
+    private readonly IMapper _mapper;
+    private readonly string identityService;
 
-    public OrderController(ApplicationDbContext dbContext, ISharedIdentityService sharedIdentityService, IExcelService excelService, IHttpClientFactory httpClientFactory, IConfiguration configuration)
+    public OrderController(ApplicationDbContext dbContext, ISharedIdentityService sharedIdentityService, IExcelService excelService, IHttpClientFactory httpClientFactory, IConfiguration configuration, IMapper mapper)
     {
         _dbContext = dbContext;
         _sharedIdentityService = sharedIdentityService;
         _excelService = excelService;
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
+        identityService = _configuration["Services:IdentityService"] ?? "http://localhost:5001";
+        _mapper = mapper;
     }
 
     [HttpGet("company")]
@@ -103,7 +109,6 @@ public class OrderController : ControllerBase
             return Unauthorized();
         }
         var client = _httpClientFactory.CreateClient("products");
-        var identityService = _configuration["Services:IdentityService"];
         var orderOpenedBy = client.GetAsync($"{identityService}/api/Users/{order.OpenedBy}");
         var user = await orderOpenedBy.Result.Content.ReadFromJsonAsync<UserDto>();
         order.OpenedBy = user.UserName;
@@ -113,7 +118,9 @@ public class OrderController : ControllerBase
             var userClosed = await orderClosedBy.Result.Content.ReadFromJsonAsync<UserDto>();
             order.ClosedBy = userClosed.UserName;
         }
-        return Ok(order);
+        order.Warehouse = await Mediator.Send(new GetWarehouse(order.WarehouseId));
+        var orderDto = _mapper.Map<OrderShowDto>(order);
+        return Ok(orderDto);
     }
 
     [HttpGet("{id}/products")]

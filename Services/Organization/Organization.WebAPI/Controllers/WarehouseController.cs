@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Organization.Application.Shelves.Queries.GetShelvesQuery;
 using Organization.Application.Warehouses.Commands.CreateWarehouseCommand;
 using Organization.Application.Warehouses.Commands.DeleteWarehouseCommand;
 using Organization.Application.Warehouses.Commands.EditWarehouseCommand;
@@ -40,6 +41,19 @@ public class WarehouseController : BaseController
     {
         var response = await Mediator.Send(command);
         return Ok(response);
+    }
+
+    [HttpGet("occupancy-rate")]
+    public async Task<IActionResult> GetOccupancyRate()
+    {
+        var warehouses = await Mediator.Send(new GetWarehouses());
+        var warehouse = warehouses.FirstOrDefault();
+        var shelves = await Mediator.Send(new GetShelvesByWarehouse(warehouse.Id));
+        decimal emptySheleves = shelves.Where(x => x.ShelfProducts.Count == 0).Count();
+        decimal totalShelves = shelves.Count;
+        decimal fullShelves = totalShelves - emptySheleves;
+        decimal occupancyRate = fullShelves / totalShelves;
+        return Ok(occupancyRate);
     }
 
     [HttpPut("{id}")]

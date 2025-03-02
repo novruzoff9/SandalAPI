@@ -8,8 +8,8 @@ using Organization.Application.Products.Commands.EditProductCommand;
 using Organization.Application.Products.Queries.GetProductQuery;
 using Organization.Application.Products.Queries.GetProductsQuery;
 using Organization.Domain.Entities;
-using Organization.WebAPI.DTOs.General;
-using Organization.WebAPI.DTOs.Product;
+using Organization.Application.DTOs.General;
+using Organization.Application.DTOs.Product;
 using Shared.ResultTypes;
 using Shared.Services;
 

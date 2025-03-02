@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Organization.Application.Warehouses.Queries.GetWarehouseQuery;
-using Organization.WebAPI.DTOs.User;
+using Organization.Application.DTOs.User;
 using Shared.ResultTypes;
 using Shared.Services;
 using System.Text;
@@ -25,7 +25,7 @@ public class EmployeeController : BaseController
         _httpClientFactory = httpClientFactory;
         _sharedIdentityService = sharedIdentityService;
         _configuration = configuration;
-        identityService = _configuration["Services:IdentityService"];
+        identityService = _configuration["Services:IdentityService"] ?? "http://localhost:5001";
     }
 
     [HttpGet]

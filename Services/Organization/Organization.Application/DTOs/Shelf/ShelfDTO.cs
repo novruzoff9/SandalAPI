@@ -1,5 +1,4 @@
-﻿namespace Organization.WebAPI.DTOs.Shelf;
-
+﻿namespace Organization.Application.DTOs.Shelf;
 public class ShelfDTO
 {
     public string Id { get; set; }

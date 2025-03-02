@@ -14,6 +14,7 @@ public class GetShelvesByWarehouseHandler : IRequestHandler<GetShelvesByWarehous
         Guard.Against.Null(request, nameof(GetShelvesByWarehouse));
         var shelves = await _context.Shelves
             .Where(x => x.WarehouseID == request.Id)
+            .Include(x => x.ShelfProducts)
             .ToListAsync(cancellationToken);
         return shelves;
     }

@@ -7,7 +7,7 @@ using Organization.Application.Companies.Commands.DeleteCompanyCommand;
 using Organization.Application.Companies.Commands.EditCompanyCommand;
 using Organization.Application.Companies.Queries.GetCompaniesQuery;
 using Organization.Application.Companies.Queries.GetCompanyQuery;
-using Organization.WebAPI.DTOs.Company;
+using Organization.Application.DTOs.Company;
 using Shared.ResultTypes;
 
 namespace Organization.WebAPI.Controllers;

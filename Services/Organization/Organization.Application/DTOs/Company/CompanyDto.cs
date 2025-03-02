@@ -1,4 +1,4 @@
-﻿namespace Organization.WebAPI.DTOs.Company;
+﻿namespace Organization.Application.DTOs.Company;
 
 public class CompanyDto
 {

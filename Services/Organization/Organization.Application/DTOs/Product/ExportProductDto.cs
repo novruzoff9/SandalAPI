@@ -1,5 +1,4 @@
-﻿namespace Organization.WebAPI.DTOs.Product;
-
+﻿namespace Organization.Application.DTOs.Product;
 public class ExportProductDto
 {
     public Guid Id { get; set; }

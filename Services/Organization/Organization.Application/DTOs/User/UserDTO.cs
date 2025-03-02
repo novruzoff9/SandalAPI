@@ -1,5 +1,4 @@
-﻿namespace Organization.WebAPI.DTOs.User;
-
+﻿namespace Organization.Application.DTOs.User;
 public class UserDto
 {
     public string Id { get; set; }

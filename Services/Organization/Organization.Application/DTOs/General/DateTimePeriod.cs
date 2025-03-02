@@ -1,5 +1,4 @@
-﻿namespace Organization.WebAPI.DTOs.General;
-
+﻿namespace Organization.Application.DTOs.General;
 public class DateTimePeriod
 {
     public DateTime Start { get; set; }
