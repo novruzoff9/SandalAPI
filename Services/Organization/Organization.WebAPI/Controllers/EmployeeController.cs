@@ -85,21 +85,31 @@ public class EmployeeController : BaseController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Add(CreateUserDto request)
+    public async Task<IActionResult> Add(CreateEmployeeRequest request)
     {
-        var client = _httpClientFactory.CreateClient("employees");
-        var jsondata = JsonConvert.SerializeObject(request);
-        StringContent stringContent = new StringContent(jsondata, Encoding.UTF8, "application/json");
-        var response = await client.PostAsync($"{_identityService}/api/Employees?companyId={_sharedIdentityService.GetCompanyId}", stringContent);
+        string companyId = _sharedIdentityService.GetCompanyId;
+        var channel = GrpcChannel.ForAddress($"{_identityGrpcService}", new GrpcChannelOptions
+        {
+            Credentials = ChannelCredentials.Insecure
+        });
+        var identityClient = new Identity.IdentityClient(channel);
+        var response = await identityClient.CreateEmployeeAsync(new CreateEmployeeRequest
+        {
+            Name = request.Name,
+            Email = request.Email,
+            CompanyId = companyId,
+            WarehouseId = request.WarehouseId,
+            Password = request.Password
+        });
 
         Response<Shared.ResultTypes.NoContent> result;
-        if (response.IsSuccessStatusCode)
+        if (response.Success)
         {
             result = Response<Shared.ResultTypes.NoContent>.Success(200);
         }
         else
         {
-            result = Response<Shared.ResultTypes.NoContent>.Fail("İşçini artırmaq mümkün olmadı", 400);
+            result = Response<Shared.ResultTypes.NoContent>.Fail(response.Message, 400);
         }
         return Ok(result);
     }

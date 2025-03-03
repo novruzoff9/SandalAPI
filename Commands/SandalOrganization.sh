@@ -5,4 +5,4 @@ docker build -t sandalorganization -f Services/Organization/Organization.WebAPI/
 docker tag sandalorganization novruzoff999/sandalorganization:latest
 docker push novruzoff999/sandalorganization:latest
 
-sleep 10
+sleep 3

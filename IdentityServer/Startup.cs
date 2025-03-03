@@ -1,8 +1,4 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
-using IdentityServer4;
+﻿using IdentityServer4;
 using IdentityServer.Data;
 using IdentityServer.Models;
 using Microsoft.AspNetCore.Builder;
@@ -47,7 +43,6 @@ namespace IdentityServer
                     builder =>
                     {
                         builder
-                            //.WithOrigins("https://gleaming-frangipane-f06b21.netlify.app")
                             .AllowAnyOrigin()
                             .AllowAnyHeader()
                             .AllowAnyMethod();
@@ -74,7 +69,6 @@ namespace IdentityServer
 
             services.AddScoped<IdentityServer4.Services.IProfileService, ProfileService>();
 
-            // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
 
             services.AddAuthentication()
@@ -124,7 +118,7 @@ namespace IdentityServer
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<ProtoServices.IdentityService>()
-                    .RequireHost("localhost:5003");
+                    .RequireHost(Configuration["gRPCService"]);
                 endpoints.MapDefaultControllerRoute();
             });
         }

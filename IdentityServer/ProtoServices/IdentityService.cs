@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Shared.ResultTypes;
+using IdentityServer.Services;
 namespace IdentityServer.ProtoServices
 {
+    
     public class IdentityService : Identity.IdentityBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -50,9 +52,42 @@ namespace IdentityServer.ProtoServices
             catch (Exception ex)
             {
                 Console.WriteLine($"gRPC GetEmployees Error: {ex.Message}");
-                throw new RpcException(new Status(StatusCode.Internal, ex.Message)); // Hata detaylarını gRPC cevabına ekliyoruz
+                throw new RpcException(new Status(StatusCode.Internal, ex.Message));
             }
 
+            return response;
+        }
+
+        public override async Task<CreateEmployeeResponse> CreateEmployee(CreateEmployeeRequest request, ServerCallContext context)
+        {
+            var response = new CreateEmployeeResponse();
+            var employee = new ApplicationUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = request.Name,
+                Email = request.Email,
+                CompanyId = request.CompanyId,
+                WarehouseId = request.WarehouseId == "" ? "N/A" : request.WarehouseId
+            };
+            try
+            {
+                var result = await _userManager.CreateAsync(employee, request.Password);
+                if (result.Succeeded)
+                {
+                    response.Success = true;
+                    response.Message.AddRange(result.Errors.Select(x => x.Description).ToList());
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message.AddRange(result.Errors.Select(x => x.Description).ToList());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"gRPC AddEmployee Error: {ex.Message}");
+                throw new RpcException(new Status(StatusCode.Internal, ex.Message));
+            }
             return response;
         }
     }
