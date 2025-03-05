@@ -219,13 +219,13 @@ public class OrderController : BaseController
         return Ok(monthlySales);
     }
 
-    [HttpGet("export-file")]
+    [HttpPost("export-file")]
     public async Task<IActionResult> ExportProducts(DateTimePeriod period)
     {
         var orders = await _dbContext.Orders
             .Include(x => x.Products)
             .ThenInclude(x => x.Product)
-            .Where(x => x.Opened >= period.Start && x.Opened <= period.End)
+            //.Where(x => x.Opened >= period.Start && x.Opened <= period.End)
             .ToListAsync();
 
         var detailedOrders = orders.Select(x => new
@@ -236,11 +236,12 @@ public class OrderController : BaseController
             Products = x.Products != null
                 ? string.Join(", ", x.Products
                     .Where(p => p.Product != null)
-                    .Select(p => $"{p.Product.Name ?? "Unnamed Product"} ({p.Quantity})"))
-        : "No Products"
-        });
-        string path = await _excelService.ExportToExcel(detailedOrders);
-        return Ok(path);
+                    .Select(p => $"{p.Product!.Name} ({p.Quantity})"))
+                : "No Products"
+        }).ToList();
+
+        byte[] fileContent = await _excelService.ExportToExcel(detailedOrders);
+        return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orders.xlsx");
     }
 
     [HttpDelete("{id}")]

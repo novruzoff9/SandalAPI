@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Organization.Application.Common.Services;
+using Organization.Application.Products.Commands.CreateProductCommand;
 using Organization.Application.Shelves.Queries.GetShelvesQuery;
 using Organization.Application.Warehouses.Commands.CreateWarehouseCommand;
 using Organization.Application.Warehouses.Commands.DeleteWarehouseCommand;
@@ -8,6 +10,7 @@ using Organization.Application.Warehouses.Queries.GetWarehouseQuery;
 using Organization.Application.Warehouses.Queries.GetWarehousesQuery;
 using Organization.Domain.Entities;
 using Shared.ResultTypes;
+using Shared.Services;
 
 namespace Organization.WebAPI.Controllers;
 
@@ -15,6 +18,15 @@ namespace Organization.WebAPI.Controllers;
 [ApiController]
 public class WarehouseController : BaseController
 {
+    private readonly ISharedIdentityService _sharedIdentityService;
+    private readonly IExcelService _excelService;
+
+    public WarehouseController(ISharedIdentityService sharedIdentityService, IExcelService excelService)
+    {
+        _sharedIdentityService = sharedIdentityService;
+        _excelService = excelService;
+    }
+
     [HttpGet]
     public async Task<IActionResult> Get()
     {
@@ -54,6 +66,27 @@ public class WarehouseController : BaseController
         decimal fullShelves = totalShelves - emptySheleves;
         decimal occupancyRate = fullShelves / totalShelves;
         return Ok(occupancyRate);
+    }
+
+    [HttpPost("import-file")]
+    public async Task<IActionResult> ImportWarehouses(IFormFile file)
+    {
+        string companyId = _sharedIdentityService.GetCompanyId;
+        var warehouses = await _excelService.ImportWarehouses(file, companyId);
+        foreach (var warehouse in warehouses)
+        {
+            await Mediator.Send(new CreateWarehouse
+            (
+                Name: warehouse.Name,
+                GoogleMaps: warehouse.GoogleMaps,
+                City: warehouse.City,
+                State: warehouse.State,
+                Street: warehouse.Street,
+                ZipCode: warehouse.ZipCode
+            ));
+        }
+        var response = Response<NoContent>.Success(200);
+        return Ok(response);
     }
 
     [HttpPut("{id}")]

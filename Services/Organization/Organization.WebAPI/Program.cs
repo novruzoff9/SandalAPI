@@ -6,8 +6,8 @@ using Organization.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//var env = builder.Environment.EnvironmentName;
-var env = "Production";
+var env = builder.Environment.EnvironmentName;
+//var env = "Production";
 
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())

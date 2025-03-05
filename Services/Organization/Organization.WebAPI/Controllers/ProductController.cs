@@ -88,10 +88,11 @@ public class ProductController : BaseController
                 ImageUrl: product.ImageUrl
             ));
         }
-        return Ok(products);
+        var response = Response<NoContent>.Success(200);
+        return Ok(response);
     }
 
-    [HttpGet("export-file")]
+    [HttpPost("export-file")]
     public async Task<IActionResult> ExportProducts([FromBody] DateTimePeriod period)
     {
         var products = await Mediator.Send(new GetProductsWithOrder(period.Start, period.End));
@@ -103,8 +104,8 @@ public class ProductController : BaseController
             SellPrice = x.SellPrice,
             Quantity = x.Quantity,
             Ordered = x.OrderItems.Sum(x=>x.Quantity)
-        });
-        string path = await _excelService.ExportToExcel(detailedProducts);
-        return Ok(path);
+        }).ToList();
+        var fileContent = await _excelService.ExportToExcel(detailedProducts);
+        return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "products.xlsx");
     }
 }
