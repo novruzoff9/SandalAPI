@@ -53,7 +53,7 @@ public class ShelfController : BaseController
     public async Task<IActionResult> AddProductToShelf(AddingProductsToShelfDTO request)
     {
         var shelves = await Mediator.Send(new GetShelves());
-        var shelf = shelves.FirstOrDefault(x => x.Code == request.ShelfId);
+        var shelf = shelves.FirstOrDefault(x => x.Code == request.ShelfCode);
         var response = await Mediator.Send(new AddProductsToShelf(shelf.Id, request.ProductIds));
         return Ok(response);
     }

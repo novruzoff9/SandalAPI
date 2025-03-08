@@ -8,6 +8,6 @@ namespace Organization.Application.Common.Models.ShelfProducts;
 
 public class AddingProductsToShelfDTO
 {
-    public string ShelfId { get; set; }
-    public List<string> ProductIds { get; set; }
+    public string ShelfCode { get; set; }
+    public Dictionary<string, int> ProductIds { get; set; }
 }

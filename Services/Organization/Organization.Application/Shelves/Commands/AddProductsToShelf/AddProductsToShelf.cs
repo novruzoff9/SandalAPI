@@ -1,6 +1,6 @@
 ﻿namespace Organization.Application.Shelves.Commands.AddProductsToShelf;
 
-public record AddProductsToShelf(string shelfId, List<string> products) : IRequest<bool>;
+public record AddProductsToShelf(string shelfId, Dictionary<string, int> products) : IRequest<bool>;
 
 public class AddProductsToShelfHandler : IRequestHandler<AddProductsToShelf, bool>
 {
@@ -18,26 +18,15 @@ public class AddProductsToShelfHandler : IRequestHandler<AddProductsToShelf, boo
         }
         var alredyExist = await _context.ShelfProducts.Where(x => x.ShelfID == request.shelfId).ToListAsync();
 
-        Dictionary<string, int> idCounts = new Dictionary<string, int>();
-        foreach (var item in request.products)
-        {
-            if (idCounts.ContainsKey(item))
-            {
-                idCounts[item]++;
-            }
-            else
-            {
-                idCounts[item] = 1;
-            }
-        }
-        var products = await _context.Products.Where(x => request.products.Contains(x.Id)).ToListAsync();
+
+        var products = await _context.Products.Where(x => request.products.Keys.Contains(x.Id)).ToListAsync();
         if (products.Count != request.products.Count)
         {
             throw new NotFoundException(nameof(Product), "mehsullar tapilmadi");
         }
         var shelfProducts = new List<ShelfProduct>();
 
-        foreach (var product in idCounts)
+        foreach (var product in request.products)
         {
             var existingProduct = alredyExist.FirstOrDefault(x => x.ProductID == product.Key);
             if (existingProduct != null)
@@ -49,9 +38,9 @@ public class AddProductsToShelfHandler : IRequestHandler<AddProductsToShelf, boo
                 shelfProducts.Add(new ShelfProduct
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Shelf = shelf,
-                    Product = products.FirstOrDefault(x => x.Id == product.Key),
-                    Quantity = product.Value
+                    Quantity = product.Value,
+                    ShelfID = shelf.Id,
+                    ProductID = product.Key
                 });
             }
         }

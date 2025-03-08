@@ -179,9 +179,9 @@ public class OrderController : BaseController
     }
 
     [HttpPost("{id}/complete")]
-    public async Task<IActionResult> Close(string id, List<Product> products)
+    public async Task<IActionResult> Close(string id, CompleteOrderRequest request)
     {
-        var order = await _dbContext.Orders.Include(x => x.Products).FirstOrDefaultAsync(x => x.Id == id);
+        var order = await _dbContext.Orders.Include(x => x.Products).ThenInclude(x => x.Product).FirstOrDefaultAsync(x => x.Id == id);
         var userId = _sharedIdentityService.GetUserId;
         if (order == null)
         {
@@ -189,8 +189,8 @@ public class OrderController : BaseController
         }
         foreach (var product in order.Products)
         {
-            var orderItem = products.FirstOrDefault(x => x.Id == product.Id);
-            if (orderItem == null || orderItem.Quantity != product.Quantity)
+            var orderItem = request.Products.FirstOrDefault(x => x.Key == product.Product.Id);
+            if (orderItem.Value == 0 || orderItem.Value != product.Quantity)
             {
                 return BadRequest();
             }
@@ -214,7 +214,8 @@ public class OrderController : BaseController
             {
                 Month = g.Key,
                 TotalSales = g.Sum(x => x.Products.Sum(p => p.Quantity))
-            }).ToList();
+            })
+            .OrderBy(x => x.Month).ToList();
 
         return Ok(monthlySales);
     }
@@ -244,6 +245,26 @@ public class OrderController : BaseController
         return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "orders.xlsx");
     }
 
+    [HttpGet("monthly-sales-in-out-come")]
+    public async Task<IActionResult> GetMonthlySalesInOutCome()
+    {
+        var companyId = _sharedIdentityService.GetCompanyId;
+        var orders = await _dbContext.Orders.Include(x => x.Products)
+            .ThenInclude(x => x.Product)
+            .Where(x => x.CompanyId == companyId && x.Closed.HasValue)
+            .ToListAsync();
+
+        var monthlySales = orders.GroupBy(x => x.Closed.Value.Month).ToList();
+        var monthlySalesInOutCome = monthlySales.Select(g => new
+        {
+            Month = g.Key,
+            TotalSales = g.Sum(x => x.Products.Sum(p => p.Quantity)),
+            TotalIncome = g.Sum(x => x.Products.Sum(p => p.Product.SellPrice * p.Quantity))
+        })
+            .OrderBy(x => x.Month).ToList();
+        return Ok(monthlySalesInOutCome);
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
@@ -255,4 +276,8 @@ public class OrderController : BaseController
         _dbContext.SaveChanges();
         return Ok();
     }
+}
+public class CompleteOrderRequest
+{
+    public Dictionary<string, int> Products { get; set; }
 }
