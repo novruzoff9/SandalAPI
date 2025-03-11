@@ -29,3 +29,7 @@ public class OrderItemShowDto
     public string Name { get; set; } = null!;
     public string ShelfCode { get; set; }
 }
+public class CompleteOrderRequest
+{
+    public Dictionary<string, int> Products { get; set; }
+}

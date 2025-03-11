@@ -123,21 +123,19 @@ public class OrderController : BaseController
         return Ok(orderDto);
     }
 
+
     [HttpGet("{id}/products")]
     public async Task<IActionResult> GetProductsById(string id)
     {
-        var order = await _dbContext.Orders.Include(x => x.Products)
-            .ThenInclude(x => x.Product)
-            .ThenInclude(x => x.ShelfProducts)
-            .ThenInclude(x => x.Shelf)
+        Order? order = await _dbContext.Orders.Include(x => x.Products!)
+            .ThenInclude(x => x.Product!)
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        var orderProducts = order.Products.Select(x => new OrderItemShowDto
+        var orderProducts = order?.Products!.Select(x => new OrderItemShowDto
         {
             Id = x.ProductId,
             Quantity = x.Quantity,
-            Name = x.Product.Name
-            //ShelfCode = x.Product.ShelfProducts.FirstOrDefault().Shelf.Code
+            Name = x.Product.Name,
         }).ToList();
 
         string companyId = _sharedIdentityService.GetCompanyId;
@@ -145,10 +143,49 @@ public class OrderController : BaseController
         {
             return Unauthorized();
         }
-        var shelves = await _dbContext.Shelves.Where(x => x.WarehouseID == order.WarehouseId)
-            .Include(x => x.ShelfProducts)
-            .ThenInclude(x => x.Product).ToListAsync();
 
+        return Ok(orderProducts);
+    }
+
+    [HttpGet("{id}/products-with-shelves")]
+    public async Task<IActionResult> GetProductsWithShelvesById(string id)
+    {
+        Order? order = await _dbContext.Orders.Include(x => x.Products!)
+            .ThenInclude(x => x.Product!)
+            .ThenInclude(p => p.ShelfProducts!)
+            .ThenInclude(sp => sp.Shelf!)
+            .FirstOrDefaultAsync(x => x.Id == id);
+
+        var orderProducts = order?.Products!.Select(x => new OrderItemShowDto
+        {
+            Id = x.ProductId,
+            Quantity = x.Quantity,
+            Name = x.Product.Name,
+        }).ToList();
+
+        string companyId = _sharedIdentityService.GetCompanyId;
+        if (order.CompanyId != companyId)
+        {
+            return Unauthorized();
+        }
+
+        List<List<ShelfProduct>> shelfProducts = order.Products.Select(x => x.Product.ShelfProducts).ToList();
+
+        foreach (var orderItem in order.Products)
+        {
+            var spOfProduct = shelfProducts.FirstOrDefault(x => x != null &&
+            x.Any(sp => sp.ProductID == orderItem.ProductId && sp.Quantity >= orderItem.Quantity))?
+            .FirstOrDefault(sp => sp.ProductID == orderItem.ProductId && sp.Quantity >= orderItem.Quantity);
+
+            if (spOfProduct != null)
+            {
+                orderProducts.FirstOrDefault(x => x.Id == spOfProduct.ProductID).ShelfCode = spOfProduct.Shelf.Code;
+            }
+            else
+            {
+                //TODO: mehsul olmamasi halinda response
+            }
+        }
 
         return Ok(orderProducts);
     }
@@ -269,6 +306,11 @@ public class OrderController : BaseController
     public async Task<IActionResult> Delete(string id)
     {
         var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == id);
+        string companyId = _sharedIdentityService.GetCompanyId;
+        if (order.CompanyId != companyId)
+        {
+            return Unauthorized();
+        }
         if (order != null)
         {
             _dbContext.Orders.Remove(order);
@@ -276,8 +318,4 @@ public class OrderController : BaseController
         _dbContext.SaveChanges();
         return Ok();
     }
-}
-public class CompleteOrderRequest
-{
-    public Dictionary<string, int> Products { get; set; }
 }
