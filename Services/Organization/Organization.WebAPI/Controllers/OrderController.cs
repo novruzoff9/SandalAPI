@@ -39,6 +39,18 @@ public class OrderController : BaseController
         _mapper = mapper;
     }
 
+    [HttpGet("{id}/status")]
+    public async Task<IActionResult> GetStatusofOrder(string id)
+    {
+        var order = await _dbContext.Orders.FirstOrDefaultAsync(x => x.Id == id);
+        string companyId = _sharedIdentityService.GetCompanyId;
+        if (order.CompanyId != companyId)
+        {
+            return Unauthorized();
+        }
+        return Ok(order.Closed.HasValue ? "completed" : "active");
+    }
+
     [HttpGet("company")]
     public async Task<IActionResult> GetByCompany()
     {
@@ -58,9 +70,9 @@ public class OrderController : BaseController
     [HttpGet("active")]
     public async Task<IActionResult> GetActiveOrders()
     {
-        //string companyId = _sharedIdentityService.GetCompanyId;
+        string companyId = _sharedIdentityService.GetCompanyId;
         var orders = await _dbContext.Orders.Include(x => x.Warehouse)
-            .Where(x => x.Closed == null)
+            .Where(x => x.Closed == null && x.CompanyId == companyId)
             .OrderByDescending(x => x.Opened)
             .Select(x => new OrderShowDto
             {
