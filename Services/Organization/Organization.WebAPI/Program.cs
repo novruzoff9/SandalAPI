@@ -1,4 +1,9 @@
+using EventBus.Base;
+using EventBus.Base.Abstraction;
+using EventBus.Factory;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Organization.Application;
@@ -15,12 +20,12 @@ builder.Configuration
     .AddJsonFile($"appsettings.{env}.json", optional: true)
     .AddEnvironmentVariables();
 
-// Add services to the container.
-
+// Add services to the container.builder.Services.AddControllers(options =>
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-builder.Services.AddInfrasrtuctureServices(builder.Configuration);
+builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddApplicationServices(builder.Configuration);
 
@@ -33,10 +38,10 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         builder => builder
             .AllowAnyOrigin()
-            //.WithOrigins("https://gleaming-frangipane-f06b21.netlify.app")
             .AllowAnyMethod()
             .AllowAnyHeader());
 });
+
 JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
 JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("roles");
 
@@ -51,9 +56,24 @@ builder.Services
         options.TokenValidationParameters = new TokenValidationParameters
         {
             NameClaimType = "sub",
-            RoleClaimType = "roles"
+            RoleClaimType = "roles",
+            ValidateAudience = true
         };
     });
+
+builder.Services.AddSingleton<IEventBus>(options =>
+{
+    EventBusConfig config = new()
+    {
+        ConnectionRetryCount = 5,
+        EventNameSuffix = "IntegrationEvent",
+        SubscribeClientAppName = "OrganizationService",
+        EventBusType = EventBusType.RabbitMQ,
+    };
+
+    return EventBusFactory.Create(config, options);
+});
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

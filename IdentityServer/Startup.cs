@@ -35,7 +35,6 @@ namespace IdentityServer
 
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-            //services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, CustomUserClaimsPrincipalFactory>();
 
             services.AddCors(options =>
             {
@@ -67,6 +66,7 @@ namespace IdentityServer
                 .AddInMemoryClients(Config.Clients)
                 .AddAspNetIdentity<ApplicationUser>();
 
+            builder.AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>();
             services.AddScoped<IdentityServer4.Services.IProfileService, ProfileService>();
 
             builder.AddDeveloperSigningCredential();
@@ -83,7 +83,6 @@ namespace IdentityServer
                     options.ClientSecret = "copy client secret from Google here";
                 });
 
-            builder.AddResourceOwnerValidator<IdentityResourceOwnerPasswordValidator>();
 
             builder.Services.AddCors(options =>
             {

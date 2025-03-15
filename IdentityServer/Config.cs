@@ -15,6 +15,8 @@ namespace IdentityServer
         public static IEnumerable<ApiResource> ApiResources => new List<ApiResource>
         {
             new ApiResource("OrganizationAPIFullAccess") { Scopes = { "OrganizationAPIFullAccess" }, },
+            new ApiResource("GatewayAPIFullAccess") { Scopes = { "GatewayAPIFullAccess" } },
+
             new ApiResource(IdentityServerConstants.LocalApi.ScopeName)
         };
 
@@ -38,6 +40,7 @@ namespace IdentityServer
             new ApiScope[]
             {
                 new ApiScope("OrganizationAPIFullAccess", "Access for Organization Api application"),
+                new ApiScope("GatewayAPIFullAccess","Gateway API Full Access"),
                 new ApiScope(IdentityServerConstants.LocalApi.ScopeName)
             };
 
@@ -47,7 +50,7 @@ namespace IdentityServer
                 new Client
                 {
                     ClientId = "MVCApiClient",
-                    ClientName = "MRPos Core API",
+                    ClientName = "Sandal Core API",
 
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
@@ -74,6 +77,7 @@ namespace IdentityServer
                     AllowedScopes = { 
                         "roles",
                         "OrganizationAPIFullAccess",
+                        "GatewayAPIFullAccess",
                         IdentityServerConstants.LocalApi.ScopeName,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.OpenId,

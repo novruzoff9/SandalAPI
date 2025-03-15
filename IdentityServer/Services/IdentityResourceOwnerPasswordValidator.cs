@@ -41,12 +41,10 @@ namespace IdentityServer.Services
 
             // Claim listesi oluştur ve roller ekle
             var claims = new List<Claim>
-        {
-            new Claim("sub", user.Id.ToString()), // Kullanıcı kimliği
-            new Claim("email", user.Email),        // Kullanıcı e-posta
-            new Claim("company", user.CompanyId ?? "Sandal"),
-            new Claim("warehouse", user.WarehouseId == null ? "noBranch" : user.WarehouseId)
-        };
+            {
+                new Claim("sub", user.Id.ToString()), // Kullanıcı kimliği
+                new Claim("email", user.Email),        // Kullanıcı e-posta
+            };
 
             // Rolleri ekle
             claims.AddRange(roles.Select(role => new Claim("roles", role)));
