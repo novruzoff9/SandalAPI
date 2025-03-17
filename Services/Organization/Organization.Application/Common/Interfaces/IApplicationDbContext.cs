@@ -11,8 +11,6 @@ namespace Organization.Application.Common.Interfaces
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<Shelf> Shelves { get; set; }
         public DbSet<ShelfProduct> ShelfProducts { get; set; }
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

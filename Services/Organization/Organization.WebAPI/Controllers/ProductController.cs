@@ -95,7 +95,8 @@ public class ProductController : BaseController
     [HttpPost("export-file")]
     public async Task<IActionResult> ExportProducts([FromBody] DateTimePeriod period)
     {
-        var products = await Mediator.Send(new GetProductsWithOrder(period.Start, period.End));
+        //var products = await Mediator.Send(new GetProducts(period.Start, period.End));
+        var products = await Mediator.Send(new GetProducts());
         var detailedProducts = products.Select(x => new ExportProductDto
         {
             Name = x.Name,
@@ -103,7 +104,7 @@ public class ProductController : BaseController
             PurchasePrice = x.PurchasePrice,
             SellPrice = x.SellPrice,
             Quantity = x.Quantity,
-            Ordered = x.OrderItems.Sum(x=>x.Quantity)
+            //Ordered = x.OrderItems.Sum(x=>x.Quantity)
         }).ToList();
         var fileContent = await _excelService.ExportToExcel(detailedProducts);
         return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "products.xlsx");

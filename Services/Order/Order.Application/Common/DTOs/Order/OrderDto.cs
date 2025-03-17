@@ -1,4 +1,4 @@
-﻿namespace Organization.Application.DTOs.Order;
+﻿namespace Order.Application.DTOs.Order;
 public class OrderDto
 {
     public string WarehouseId { get; set; } = null!;
@@ -8,6 +8,9 @@ public class OrderDto
 public class OrderItemDto
 {
     public string ProductId { get; set; } = null!;
+    public string ProductName { get; set; }
+    public decimal UnitPrice { get; set; }
+    public string ImageUrl { get; set; }
     public int Quantity { get; set; }
 }
 

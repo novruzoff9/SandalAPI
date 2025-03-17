@@ -16,9 +16,6 @@ namespace Organization.Infrastructure.Data
         public DbSet<Shelf> Shelves { get; set; }
         public DbSet<ShelfProduct> ShelfProducts { get; set; }
 
-        public DbSet<Order> Orders { get; set; }
-        public DbSet<OrderItem> OrderItems { get; set; }
-
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             return await base.SaveChangesAsync(cancellationToken);

@@ -5,14 +5,13 @@ namespace Organization.Domain.Entities;
 
 public class Warehouse : BaseEntity
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
     public string? GoogleMaps { get; set; } 
-    public string City { get; set; }
-    public string State { get; set; }
+    public string City { get; set; } = null!;
+    public string State { get; set; } = null!;
     public string Street { get; set; }
     public string ZipCode { get; set; }
-    public string CompanyID { get; set; }
+    public string CompanyID { get; set; } = null!;
     public Company Company { get; set; }
-    public List<Shelf> Shelves { get; set; }
-    public List<Order> Orders { get; set; }
+    public List<Shelf>? Shelves { get; set; }
 }

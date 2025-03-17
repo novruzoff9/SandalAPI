@@ -34,7 +34,7 @@ namespace IdentityServer.Services
             var companyClaim = new Claim("company", user.CompanyId ?? "Sandal");
             context.IssuedClaims.Add(companyClaim);
 
-            var branchClaim = new Claim("warehouse", user.WarehouseId ?? "NoBranch");
+            var branchClaim = new Claim("warehouse", user.WarehouseId ?? "N/A");
             context.IssuedClaims.Add(branchClaim);
 
             var emailClaim = new Claim("email", user.Email);

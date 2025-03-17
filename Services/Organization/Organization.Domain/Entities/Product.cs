@@ -13,5 +13,4 @@ public class Product : BaseEntity
     public string CompanyId { get; set; }
     public Company Company { get; set; }
     public List<ShelfProduct> ShelfProducts { get; set; }
-    public List<OrderItem> OrderItems { get; set; }
 }
