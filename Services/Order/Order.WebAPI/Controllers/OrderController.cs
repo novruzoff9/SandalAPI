@@ -19,6 +19,9 @@ public class BaseController : ControllerBase
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
 }
 
+
+[Route("api/[controller]")]
+[ApiController]
 public class OrderController : BaseController
 {
     private readonly IExcelService _excelService;
@@ -70,8 +73,8 @@ public class OrderController : BaseController
     public async Task<IActionResult> GetById(string id)
     {
         var order = await Mediator.Send(new GetOrderQuery(id));
-        var client = _httpClientFactory.CreateClient("products");
-        var orderOpenedBy = client.GetAsync($"{identityService}/api/Users/{order.OpenedBy}");
+        //var client = _httpClientFactory.CreateClient("products");
+        //var orderOpenedBy = client.GetAsync($"{identityService}/api/Users/{order.OpenedBy}");
         //var user = await orderOpenedBy.Result.Content.ReadFromJsonAsync<UserDto>();
         //order.OpenedBy = user.UserName;
         //if (order.ClosedBy != null)

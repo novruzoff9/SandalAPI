@@ -20,6 +20,7 @@ public class OrderItem : BaseEntity
         Guard.Against.NullOrEmpty(imageUrl, nameof(imageUrl));
         Guard.Against.NegativeOrZero(unitPrice, nameof(unitPrice));
 
+        Id = Guid.NewGuid().ToString();
         ProductId = productId;
         ProductName = productName;
         UnitPrice = unitPrice;
@@ -34,6 +35,7 @@ public class OrderItem : BaseEntity
         Guard.Against.NegativeOrZero(unitPrice, nameof(unitPrice));
         Guard.Against.NegativeOrZero(quantity, nameof(quantity));
 
+        Id = Guid.NewGuid().ToString();
         ProductId = productId;
         ProductName = productName;
         UnitPrice = unitPrice;

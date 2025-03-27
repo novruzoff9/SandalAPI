@@ -17,12 +17,18 @@ public class GetOrderQueryHandler : IRequestHandler<GetOrderQuery, Domain.Entiti
     {
         string companyId = _sharedIdentityService.GetCompanyId;
         var order = await _context.Orders
-            .Include(x=>x.Products)
+            .Include(x => x.Products)
+            .Include(x=>x.Status)
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
-        if(order == null)
+        if (order == null)
         {
             throw new NotFoundException(nameof(Domain.Entities.Order), request.Id);
+        }
+
+        foreach (var item in order.Products)
+        {
+            item.Order = null;
         }
         return order;
     }

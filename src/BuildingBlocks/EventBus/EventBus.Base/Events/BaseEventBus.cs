@@ -41,7 +41,13 @@ public abstract class BaseEventBus : IEventBus
 
                     var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
                     await Task.Yield();
-                    await (Task)concreteType.GetMethod("Handle").Invoke(handler, new object[] { integrationEvent });
+                    var method = concreteType.GetMethod("Handle");
+                    var result = method.Invoke(handler, new object[] { integrationEvent, CancellationToken.None });
+
+                    if (result is Task task)
+                    {
+                        await task;
+                    }
                 }
             }
             processed = true;

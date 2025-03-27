@@ -1,5 +1,14 @@
+using EventBus.Base.Abstraction;
+using EventBus.Base;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.JsonWebTokens;
+using Microsoft.IdentityModel.Tokens;
 using Order.Application;
 using Order.Infrastructure;
+using EventBus.Factory;
+using Order.Application.IntegratonEvents.Handlers;
+using Shared.Events.Events;
+using Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,17 +31,47 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddApplication(builder.Configuration);
 
+builder.Services.AddHttpClient();
+
+builder.Services.AddHttpContextAccessor();
+JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("roles");
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = builder.Configuration["Services:IdentityService"];
+        options.Audience = "OrganizationAPIFullAccess";
+        options.RequireHttpsMetadata = false;
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            NameClaimType = "sub",
+            RoleClaimType = "roles",
+            ValidateAudience = true
+        };
+    });
+
 builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
+IEventBus _eventBus = app.Services.GetRequiredService<IEventBus>();
+_eventBus.Subscribe<OrderStockNotEnoughIntegrationEvent, OrderStockNotEnoughIntegrationEventHandler>();
+
 app.UseAuthorization();
+
+app.UseMiddleware<RestrictAccessMiddleware>();
 
 app.MapControllers();
 

@@ -16,14 +16,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\..\..\Shared\Shared.Events\Shared.Events.csproj" />
 	  <ProjectReference Include="..\..\..\Shared\Shared\Shared.csproj" />
+	  <ProjectReference Include="..\..\..\src\BuildingBlocks\EventBus\EventBus.Base\EventBus.Base.csproj" />
+	  <ProjectReference Include="..\..\..\src\BuildingBlocks\EventBus\EventBus.Factory\EventBus.Factory.csproj" />
 	  <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Common\Behaviors\" />
 	  <Folder Include="Common\Exceptions\" />
-	  <Folder Include="IntegratonEvents\" />
 	</ItemGroup>
 
 </Project>

@@ -16,7 +16,8 @@ public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, List<Domain
     public async Task<List<Domain.Entities.Order>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
     {
         string companyId = _identityService.GetCompanyId;
-        var orders = await _context.Orders.Where(x => x.CompanyId == companyId).ToListAsync(cancellationToken);
+        var orders = await _context.Orders.Where(x => x.CompanyId == companyId)
+            .ToListAsync(cancellationToken);
         return orders;
     }
 }

@@ -7,7 +7,11 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Organization.Application;
+using Organization.Application.Common.Services;
+using Organization.Application.IntegrationEvent.Handlers;
 using Organization.Infrastructure;
+using Shared.Events.Events;
+using Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,15 +37,6 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowAll",
-        builder => builder
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
-});
-
 JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
 JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("roles");
 
@@ -61,19 +56,6 @@ builder.Services
         };
     });
 
-builder.Services.AddSingleton<IEventBus>(options =>
-{
-    EventBusConfig config = new()
-    {
-        ConnectionRetryCount = 5,
-        EventNameSuffix = "IntegrationEvent",
-        SubscribeClientAppName = "OrganizationService",
-        EventBusType = EventBusType.RabbitMQ,
-    };
-
-    return EventBusFactory.Create(config, options);
-});
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -86,9 +68,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors("AllowAll");
+IEventBus _eventBus = app.Services.GetRequiredService<IEventBus>();
+_eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseMiddleware<RestrictAccessMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 

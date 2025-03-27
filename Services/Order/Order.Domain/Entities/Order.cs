@@ -14,6 +14,7 @@ public class Order : BaseEntity, IAggregateRoot
     public string WarehouseId { get; private set; }
     public string WarehouseName { get; private set; }
     public string CustomerId { get; private set; } = null!;
+    public string? Note { get; private set; }
 
     public Address Address { get; private set; }
 
@@ -21,12 +22,12 @@ public class Order : BaseEntity, IAggregateRoot
     public IReadOnlyCollection<OrderItem> Products => _products.AsReadOnly();
 
     private int _statusId;
-    public OrderStatus Status { get; private set; }
+    public OrderStatus? Status { get; private set; }
 
     public Order() { }
     public Order(string openedBy,Address address, string companyId,
-        //string customerId,
-        string warehouseId, string warehouseName)
+        string warehouseId, string warehouseName,
+        string customerId)
     {
         Guard.Against.Null(address, nameof(address));
         Guard.Against.NullOrEmpty(companyId, nameof(companyId));
@@ -34,12 +35,14 @@ public class Order : BaseEntity, IAggregateRoot
         Guard.Against.NullOrEmpty(warehouseName, nameof(warehouseName));
         //Guard.Against.NullOrEmpty(customerId, nameof(customerId));
 
+        Id = Guid.NewGuid().ToString();
         Opened = DateTime.Now;
         OpenedBy = openedBy;
         Address = address;
         CompanyId = companyId;
         WarehouseId = warehouseId;
         WarehouseName = warehouseName;
+        CustomerId = customerId;
         _statusId = OrderStatus.Submitted.Id;
         //CustomerId = customerId;
         _products = new List<OrderItem>();
@@ -109,5 +112,10 @@ public class Order : BaseEntity, IAggregateRoot
     {
         Guard.Against.Null(status, nameof(status));
         _statusId = status.Id;
+    }
+
+    public void UpdateNote(string note)
+    {
+        Note = note;
     }
 }

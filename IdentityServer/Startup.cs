@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using IdentityServer.Services;
 using Shared.Services;
+using Shared.Middlewares;
 
 namespace IdentityServer
 {
@@ -35,18 +36,6 @@ namespace IdentityServer
 
             services.AddScoped<ISharedIdentityService, SharedIdentityService>();
             services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAllOrigins",
-                    builder =>
-                    {
-                        builder
-                            .AllowAnyOrigin()
-                            .AllowAnyHeader()
-                            .AllowAnyMethod();
-                    });
-            });
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -83,18 +72,6 @@ namespace IdentityServer
                     options.ClientSecret = "copy client secret from Google here";
                 });
 
-
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAllOrigins",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin()
-                        .AllowAnyHeader()
-                        .AllowAnyMethod();
-                    });
-            });
-
             services.AddGrpc();
         }
 
@@ -109,11 +86,10 @@ namespace IdentityServer
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseCors("AllowAllOrigins");
+            app.UseMiddleware<RestrictAccessMiddleware>();
             app.UseIdentityServer();
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCors("AllowAllOrigins");
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGrpcService<ProtoServices.IdentityService>()

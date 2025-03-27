@@ -1,4 +1,3 @@
-
 namespace Organization.Application.Products.Queries.GetProductQuery;
 
 public record GetProduct(string Id) : IRequest<Product>;
