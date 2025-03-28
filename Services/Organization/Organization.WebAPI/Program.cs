@@ -74,6 +74,7 @@ _eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHa
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseMiddleware<RestrictAccessMiddleware>();
+app.UseMiddleware<TokenCheckerMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 

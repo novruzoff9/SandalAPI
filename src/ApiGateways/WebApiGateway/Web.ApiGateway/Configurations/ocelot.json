@@ -69,7 +69,7 @@
           "Port": 5002
         }
       ],
-      "UpstreamPathTemplate": "/shelfves/{everything}",
+      "UpstreamPathTemplate": "/shelves/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {

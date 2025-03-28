@@ -72,6 +72,7 @@ _eventBus.Subscribe<OrderStockNotEnoughIntegrationEvent, OrderStockNotEnoughInte
 app.UseAuthorization();
 
 app.UseMiddleware<RestrictAccessMiddleware>();
+app.UseMiddleware<TokenCheckerMiddleware>();
 
 app.MapControllers();
 

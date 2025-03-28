@@ -11,7 +11,7 @@ public class InterceptionMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        context.Request.Headers["Referrer"] = "Sandal-Gateway";
+        context.Request.Headers["X-Internal-Request"] = "true";
         await next(context);
     }
 }

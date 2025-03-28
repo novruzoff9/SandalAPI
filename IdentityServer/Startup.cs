@@ -72,6 +72,7 @@ namespace IdentityServer
                     options.ClientSecret = "copy client secret from Google here";
                 });
 
+
             services.AddGrpc();
         }
 
