@@ -11,9 +11,7 @@ namespace Order.Domain.Entities;
 public class OrderStatus : Enumeration
 {
     public static OrderStatus Submitted = new(1, nameof(Submitted).ToLowerInvariant());
-    //public static OrderStatus AwaitingValidation = new(2, nameof(AwaitingValidation).ToLowerInvariant());
     public static OrderStatus StockConfirmed = new(2, nameof(StockConfirmed).ToLowerInvariant());
-    //public static OrderStatus Paid = new(4, nameof(Paid).ToLowerInvariant());
     public static OrderStatus Prepared = new(3, nameof(Prepared).ToLowerInvariant());
     public static OrderStatus Shipped = new(4, nameof(Shipped).ToLowerInvariant());
     public static OrderStatus Cancelled = new(5, nameof(Cancelled).ToLowerInvariant());

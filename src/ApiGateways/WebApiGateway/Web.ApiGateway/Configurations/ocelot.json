@@ -21,7 +21,7 @@
           "Port": 5002
         }
       ],
-      "UpstreamPathTemplate": "/companies/{everything}",
+      "UpstreamPathTemplate": "/company/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
@@ -33,7 +33,7 @@
           "Port": 5002
         }
       ],
-      "UpstreamPathTemplate": "/products/{everything}",
+      "UpstreamPathTemplate": "/product/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
@@ -45,7 +45,19 @@
           "Port": 5002
         }
       ],
-      "UpstreamPathTemplate": "/employees/{everything}",
+      "UpstreamPathTemplate": "/employee/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/customer/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5002
+        }
+      ],
+      "UpstreamPathTemplate": "/customer/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
@@ -57,7 +69,7 @@
           "Port": 5002
         }
       ],
-      "UpstreamPathTemplate": "/warehouses/{everything}",
+      "UpstreamPathTemplate": "/warehouse/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
@@ -69,7 +81,7 @@
           "Port": 5002
         }
       ],
-      "UpstreamPathTemplate": "/shelves/{everything}",
+      "UpstreamPathTemplate": "/shelf/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
@@ -81,11 +93,11 @@
           "Port": 5004
         }
       ],
-      "UpstreamPathTemplate": "/orders/{everything}",
+      "UpstreamPathTemplate": "/order/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:1900"
+    "BaseUrl": "http://localhost:5000"
   }
 }

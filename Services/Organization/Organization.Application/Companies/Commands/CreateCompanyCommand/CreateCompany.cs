@@ -15,13 +15,7 @@ public class CreateCompanyCommandHandler : IRequestHandler<CreateCompany, bool>
     {
         Guard.Against.Null(request, nameof(CreateCompany));
 
-        var company = new Company
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = request.Name,
-            Description = request.Description,
-            LogoUrl = request.LogoUrl
-        };
+        var company = new Company(request.Name, request.LogoUrl, request.Description);
 
         await _context.Companies.AddAsync(company, cancellationToken);
 

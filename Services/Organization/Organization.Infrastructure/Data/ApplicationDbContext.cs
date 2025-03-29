@@ -15,8 +15,9 @@ namespace Organization.Infrastructure.Data
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<Shelf> Shelves { get; set; }
         public DbSet<ShelfProduct> ShelfProducts { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
-        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             return await base.SaveChangesAsync(cancellationToken);
         }

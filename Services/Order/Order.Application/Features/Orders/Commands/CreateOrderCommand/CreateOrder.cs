@@ -40,14 +40,14 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, boo
 
         foreach (var item in request.orderItems)
         {
-            newOrder.AddOrderItem(item.ProductId, item.ProductName, item.UnitPrice, item.ImageUrl);
+            newOrder.AddOrderItem(item.ProductId, item.ProductName, item.UnitPrice, item.ImageUrl, item.Quantity);
         }
 
         await _context.Orders.AddAsync(newOrder, cancellationToken);
 
-        var success = await _context.SaveChangesAsync(cancellationToken) > 0;
+        bool success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-        var orderCreatedEvent = new OrderCreatedIntegrationEvent(
+        OrderCreatedIntegrationEvent orderCreatedEvent = new(
             newOrder.Id, request.customerId, request.warehouseId,
             newOrder.Products.Select(p => new Shared.Events.Events.OrderItemDto
             {

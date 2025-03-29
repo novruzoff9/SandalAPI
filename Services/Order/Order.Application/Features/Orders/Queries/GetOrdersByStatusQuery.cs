@@ -22,6 +22,8 @@ public class GetOrdersByStatusQueryHandler : IRequestHandler<GetOrdersByStatusQu
         var status = OrderStatus.FromName(request.status);
         string companyId = _sharedIdentityService.GetCompanyId;
         var orders = await _context.Orders
+            .Include(x => x.Products)
+            .Include(x => x.Status)
             .Where(x => x.CompanyId == companyId && x.Status == status)
             .ToListAsync(cancellationToken);
 

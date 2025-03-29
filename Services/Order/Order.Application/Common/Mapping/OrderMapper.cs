@@ -17,6 +17,6 @@ public class OrderMapper : Profile
             .ForMember(dest => dest.OpenedBy, opt => opt.MapFrom(src => src.OpenedBy))
             .ForMember(dest => dest.Closed, opt => opt.MapFrom(src => src.Closed.HasValue ? src.Closed.Value.ToString("yyyy-MM-dd HH:mm") : null))
             .ForMember(dest => dest.ClosedBy, opt => opt.MapFrom(src => src.ClosedBy != null ? src.ClosedBy : null))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Closed.HasValue ? "Closed" : "Open"));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status!.Name));
     }
 }

@@ -7,6 +7,8 @@ using Organization.Application.IntegrationEvent.Handlers;
 using Shared.Services;
 using System.Reflection;
 using EventBus.Factory;
+using FluentValidation;
+using Organization.Application.Common.Behaviors;
 
 namespace Organization.Application;
 
@@ -17,10 +19,14 @@ public static class DependencyInjection
         //Automapper configuration
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
+        //FluentValidation configuration
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+        //MediatR configuration
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
-            //cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         });
 
         services.AddScoped<ISharedIdentityService, SharedIdentityService>();

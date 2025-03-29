@@ -22,9 +22,7 @@ public class EditCompanyCommandHandler : IRequestHandler<EditCompany, bool>
 
         if (company == null) { return false; }
 
-        company.Name = request.Name;
-        company.Description = request.Description;
-        company.LogoUrl = request.LogoUrl;
+        company.Update(request.Name, request.LogoUrl, request.Description);
 
         _context.Companies.Update(company);
 

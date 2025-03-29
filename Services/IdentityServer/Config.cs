@@ -67,7 +67,6 @@ namespace IdentityServer
                     ClientId = "MVCUserApiClient",
                     ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
 
-                    AllowOfflineAccess = true,
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
 
                     //RedirectUris = { "https://localhost:44300/signin-oidc" },
@@ -85,9 +84,12 @@ namespace IdentityServer
                         IdentityServerConstants.StandardScopes.OfflineAccess
                     },
                     AccessTokenType = AccessTokenType.Jwt,
-                    AccessTokenLifetime = 24 * 60 * 60,
-                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(1) - DateTime.Now).TotalSeconds,
-                    RefreshTokenUsage = TokenUsage.ReUse
+                    AccessTokenLifetime = 60 * 60,
+                    AllowOfflineAccess = true,
+                    RefreshTokenUsage = TokenUsage.ReUse,
+                    RefreshTokenExpiration = TokenExpiration.Sliding,
+                    AbsoluteRefreshTokenLifetime = (int)(DateTime.Now.AddDays(3) - DateTime.Now).TotalSeconds,
+                    SlidingRefreshTokenLifetime = 60 * 60 * 24,
                 },
             };
     }

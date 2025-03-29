@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Organization.Application;
+using Organization.Application.Common.Middlewares;
 using Organization.Application.Common.Services;
 using Organization.Application.IntegrationEvent.Handlers;
 using Organization.Infrastructure;
@@ -73,6 +74,7 @@ _eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHa
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<RestrictAccessMiddleware>();
 app.UseMiddleware<TokenCheckerMiddleware>();
 app.UseAuthorization();

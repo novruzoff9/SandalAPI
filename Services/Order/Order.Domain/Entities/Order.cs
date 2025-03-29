@@ -33,7 +33,7 @@ public class Order : BaseEntity, IAggregateRoot
         Guard.Against.NullOrEmpty(companyId, nameof(companyId));
         Guard.Against.NullOrEmpty(warehouseId, nameof(warehouseId));
         Guard.Against.NullOrEmpty(warehouseName, nameof(warehouseName));
-        //Guard.Against.NullOrEmpty(customerId, nameof(customerId));
+        Guard.Against.NullOrEmpty(customerId, nameof(customerId));
 
         Id = Guid.NewGuid().ToString();
         Opened = DateTime.Now;
@@ -44,7 +44,6 @@ public class Order : BaseEntity, IAggregateRoot
         WarehouseName = warehouseName;
         CustomerId = customerId;
         _statusId = OrderStatus.Submitted.Id;
-        //CustomerId = customerId;
         _products = new List<OrderItem>();
     }
 
@@ -106,6 +105,7 @@ public class Order : BaseEntity, IAggregateRoot
         Guard.Against.NullOrEmpty(closedBy, nameof(closedBy));
         Closed = DateTime.Now;
         ClosedBy = closedBy;
+        _statusId = OrderStatus.Shipped.Id;
     }
 
     public void UpdateStatus(OrderStatus status)

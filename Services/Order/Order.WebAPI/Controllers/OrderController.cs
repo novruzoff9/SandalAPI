@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Order.Application.Common.Mapping;
 using Order.Application.Common.Services;
 using Order.Application.DTOs.Order;
 using Order.Application.Features.Orders.Commands.CompleteOrderCommand;
@@ -10,6 +12,7 @@ using Order.Application.Features.Orders.Queries;
 using Order.Application.Features.Orders.Queries.GetOrderQuery;
 using Order.Application.Features.Orders.Queries.GetOrdersByWarehouseQuery;
 using Order.Application.Features.Orders.Queries.GetOrdersQuery;
+using Shared.ResultTypes;
 
 namespace Order.WebAPI.Controllers;
 
@@ -62,11 +65,14 @@ public class OrderController : BaseController
         return Ok(orders);
     }
 
-    [HttpGet("ByStatus")]
+    [HttpGet("ByStatus/{status}")]
     public async Task<IActionResult> GetByStatus(string status)
     {
         var orders = await Mediator.Send(new GetOrdersByStatusQuery(status));
-        return Ok(orders);
+        var orderDtos = orders.AsQueryable()
+            .ProjectTo<OrderShowDto>(_mapper.ConfigurationProvider).ToList();
+        var response = Response<List<OrderShowDto>>.Success(orderDtos, 200);
+        return Ok(response);
     }
 
     [HttpGet("{id}")]
@@ -120,9 +126,10 @@ public class OrderController : BaseController
     [HttpGet("monthly-sales")]
     public async Task<IActionResult> GetMonthlySales()
     {
-        var orders = await Mediator.Send(new GetOrdersByStatusQuery("Completed"));
+        var orders = await Mediator.Send(new GetOrdersByStatusQuery("shipped"));
 
-        var monthlySales = orders.GroupBy(x => x.Closed.Value.Month)
+        var monthlySales = orders
+            .GroupBy(x => new DateOnly(x.Closed.Value.Year, x.Closed.Value.Month, 1))
             .Select(g => new
             {
                 Month = g.Key,
@@ -157,9 +164,10 @@ public class OrderController : BaseController
     [HttpGet("monthly-sales-in-out-come")]
     public async Task<IActionResult> GetMonthlySalesInOutCome()
     {
-        var orders = await Mediator.Send(new GetOrdersQuery());
+        var orders = await Mediator.Send(new GetOrdersByStatusQuery("shipped"));
 
-        var monthlySales = orders.GroupBy(x => x.Closed.Value.Month).ToList();
+        var monthlySales = orders
+            .GroupBy(x => new DateOnly(x.Closed.Value.Year, x.Closed.Value.Month, 1)).ToList();
         var monthlySalesInOutCome = monthlySales.Select(g => new
         {
             Month = g.Key,

@@ -11,6 +11,8 @@ using System.Text;
 using Grpc.Net.Client;
 using IdentityServer.Protos;
 using Grpc.Core;
+using Grpc.Core.Interceptors;
+using Shared.Interceptors;
 
 namespace Organization.WebAPI.Controllers;
 
@@ -36,13 +38,14 @@ public class EmployeeController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetEmployees()
     {
-        string companyId = _sharedIdentityService.GetCompanyId; 
+        string companyId = _sharedIdentityService.GetCompanyId;
         var channel = GrpcChannel.ForAddress($"{_identityGrpcService}", new GrpcChannelOptions
         {
             Credentials = ChannelCredentials.Insecure
         });
 
-        var identityClient = new Identity.IdentityClient(channel);
+        var callInvoker = channel.Intercept(new InternalRequestInterceptor());
+        var identityClient = new Identity.IdentityClient(callInvoker);
 
         GetEmployeesResponse response = await identityClient.GetEmployeesAsync(new GetEmployeesRequest
         {
@@ -70,6 +73,7 @@ public class EmployeeController : BaseController
     {
         string id = _sharedIdentityService.GetUserId;
         var client = _httpClientFactory.CreateClient("employees");
+        client.DefaultRequestHeaders.Add("X-Internal-Request", "true");
         var response = await client.GetAsync($"{_identityService}/api/Users/{id}");
         var employee = await response.Content.ReadFromJsonAsync<UserDto>();
         if (employee.WarehouseId != null)
