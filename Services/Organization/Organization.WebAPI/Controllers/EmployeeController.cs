@@ -1,18 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using Organization.Application.Warehouses.Queries.GetWarehouseQuery;
-using Organization.Application.DTOs.User;
-using Shared.ResultTypes;
-using Shared.Services;
-using System.Text;
+﻿using Grpc.Core;
+using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using IdentityServer.Protos;
-using Grpc.Core;
-using Grpc.Core.Interceptors;
+using Microsoft.AspNetCore.Mvc;
+using Organization.Application.Warehouses.Queries.GetWarehouseQuery;
 using Shared.Interceptors;
+using Shared.ResultTypes;
+using Shared.Services;
 
 namespace Organization.WebAPI.Controllers;
 
@@ -24,7 +18,7 @@ public class EmployeeController : BaseController
     private readonly ISharedIdentityService _sharedIdentityService;
     private readonly IConfiguration _configuration;
     private readonly string _identityService;
-    private readonly string _identityGrpcService;
+    private readonly Identity.IdentityClient _identityClient;
 
     public EmployeeController(IHttpClientFactory httpClientFactory, ISharedIdentityService sharedIdentityService, IConfiguration configuration)
     {
@@ -32,37 +26,31 @@ public class EmployeeController : BaseController
         _sharedIdentityService = sharedIdentityService;
         _configuration = configuration;
         _identityService = _configuration["Services:IdentityService"] ?? "http://localhost:5001";
-        _identityGrpcService = _configuration["Services:IdentityGrpcService"] ?? "http://localhost:5003";
+        string identityGrpcService = _configuration["Services:IdentityGrpcService"] ?? "http://localhost:5003";
+
+        var channel = GrpcChannel.ForAddress($"{identityGrpcService}", new GrpcChannelOptions
+        {
+            Credentials = ChannelCredentials.Insecure
+        });
+        var callInvoker = channel.Intercept(new InternalRequestInterceptor());
+        _identityClient = new Identity.IdentityClient(callInvoker);
     }
 
     [HttpGet]
     public async Task<IActionResult> GetEmployees()
     {
         string companyId = _sharedIdentityService.GetCompanyId;
-        var channel = GrpcChannel.ForAddress($"{_identityGrpcService}", new GrpcChannelOptions
-        {
-            Credentials = ChannelCredentials.Insecure
-        });
 
-        var callInvoker = channel.Intercept(new InternalRequestInterceptor());
-        var identityClient = new Identity.IdentityClient(callInvoker);
-
-        GetEmployeesResponse response = await identityClient.GetEmployeesAsync(new GetEmployeesRequest
+        GetEmployeesResponse response = await _identityClient.GetEmployeesAsync(new GetEmployeesRequest
         {
             CompanyId = companyId
         });
 
-
         foreach (var employee in response.Employees)
         {
-            if (employee.WarehouseId != "N/A")
-            {
-                employee.WarehouseName = (await Mediator.Send(new GetWarehouse(employee.WarehouseId))).Name;
-            }
-            else
-            {
-                employee.WarehouseName = "N/A";
-            }
+            employee.WarehouseName = employee.WarehouseId != "N/A"
+                ? (await Mediator.Send(new GetWarehouse(employee.WarehouseId))).Name
+                : "N/A";
         }
         var result = Response<List<Employee>>.Success(response.Employees.ToList(), 200);
         return Ok(result);
@@ -72,19 +60,24 @@ public class EmployeeController : BaseController
     public async Task<IActionResult> GetCurrentUser()
     {
         string id = _sharedIdentityService.GetUserId;
-        var client = _httpClientFactory.CreateClient("employees");
-        client.DefaultRequestHeaders.Add("X-Internal-Request", "true");
-        var response = await client.GetAsync($"{_identityService}/api/Users/{id}");
-        var employee = await response.Content.ReadFromJsonAsync<UserDto>();
-        if (employee.WarehouseId != null)
+
+        GetEmployeeResponse response = await _identityClient.GetEmployeeAsync(new GetEmployeeRequest
         {
-            employee.WarehouseName = (await Mediator.Send(new GetWarehouse(employee.WarehouseId))).Name;
-        }
-        else
+            Id = id
+        });
+
+        if (!response.Success)
         {
-            employee.WarehouseName = "N/A";
+            return BadRequest(response.Message);
         }
-        var result = Response<UserDto>.Success(employee, 200);
+        var employee = response.Employee;
+
+        employee.WarehouseName = employee.WarehouseId != "N/A"
+            ? (await Mediator.Send(new GetWarehouse(employee.WarehouseId))).Name
+            : "N/A";
+
+
+        var result = Response<Employee>.Success(employee, 200);
         return Ok(result);
     }
 
@@ -92,12 +85,7 @@ public class EmployeeController : BaseController
     public async Task<IActionResult> Add(CreateEmployeeRequest request)
     {
         string companyId = _sharedIdentityService.GetCompanyId;
-        var channel = GrpcChannel.ForAddress($"{_identityGrpcService}", new GrpcChannelOptions
-        {
-            Credentials = ChannelCredentials.Insecure
-        });
-        var identityClient = new Identity.IdentityClient(channel);
-        var response = await identityClient.CreateEmployeeAsync(new CreateEmployeeRequest
+        var response = await _identityClient.CreateEmployeeAsync(new CreateEmployeeRequest
         {
             Name = request.Name,
             Email = request.Email,
@@ -107,14 +95,11 @@ public class EmployeeController : BaseController
         });
 
         Response<Shared.ResultTypes.NoContent> result;
-        if (response.Success)
-        {
-            result = Response<Shared.ResultTypes.NoContent>.Success(200);
-        }
-        else
-        {
-            result = Response<Shared.ResultTypes.NoContent>.Fail(response.Message, 400);
-        }
+
+        result = response.Success
+            ? Response<Shared.ResultTypes.NoContent>.Success(200) 
+            : Response<Shared.ResultTypes.NoContent>.Fail(response.Message, 400);
+
         return Ok(result);
     }
 
@@ -128,14 +113,9 @@ public class EmployeeController : BaseController
         Response<Shared.ResultTypes.NoContent> result;
 
 
-        if (response.IsSuccessStatusCode)
-        {
-            result = Response<Shared.ResultTypes.NoContent>.Success(200);
-        }
-        else
-        {
-            result = Response<Shared.ResultTypes.NoContent>.Fail("Error oldu", 400);
-        }
+        result = response.IsSuccessStatusCode
+            ? Response<Shared.ResultTypes.NoContent>.Success(200)
+            : Response<Shared.ResultTypes.NoContent>.Fail("Error oldu", 400);
         return Ok(result);
     }
 
@@ -147,19 +127,14 @@ public class EmployeeController : BaseController
 
         Response<Shared.ResultTypes.NoContent> result;
 
-        if (response.IsSuccessStatusCode)
-        {
-            result = Response<Shared.ResultTypes.NoContent>.Success(200);
-        }
-        else
-        {
-            result = Response<Shared.ResultTypes.NoContent>.Fail($"Error oldu {response}", 400);
-        }
+        result = response.IsSuccessStatusCode
+            ? Response<Shared.ResultTypes.NoContent>.Success(200)
+            : Response<Shared.ResultTypes.NoContent>.Fail($"Error oldu {response}", 400);
         return Ok(result);
     }
 
     [HttpGet("httpaccesor")]
-    public async Task<IActionResult> GetHttpAccesor()
+    public IActionResult GetHttpAccesor()
     {
         var content = _sharedIdentityService.GetUser;
         return Ok(content);

@@ -7,5 +7,5 @@ public class UserDto
     public string CompanyId { get; set; }
     public string WarehouseId { get; set; }
     public string WarehouseName { get; set; }
-    public List<string> Roles { get; set; }
+    public string Role { get; set; }
 }

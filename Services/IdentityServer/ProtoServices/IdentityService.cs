@@ -58,6 +58,40 @@ namespace IdentityServer.ProtoServices
             return response;
         }
 
+        public override async Task<GetEmployeeResponse> GetEmployee(GetEmployeeRequest request, ServerCallContext context)
+        {
+            var response = new GetEmployeeResponse();
+            try
+            {
+                var user = await _userManager.FindByIdAsync(request.Id);
+                if (user == null)
+                {
+                    response.Success = false;
+                    response.Message.Add("User not found");
+                }
+                else
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+                    response.Employee = new Employee
+                    {
+                        Id = user.Id,
+                        Name = user.UserName,
+                        Email = user.Email,
+                        CompanyId = user.CompanyId,
+                        WarehouseId = user.WarehouseId ?? "N/A",
+                        Role = roles.FirstOrDefault() ?? "Unknown"
+                    };
+                    response.Success = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine($"gRPC GetEmployee Error: {ex.Message}");
+                throw new RpcException(new Status(StatusCode.Internal, ex.Message));
+            }
+            return response;
+        }
+
         public override async Task<CreateEmployeeResponse> CreateEmployee(CreateEmployeeRequest request, ServerCallContext context)
         {
             var response = new CreateEmployeeResponse();

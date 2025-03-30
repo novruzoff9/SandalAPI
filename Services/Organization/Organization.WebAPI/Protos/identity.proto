@@ -6,6 +6,7 @@ package IdentityServer;
 
 service Identity {
   rpc GetEmployees (GetEmployeesRequest) returns (GetEmployeesResponse);
+  rpc GetEmployee (GetEmployeeRequest) returns (GetEmployeeResponse);
   rpc CreateEmployee (CreateEmployeeRequest) returns (CreateEmployeeResponse);
 }
 
@@ -15,6 +16,16 @@ message GetEmployeesRequest {
 
 message GetEmployeesResponse {
   repeated Employee employees = 1;
+}
+
+message GetEmployeeRequest {
+  string id = 1;
+}
+
+message GetEmployeeResponse {
+  Employee employee = 1;
+  bool success = 2;
+  repeated string message = 3;
 }
 
 message CreateEmployeeRequest {

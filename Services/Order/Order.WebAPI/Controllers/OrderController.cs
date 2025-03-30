@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Grpc.Core;
+using Grpc.Core.Interceptors;
+using Grpc.Net.Client;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Order.Application.Common.Mapping;
 using Order.Application.Common.Services;
 using Order.Application.DTOs.Order;
 using Order.Application.Features.Orders.Commands.CompleteOrderCommand;
@@ -12,6 +14,8 @@ using Order.Application.Features.Orders.Queries;
 using Order.Application.Features.Orders.Queries.GetOrderQuery;
 using Order.Application.Features.Orders.Queries.GetOrdersByWarehouseQuery;
 using Order.Application.Features.Orders.Queries.GetOrdersQuery;
+using OrderService.Protos;
+using Shared.Interceptors;
 using Shared.ResultTypes;
 
 namespace Order.WebAPI.Controllers;
@@ -32,16 +36,25 @@ public class OrderController : BaseController
     private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
     private readonly string identityService;
+    private readonly Identity.IdentityClient _identityClient;
 
     public OrderController(
         IExcelService excelService, 
         IHttpClientFactory httpClientFactory, IConfiguration configuration, IMapper mapper)
     {
+        _mapper = mapper;
         _excelService = excelService;
         _httpClientFactory = httpClientFactory;
         _configuration = configuration;
         identityService = _configuration["Services:IdentityService"] ?? "http://localhost:5001";
-        _mapper = mapper;
+        string identityGrpcService = _configuration["Services:IdentityGrpcService"] ?? "http://localhost:5003";
+
+        var channel = GrpcChannel.ForAddress($"{identityGrpcService}", new GrpcChannelOptions
+        {
+            Credentials = ChannelCredentials.Insecure
+        });
+        var callInvoker = channel.Intercept(new InternalRequestInterceptor());
+        _identityClient = new Identity.IdentityClient(callInvoker);
     }
 
     [HttpGet("{id}/status")]
@@ -79,20 +92,24 @@ public class OrderController : BaseController
     public async Task<IActionResult> GetById(string id)
     {
         var order = await Mediator.Send(new GetOrderQuery(id));
-        //var client = _httpClientFactory.CreateClient("products");
-        //var orderOpenedBy = client.GetAsync($"{identityService}/api/Users/{order.OpenedBy}");
-        //var user = await orderOpenedBy.Result.Content.ReadFromJsonAsync<UserDto>();
-        //order.OpenedBy = user.UserName;
-        //if (order.ClosedBy != null)
-        //{
-        //    var orderClosedBy = client.GetAsync($"{identityService}/api/Users/{order.ClosedBy}");
-        //    var userClosed = await orderClosedBy.Result.Content.ReadFromJsonAsync<UserDto>();
-        //    order.ClosedBy = userClosed.UserName;
-        //}
-        //var orderDto = _mapper.Map<OrderShowDto>(order);
-        return Ok(order);
-    }
+        GetEmployeeResponse openedByResponse = await _identityClient.GetEmployeeAsync(new GetEmployeeRequest
+        {
+            Id = order.OpenedBy
+        });
 
+        var orderDto = _mapper.Map<OrderShowDto>(order);
+
+        orderDto.OpenedBy = openedByResponse.Employee.Name;
+        if (order.ClosedBy != null)
+        {
+            GetEmployeeResponse closedByResponse = await _identityClient.GetEmployeeAsync(new GetEmployeeRequest
+            {
+                Id = order.ClosedBy
+            });
+            orderDto.ClosedBy = closedByResponse.Employee.Name;
+        }
+        return Ok(orderDto);
+    }
 
     [HttpGet("{id}/products")]
     public async Task<IActionResult> GetProductsById(string id)
