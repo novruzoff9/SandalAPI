@@ -13,10 +13,14 @@ public class OrderMapper : Profile
     {
         CreateMap<Order.Domain.Entities.Order, OrderShowDto>()
             .ForMember(dest => dest.Warehouse, opt => opt.MapFrom(src => src.WarehouseName))
+            .ForMember(dest => dest.Customer, opt => opt.MapFrom(src => src.CustomerId))
             .ForMember(dest => dest.Opened, opt => opt.MapFrom(src => src.Opened.ToString("yyyy-MM-dd HH:mm")))
             .ForMember(dest => dest.OpenedBy, opt => opt.MapFrom(src => src.OpenedBy))
             .ForMember(dest => dest.Closed, opt => opt.MapFrom(src => src.Closed.HasValue ? src.Closed.Value.ToString("yyyy-MM-dd HH:mm") : null))
             .ForMember(dest => dest.ClosedBy, opt => opt.MapFrom(src => src.ClosedBy != null ? src.ClosedBy : null))
-            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status!.Name));
+            .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status!.Name))
+            .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Products.Sum(x => x.Quantity)))
+            .ForMember(dest => dest.TotalPrice, opt => opt.MapFrom(src => src.Products.Sum(x => x.Quantity * x.UnitPrice)))
+            .ForMember(dest => dest.Note, opt => opt.MapFrom(src => src.Note));
     }
 }

@@ -53,7 +53,7 @@ public class OrderCreatedIntegrationEventHandler : IIntegrationEventHandler<Orde
         else
         {
             //TODO: Mehsullar esasinda anbarda kagiz cap olunmalidi ki, anbardar mehsullari yığışdırıla bilsin
-
+            
         }
     }
 }

@@ -19,6 +19,7 @@ public static class DependencyInjection
 
         services.AddScoped<ISharedIdentityService, SharedIdentityService>();
         services.AddScoped<IExcelService, ExcelService>();
+        services.AddScoped<CustomerService>();
 
         services.AddSingleton<IEventBus>(options =>
         {
@@ -35,6 +36,7 @@ public static class DependencyInjection
         });
 
         services.AddTransient<OrderStockNotEnoughIntegrationEventHandler>();
+        services.AddTransient<CustomerCreatedIntegrationEventHandler>();
 
         return services;
     }

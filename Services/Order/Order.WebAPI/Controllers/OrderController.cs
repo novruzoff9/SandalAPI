@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
+using IdentityServer.Protos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Order.Application.Common.Services;
@@ -14,7 +15,6 @@ using Order.Application.Features.Orders.Queries;
 using Order.Application.Features.Orders.Queries.GetOrderQuery;
 using Order.Application.Features.Orders.Queries.GetOrdersByWarehouseQuery;
 using Order.Application.Features.Orders.Queries.GetOrdersQuery;
-using OrderService.Protos;
 using Shared.Interceptors;
 using Shared.ResultTypes;
 
@@ -24,6 +24,8 @@ public class BaseController : ControllerBase
 {
     private IMediator _mediator;
     protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
+    private IMapper _mapper;
+    protected IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();
 }
 
 
@@ -32,21 +34,15 @@ public class BaseController : ControllerBase
 public class OrderController : BaseController
 {
     private readonly IExcelService _excelService;
-    private readonly IHttpClientFactory _httpClientFactory;
     private readonly IConfiguration _configuration;
-    private readonly IMapper _mapper;
-    private readonly string identityService;
     private readonly Identity.IdentityClient _identityClient;
+    private readonly CustomerService _customerService;
 
-    public OrderController(
-        IExcelService excelService, 
-        IHttpClientFactory httpClientFactory, IConfiguration configuration, IMapper mapper)
+    public OrderController(IExcelService excelService, IConfiguration configuration, CustomerService customerService)
     {
-        _mapper = mapper;
         _excelService = excelService;
-        _httpClientFactory = httpClientFactory;
         _configuration = configuration;
-        identityService = _configuration["Services:IdentityService"] ?? "http://localhost:5001";
+        _customerService = customerService;
         string identityGrpcService = _configuration["Services:IdentityGrpcService"] ?? "http://localhost:5003";
 
         var channel = GrpcChannel.ForAddress($"{identityGrpcService}", new GrpcChannelOptions
@@ -83,7 +79,11 @@ public class OrderController : BaseController
     {
         var orders = await Mediator.Send(new GetOrdersByStatusQuery(status));
         var orderDtos = orders.AsQueryable()
-            .ProjectTo<OrderShowDto>(_mapper.ConfigurationProvider).ToList();
+            .ProjectTo<OrderShowDto>(Mapper.ConfigurationProvider).ToList();
+        foreach (var item in orderDtos)
+        {
+            item.Customer = await _customerService.GetCustomerFullName(item.Customer);
+        }
         var response = Response<List<OrderShowDto>>.Success(orderDtos, 200);
         return Ok(response);
     }
@@ -97,7 +97,7 @@ public class OrderController : BaseController
             Id = order.OpenedBy
         });
 
-        var orderDto = _mapper.Map<OrderShowDto>(order);
+        var orderDto = Mapper.Map<OrderShowDto>(order);
 
         orderDto.OpenedBy = openedByResponse.Employee.Name;
         if (order.ClosedBy != null)
@@ -108,6 +108,7 @@ public class OrderController : BaseController
             });
             orderDto.ClosedBy = closedByResponse.Employee.Name;
         }
+        orderDto.Customer = await _customerService.GetCustomerFullName(order.CustomerId);
         return Ok(orderDto);
     }
 
@@ -121,6 +122,7 @@ public class OrderController : BaseController
             Id = x.ProductId,
             Quantity = x.Quantity,
             Name = x.ProductName,
+            UnitPrice = x.UnitPrice
         }).ToList();
 
         return Ok(orderProducts);

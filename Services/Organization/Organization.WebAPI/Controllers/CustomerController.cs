@@ -5,6 +5,8 @@ using Organization.Application.Customers.Commands.DeleteCustomerCommand;
 using Organization.Application.Customers.Commands.EditCustomerCommand;
 using Organization.Application.Customers.Queries.GetCustomerQuery;
 using Organization.Application.Customers.Queries.GetCustomersQuery;
+using Organization.Domain.Entities;
+using Shared.ResultTypes;
 
 namespace Organization.WebAPI.Controllers;
 
@@ -16,7 +18,8 @@ public class CustomerController : BaseController
     public async Task<IActionResult> Get()
     {
         var customers = await Mediator.Send(new GetCustomersQuery());
-        return Ok(customers);
+        var response = Response<List<Customer>>.Success(customers, 200);
+        return Ok(response);
     }
 
     [HttpGet("{id}")]
@@ -30,7 +33,8 @@ public class CustomerController : BaseController
     public async Task<IActionResult> Post(CreateCustomerCommand command)
     {
         var customer = await Mediator.Send(command);
-        return Ok(customer);
+        var response = Response<bool>.Success(customer, 200);
+        return Ok(response);
     }
 
     [HttpPut("{id}")]
