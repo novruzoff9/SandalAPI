@@ -26,24 +26,25 @@ public class OrderCreatedIntegrationEventHandler : IIntegrationEventHandler<Orde
     {
         using var scope = _scopeFactory.CreateScope();
         var shelfProductService = scope.ServiceProvider.GetRequiredService<ShelfProductService>();
+        var context = scope.ServiceProvider.GetRequiredService<IApplicationDbContext>();
         _logger.LogInformation($"OrderCreatedIntegrationEvent: {@event.OrderId}");
         var orderItems = @event.Items;
         Dictionary<string, int> notEnoughProducts = new();
         List<ShelfProductDTO> shelfProducts = new();
         foreach (var item in @event.Items)
         {
-            ShelfProductDTO shelfProduct = await shelfProductService.GetShelfProduct(item.ProductId, item.Quantity);
-            if (shelfProduct.ShelfCode is null)
+            ShelfProductDTO shelfProductDto = await shelfProductService.GetShelfProduct(item.ProductId, item.Quantity);
+            if (shelfProductDto.ShelfCode is null)
             {
-                notEnoughProducts.Add(shelfProduct.ProductName, item.Quantity);
-                _logger.LogError($"Product {shelfProduct.ProductName} is not available in the warehouse");
+                notEnoughProducts.Add(shelfProductDto.ProductName, item.Quantity);
+                _logger.LogError($"Product {shelfProductDto.ProductName} is not available in the warehouse");
             }
             else
             {
-                //shelfProduct.Quantity -= item.Quantity;
-                //_context.ShelfProducts.Update(shelfProduct);
-                shelfProducts.Add(shelfProduct);
-                _logger.LogInformation($"Product {shelfProduct.ProductName} is removed from the {shelfProduct.ShelfCode} shelf {shelfProduct.Quantity} count at warehouse");
+                await shelfProductService.RemoveProductFromShelf(shelfProductDto.ProductId, item.Quantity, shelfProductDto.ShelfId, cancellationToken);
+
+                shelfProducts.Add(shelfProductDto);
+                _logger.LogInformation($"Product {shelfProductDto.ProductName} is removed from the {shelfProductDto.ShelfCode} shelf {shelfProductDto.Quantity} count at warehouse");
             }
         }
         if(notEnoughProducts.Count > 0)
@@ -53,7 +54,6 @@ public class OrderCreatedIntegrationEventHandler : IIntegrationEventHandler<Orde
         }
         else
         {
-            //TODO: Mehsullar esasinda anbarda kagiz cap olunmalidi ki, anbardar mehsullari yığışdırıla bilsin
             var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
             var shelfProductsDto = mapper.Map<List<Shared.Events.DTOs.ShelfProduct.ShelfProductDTO>>(shelfProducts);

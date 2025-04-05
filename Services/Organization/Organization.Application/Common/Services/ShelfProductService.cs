@@ -43,8 +43,8 @@ public class ShelfProductService
             return nullShelfProductDTO;
         }
 
-        shelfProduct.Quantity = quantity;
         var shelfProductDTO = _mapper.Map<ShelfProductDTO>(shelfProduct);
+        shelfProductDTO.Quantity = quantity;
 
         return shelfProductDTO;
     }
@@ -59,7 +59,7 @@ public class ShelfProductService
     public async Task RemoveProductFromShelf(string productId, int quantity, string shelfId, CancellationToken cancellationToken)
     {
         var shelfProduct = _context.ShelfProducts
-            .FirstOrDefault(sp => sp.Id == productId && sp.ShelfID == shelfId);
+            .FirstOrDefault(sp => sp.ProductID == productId && sp.ShelfID == shelfId);
         var product = await _context.Products.FindAsync(productId);
         if (shelfProduct is null)
         {

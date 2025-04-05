@@ -11,6 +11,7 @@ using Order.Application.DTOs.Order;
 using Order.Application.Features.Orders.Commands.CompleteOrderCommand;
 using Order.Application.Features.Orders.Commands.CreateOrderCommand;
 using Order.Application.Features.Orders.Commands.DeleteOrderCommand;
+using Order.Application.Features.Orders.Commands.RetryOrderCommand;
 using Order.Application.Features.Orders.Queries;
 using Order.Application.Features.Orders.Queries.GetOrderQuery;
 using Order.Application.Features.Orders.Queries.GetOrdersByWarehouseQuery;
@@ -139,6 +140,13 @@ public class OrderController : BaseController
     public async Task<IActionResult> Close(string id, CompleteOrderRequest request)
     {
         var result = await Mediator.Send(new CompleteOrderCommand(id, request.Products));
+        return Ok(result);
+    }
+
+    [HttpPost("{id}/retry")]
+    public async Task<IActionResult> Retry(string id)
+    {
+        var result = await Mediator.Send(new RetryOrderCommand(id));
         return Ok(result);
     }
 

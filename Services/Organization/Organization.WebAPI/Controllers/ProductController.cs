@@ -12,6 +12,7 @@ using Organization.Application.DTOs.General;
 using Organization.Application.DTOs.Product;
 using Shared.ResultTypes;
 using Shared.Services;
+using Organization.Application.Products.Commands.IncreaseProductCommand;
 
 namespace Organization.WebAPI.Controllers;
 
@@ -69,6 +70,13 @@ public class ProductController : BaseController
     public async Task<IActionResult> Delete(string id)
     {
         var product = await Mediator.Send(new DeleteProduct(id));
+        return Ok(product);
+    }
+
+    [HttpPost("{id}/increase")]
+    public async Task<IActionResult> IncreaseProduct(string id, [FromBody] int quantity)
+    {
+        var product = await Mediator.Send(new IncreaseProductCommand(id, quantity));
         return Ok(product);
     }
 

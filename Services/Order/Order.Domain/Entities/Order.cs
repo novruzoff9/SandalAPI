@@ -105,7 +105,7 @@ public class Order : BaseEntity, IAggregateRoot
         Guard.Against.NullOrEmpty(closedBy, nameof(closedBy));
         Closed = DateTime.Now;
         ClosedBy = closedBy;
-        _statusId = OrderStatus.Shipped.Id;
+        _statusId = OrderStatus.Prepared.Id;
     }
 
     public void UpdateStatus(OrderStatus status)
