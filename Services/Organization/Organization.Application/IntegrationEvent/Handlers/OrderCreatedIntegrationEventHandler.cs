@@ -1,4 +1,5 @@
-﻿using EventBus.Base.Abstraction;
+﻿using AutoMapper;
+using EventBus.Base.Abstraction;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Organization.Application.Common.Services;
@@ -53,7 +54,13 @@ public class OrderCreatedIntegrationEventHandler : IIntegrationEventHandler<Orde
         else
         {
             //TODO: Mehsullar esasinda anbarda kagiz cap olunmalidi ki, anbardar mehsullari yığışdırıla bilsin
-            
+            var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+
+            var shelfProductsDto = mapper.Map<List<Shared.Events.DTOs.ShelfProduct.ShelfProductDTO>>(shelfProducts);
+
+            var stockConfirmedEvent = new OrderStockConfirmedIntegrationEvent(@event.OrderId, shelfProductsDto);
+
+            _eventBus.Publish(stockConfirmedEvent);
         }
     }
 }

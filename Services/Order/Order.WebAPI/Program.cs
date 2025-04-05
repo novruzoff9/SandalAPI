@@ -69,6 +69,7 @@ if (app.Environment.IsDevelopment())
 IEventBus _eventBus = app.Services.GetRequiredService<IEventBus>();
 _eventBus.Subscribe<OrderStockNotEnoughIntegrationEvent, OrderStockNotEnoughIntegrationEventHandler>();
 _eventBus.Subscribe<CustomerCreatedIntegrationEvent, CustomerCreatedIntegrationEventHandler>();
+_eventBus.Subscribe<OrderStockConfirmedIntegrationEvent, OrderStockConfirmedIntegrationEventHandler>();
 
 app.UseAuthorization();
 

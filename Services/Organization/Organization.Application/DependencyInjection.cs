@@ -9,6 +9,9 @@ using System.Reflection;
 using EventBus.Factory;
 using FluentValidation;
 using Organization.Application.Common.Behaviors;
+using Shared.Events.Events;
+using System.ComponentModel;
+using QuestPDF.Infrastructure;
 
 namespace Organization.Application;
 
@@ -48,7 +51,10 @@ public static class DependencyInjection
 
 
         services.AddTransient<OrderCreatedIntegrationEventHandler>();
+        services.AddTransient<OrderStockConfirmedIntegrationEventHandler>();
         services.AddScoped<ShelfProductService>();
+
+        QuestPDF.Settings.License = LicenseType.Community;
 
         return services;
     }

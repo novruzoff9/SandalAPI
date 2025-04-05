@@ -50,7 +50,8 @@ public class ProductController : BaseController
     public async Task<IActionResult> Create(CreateProduct command)
     {
         var product = await Mediator.Send(command);
-        return Ok(product);
+        var response = Response<bool>.Success(product, 200);
+        return Ok(response);
     }
 
     [HttpPut("{id}")]

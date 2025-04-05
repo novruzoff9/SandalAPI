@@ -71,6 +71,7 @@ if (app.Environment.IsDevelopment())
 
 IEventBus _eventBus = app.Services.GetRequiredService<IEventBus>();
 _eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
+_eventBus.Subscribe<OrderStockConfirmedIntegrationEvent, OrderStockConfirmedIntegrationEventHandler>();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

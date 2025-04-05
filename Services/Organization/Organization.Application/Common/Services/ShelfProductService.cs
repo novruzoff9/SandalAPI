@@ -42,6 +42,8 @@ public class ShelfProductService
             }
             return nullShelfProductDTO;
         }
+
+        shelfProduct.Quantity = quantity;
         var shelfProductDTO = _mapper.Map<ShelfProductDTO>(shelfProduct);
 
         return shelfProductDTO;

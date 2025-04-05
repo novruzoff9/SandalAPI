@@ -37,6 +37,7 @@ public static class DependencyInjection
 
         services.AddTransient<OrderStockNotEnoughIntegrationEventHandler>();
         services.AddTransient<CustomerCreatedIntegrationEventHandler>();
+        services.AddTransient<OrderStockConfirmedIntegrationEventHandler>();
 
         return services;
     }
