@@ -11,6 +11,7 @@ using Organization.Application.Common.Middlewares;
 using Organization.Application.Common.Services;
 using Organization.Application.IntegrationEvent.Handlers;
 using Organization.Infrastructure;
+using Organization.WebAPI.Extensions;
 using Shared.Events.Events;
 using Shared.Middlewares;
 
@@ -60,6 +61,8 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddConsul(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -72,6 +75,8 @@ if (app.Environment.IsDevelopment())
 IEventBus _eventBus = app.Services.GetRequiredService<IEventBus>();
 _eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
 _eventBus.Subscribe<OrderStockConfirmedIntegrationEvent, OrderStockConfirmedIntegrationEventHandler>();
+
+app.RegisterConsulService(builder.Configuration, app.Lifetime);
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

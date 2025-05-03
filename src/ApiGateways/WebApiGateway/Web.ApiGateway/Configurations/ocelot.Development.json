@@ -5,6 +5,12 @@
       "ServiceName": "IdentityServer",
       "DownstreamPathTemplate": "/connect/token",
       "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
       "UpstreamPathTemplate": "/get-token",
       "UpstreamHttpMethod": [ "Post" ]
     },
@@ -110,9 +116,9 @@
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:5000",
     "ServiceDiscoveryProvider": {
-      "Host": "localhost",
-      "Port": 8500,
-      "Type": "Consul"
+      Host: "localhost",
+      Port: 8500,
+      Type: "Consul"
     }
   }
 }

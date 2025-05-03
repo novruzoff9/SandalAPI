@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using IdentityServer.Services;
 using Shared.Services;
 using Shared.Middlewares;
+using IdentityServer.Extensions;
 
 namespace IdentityServer
 {
@@ -74,6 +75,8 @@ namespace IdentityServer
 
 
             services.AddGrpc();
+
+            services.AddConsul(Configuration);
         }
 
         public void Configure(IApplicationBuilder app)
@@ -97,6 +100,8 @@ namespace IdentityServer
                     .RequireHost(Configuration["gRPCService"]);
                 endpoints.MapDefaultControllerRoute();
             });
+
+            app.RegisterConsulService(Configuration, app.ApplicationServices.GetService<IHostApplicationLifetime>());
         }
     }
 }

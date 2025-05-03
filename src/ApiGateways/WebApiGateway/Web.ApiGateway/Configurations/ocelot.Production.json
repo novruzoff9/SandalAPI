@@ -1,118 +1,103 @@
 {
   "Routes": [
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "IdentityServer",
       "DownstreamPathTemplate": "/connect/token",
       "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "identityserver",
+          "Port": 5001
+        }
+      ],
       "UpstreamPathTemplate": "/get-token",
-      "UpstreamHttpMethod": [ "Post" ]
+      "UpstreamHttpMethod": [ "POST" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/company/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "organization.webapi",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/company/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/product/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "organization.webapi",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/product/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/employee/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "organization.webapi",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/employee/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/customer/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "organization.webapi",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/customer/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/warehouse/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "organization.webapi",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/warehouse/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/shelf/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5002
+          "Host": "organization.webapi",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/shelf/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrderService",
       "DownstreamPathTemplate": "/api/order/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
-          "Host": "localhost",
-          "Port": 5004
+          "Host": "order.webapi",
+          "Port": 8080
         }
       ],
       "UpstreamPathTemplate": "/order/{everything}",
-      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+      "UpstreamHttpMethod": [ "GET", "POST", "PUT", "DELETE" ]
     }
   ],
   "GlobalConfiguration": {
-    "BaseUrl": "http://localhost:5000",
-    "ServiceDiscoveryProvider": {
-      "Host": "localhost",
-      "Port": 8500,
-      "Type": "Consul"
-    }
+    "BaseUrl": "http://localhost:5000"
   }
 }

@@ -3,6 +3,7 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
+using Ocelot.Provider.Consul;
 using Web.ApiGateway.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Services.AddEndpointsApiExplorer();
 
 builder.Configuration.AddJsonFile("Configurations/ocelot.json");
-builder.Services.AddOcelot();
+builder.Services.AddOcelot().AddConsul();
 
 JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
 builder.Services

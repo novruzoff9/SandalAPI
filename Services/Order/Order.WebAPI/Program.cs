@@ -9,6 +9,7 @@ using EventBus.Factory;
 using Order.Application.IntegratonEvents.Handlers;
 using Shared.Events.Events;
 using Shared.Middlewares;
+using Order.WebAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -57,6 +58,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddConsul(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -70,6 +73,8 @@ IEventBus _eventBus = app.Services.GetRequiredService<IEventBus>();
 _eventBus.Subscribe<OrderStockNotEnoughIntegrationEvent, OrderStockNotEnoughIntegrationEventHandler>();
 _eventBus.Subscribe<CustomerCreatedIntegrationEvent, CustomerCreatedIntegrationEventHandler>();
 _eventBus.Subscribe<OrderStockConfirmedIntegrationEvent, OrderStockConfirmedIntegrationEventHandler>();
+
+app.RegisterConsulService(builder.Configuration, app.Lifetime);
 
 app.UseAuthorization();
 

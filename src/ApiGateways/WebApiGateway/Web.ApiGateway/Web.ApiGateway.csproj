@@ -7,12 +7,14 @@
     <UserSecretsId>2d071f2d-51d8-443d-85ea-145e8d487197</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>..\..\..\..</DockerfileContext>
+    <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.14" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
     <PackageReference Include="Ocelot" Version="23.4.3" />
+    <PackageReference Include="Ocelot.Provider.Consul" Version="23.4.3" />
   </ItemGroup>
 
 </Project>
