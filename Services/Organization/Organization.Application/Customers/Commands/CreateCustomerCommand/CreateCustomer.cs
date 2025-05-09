@@ -1,10 +1,12 @@
 
 using EventBus.Base.Abstraction;
+using Organization.Domain.ValueObjects;
 using Shared.Events.Events;
 
 namespace Organization.Application.Customers.Commands.CreateCustomerCommand;
 
-public record CreateCustomerCommand(string FirstName, string LastName, string Email, string Phone) : IRequest<bool>;
+public record CreateCustomerCommand(string FirstName, string LastName, string Email, string Phone, 
+    Address Address) : IRequest<bool>;
 
 public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerCommand, bool>
 {
@@ -24,7 +26,7 @@ public class CreateCustomerCommandHandler : IRequestHandler<CreateCustomerComman
         Guard.Against.Null(request, nameof(CreateCustomerCommand));
         string companyId = _identityService.GetCompanyId;
 
-        var customer = new Customer(request.FirstName, request.LastName, request.Email, request.Phone, companyId);
+        var customer = new Customer(request.FirstName, request.LastName, request.Email, request.Phone, companyId, request.Address);
 
         await _context.Customers.AddAsync(customer, cancellationToken);
 

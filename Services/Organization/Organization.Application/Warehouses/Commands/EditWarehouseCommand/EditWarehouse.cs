@@ -6,36 +6,41 @@ string? GoogleMaps,
 string City,
 string State,
 string Street,
-string ZipCode,
-string CompanyID) : IRequest<bool>;
+string ZipCode) : IRequest<bool>;
 
 public class EditWarehouseCommandHandler : IRequestHandler<EditWarehouse, bool>
 {
     private readonly IApplicationDbContext _context;
+    private readonly ISharedIdentityService _sharedIdentityService;
 
-    public EditWarehouseCommandHandler(IApplicationDbContext context)
+    public EditWarehouseCommandHandler(IApplicationDbContext context, ISharedIdentityService sharedIdentityService)
     {
         _context = context;
+        _sharedIdentityService = sharedIdentityService;
     }
 
     public async Task<bool> Handle(EditWarehouse request, CancellationToken cancellationToken)
     {
         Guard.Against.NotFound(request.Id, nameof(request));
+        var companyId = _sharedIdentityService.GetCompanyId;
 
         var warehouse = await _context.Warehouses.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
 
         if (warehouse == null) { return false; }
 
-        warehouse = new Warehouse
+        if(warehouse.CompanyID != companyId)
         {
-            Name = request.Name,
-            GoogleMaps = request.GoogleMaps,
-            City = request.City,
-            State = request.State,
-            Street = request.Street,
-            ZipCode = request.ZipCode,
-            CompanyID = request.CompanyID
-        };
+            return false;
+        }
+
+        warehouse.Update(
+            request.Name,
+            request.City,
+            request.State,
+            request.Street,
+            request.ZipCode,
+            request.GoogleMaps
+        );
 
         _context.Warehouses.Update(warehouse);
 

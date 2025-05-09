@@ -25,16 +25,15 @@ public class CreateWarehouseCommandHandler : IRequestHandler<CreateWarehouse, bo
         string companyId = _sharedIdentityService.GetCompanyId;
 
         var warehouse = new Warehouse
-        {
-            Id = Guid.NewGuid().ToString(),
-            Name = request.Name,
-            GoogleMaps = request.GoogleMaps,
-            City = request.City,
-            State = request.State,
-            Street = request.Street,
-            ZipCode = request.ZipCode,
-            CompanyID = companyId
-        };
+        (
+            request.Name,
+            request.GoogleMaps,
+            request.City,
+            request.State,
+            request.Street,
+            request.ZipCode,
+            companyId
+        );
 
         await _context.Warehouses.AddAsync(warehouse, cancellationToken);
 

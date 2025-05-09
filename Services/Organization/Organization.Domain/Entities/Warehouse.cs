@@ -14,4 +14,31 @@ public class Warehouse : BaseEntity
     public string CompanyID { get; set; } = null!;
     public Company Company { get; set; }
     public List<Shelf>? Shelves { get; set; }
+
+    private Warehouse()
+    {
+        
+    }
+
+    public Warehouse(string name, string? googleMaps, string city, string state, string street, string zipCode, string companyId)
+    {
+        Id = Guid.NewGuid().ToString();
+        Name = name;
+        GoogleMaps = googleMaps ?? string.Empty;
+        City = city;
+        State = state;
+        Street = street;
+        ZipCode = zipCode;
+        CompanyID = companyId;
+    }
+
+    public void Update(string name, string city, string state, string street, string zipCode, string? googleMaps)
+    {
+        Name = name;
+        GoogleMaps = googleMaps ?? string.Empty;
+        City = city;
+        State = state;
+        Street = street;
+        ZipCode = zipCode;
+    }
 }

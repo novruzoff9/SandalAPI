@@ -10,6 +10,8 @@ public class CustomerMapping : BaseEntityMapping<Customer>
         base.Configure(builder);
         builder.Property(e => e.CompanyId).HasMaxLength(36).IsRequired();
 
+        builder.OwnsOne(e => e.Address);
+
         builder.HasOne(e => e.Company)
             .WithMany(e=>e.Customers)
             .HasForeignKey(e => e.CompanyId);

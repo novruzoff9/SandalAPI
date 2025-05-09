@@ -64,15 +64,15 @@ public class ExcelService : BaseExcelService, IExcelService
                 var rowCount = worksheet.Dimension.Rows;
                 for (int row = 2; row <= rowCount; row++)
                 {
-                    var warehouse = new Warehouse
-                    {
-                        Name = worksheet.Cells[row, 1].Value?.ToString().Trim(),
-                        City = worksheet.Cells[row, 2].Value?.ToString().Trim(),
-                        State = worksheet.Cells[row, 3].Value?.ToString().Trim(),
-                        Street = worksheet.Cells[row, 6].Value?.ToString().Trim(),
-                        ZipCode = worksheet.Cells[row, 4].Value?.ToString().Trim(),
-                        GoogleMaps = worksheet.Cells[row, 5].Value?.ToString().Trim()
-                    };
+                    var warehouse = new Warehouse(
+                        worksheet.Cells[row, 1].Value!.ToString().Trim(),
+                        worksheet.Cells[row, 2].Value?.ToString().Trim(),
+                        worksheet.Cells[row, 3].Value?.ToString().Trim(),
+                        worksheet.Cells[row, 6].Value?.ToString().Trim(),
+                        worksheet.Cells[row, 4].Value?.ToString().Trim(),
+                        worksheet.Cells[row, 5].Value?.ToString().Trim(),
+                        companyId
+                    );
                     warehouses.Add(warehouse);
                 }
             }

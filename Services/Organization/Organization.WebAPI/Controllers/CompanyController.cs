@@ -28,32 +28,23 @@ public class CompanyController : BaseController
     public async Task<IActionResult> Get()
     {
         var companies = await Mediator.Send(new GetCompanies());
-        List<CompanyDto> companiesDto = new();
-        foreach (var company in companies)
-        {
-            CompanyDto companyDto = new()
-            {
-                Id = company.Id,
-                Name = company.Name,
-                Warehouses = company.Warehouses.Count
-            };
-            companiesDto.Add(companyDto);
-        }
-        var response = Response<List<CompanyDto>>.Success(companiesDto, 200);
+        var response = Response<List<CompanyDto>>.Success(companies, 200);
         return Ok(response);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
     {
-        var response = await Mediator.Send(new GetCompany(id));
+        var company = await Mediator.Send(new GetCompany(id));
+        var response = Response<CompanyDto>.Success(company, 200);
         return Ok(response);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(CreateCompany command)
     {
-        var response = await Mediator.Send(command);
+        var result = await Mediator.Send(command);
+        var response = Response<bool>.Success(result, 201);
         return Ok(response);
     }
 
@@ -64,14 +55,24 @@ public class CompanyController : BaseController
         {
             return BadRequest();
         }
-        var response = await Mediator.Send(command);
+        var result = await Mediator.Send(command);
+        if (result == false)
+        {
+            return NotFound();
+        }
+        var response = Response<bool>.Success(result, 201);
         return Ok(response);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
-        var response = await Mediator.Send(new DeleteCompany(id));
+        var result = await Mediator.Send(new DeleteCompany(id));
+        if (result == false)
+        {
+            return NotFound();
+        }
+        var response = Response<bool>.Success(result, 204);
         return Ok(response);
     }
 }

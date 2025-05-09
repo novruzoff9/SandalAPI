@@ -10,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 //builder.Services.AddEndpointsApiExplorer();
 
-builder.Configuration.AddJsonFile("Configurations/ocelot.json");
+var env = builder.Environment.EnvironmentName;
+builder.Configuration.AddJsonFile($"Configurations/ocelot.{env}.json");
 builder.Services.AddOcelot().AddConsul();
 
 JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");

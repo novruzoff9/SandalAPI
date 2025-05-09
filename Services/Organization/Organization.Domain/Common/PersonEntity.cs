@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using Organization.Domain.ValueObjects;
+using System.Text.RegularExpressions;
 
 namespace Organization.Domain.Common;
 
@@ -8,6 +9,8 @@ public abstract class PersonEntity : BaseEntity
     public string LastName { get; private set; }
     public string Email { get; private set; }
     public string Phone { get; private set; }
+
+    protected PersonEntity() { }
 
     protected PersonEntity(string firstName, string lastName, string email, string phone)
     {

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Consul;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
@@ -87,6 +88,21 @@ public class OrderController : BaseController
         }
         var response = Response<List<OrderShowDto>>.Success(orderDtos, 200);
         return Ok(response);
+    }
+
+    [HttpGet("ByCustomer/{id}")]
+    public async Task<IActionResult> GetByCustomer(string id)
+    {
+        var orders = await Mediator.Send(new GetOrdersByCustomerQuery(id));
+        var orderDtos = orders.AsQueryable()
+            .ProjectTo<OrderShowDto>(Mapper.ConfigurationProvider).ToList();
+        foreach (var item in orderDtos)
+        {
+            item.Customer = await _customerService.GetCustomerFullName(item.Customer);
+        }
+        var response = Response<List<OrderShowDto>>.Success(orderDtos, 200);
+        return Ok(response);
+
     }
 
     [HttpGet("{id}")]

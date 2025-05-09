@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Organization.Application.Common.Services;
+using Organization.Application.DTOs.Warehouse;
 using Organization.Application.Products.Commands.CreateProductCommand;
 using Organization.Application.Shelves.Queries.GetShelvesQuery;
 using Organization.Application.Warehouses.Commands.CreateWarehouseCommand;
@@ -31,20 +32,22 @@ public class WarehouseController : BaseController
     public async Task<IActionResult> Get()
     {
         var response = await Mediator.Send(new GetWarehouses());
-        var result = Response<List<Warehouse>>.Success(response, 200);
+        var result = Response<List<WarehouseDto>>.Success(response, 200);
         return Ok(result);
     }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
     {
-        var response = await Mediator.Send(new GetWarehouse(id));
+        var warehouse = await Mediator.Send(new GetWarehouse(id));
+        var response = Response<WarehouseDto>.Success(warehouse, 200);
         return Ok(response);
     }
 
     [HttpGet("company/{id}")]
     public async Task<IActionResult> GetByCompany(string id)
     {
-        var response = await Mediator.Send(new GetWarehousesByCompany(id));
+        var warehouses = await Mediator.Send(new GetWarehousesByCompany(id));
+        var response = Response<List<WarehouseDto>>.Success(warehouses, 200);
         return Ok(response);
     }
 
@@ -52,6 +55,11 @@ public class WarehouseController : BaseController
     public async Task<IActionResult> Create(CreateWarehouse command)
     {
         var response = await Mediator.Send(command);
+        if (response == false)
+        {
+            return BadRequest();
+        }
+        var result = Response<bool>.Success(response, 201);
         return Ok(response);
     }
 
@@ -96,14 +104,24 @@ public class WarehouseController : BaseController
         {
             return BadRequest();
         }
-        var response = await Mediator.Send(command);
+        var result = await Mediator.Send(command);
+        if (result == false)
+        {
+            return NotFound();
+        }
+        var response = Response<bool>.Success(result, 201);
         return Ok(response);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
-        var response = await Mediator.Send(new DeleteWarehouse(id));
+        var result = await Mediator.Send(new DeleteWarehouse(id));
+        if (result == false)
+        {
+            return NotFound();
+        }
+        var response = Response<bool>.Success(result, 204);
         return Ok(response);
     }
 }

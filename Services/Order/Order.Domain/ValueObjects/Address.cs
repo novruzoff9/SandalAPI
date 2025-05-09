@@ -15,17 +15,12 @@ namespace Order.Domain.ValueObjects;
 [Owned]
 public class Address : ValueObject
 {
-    private static readonly string ZipCodePattern = @"^[A-Za-z]{2}\d{4}$"; // AZ1001 or az1001
+    private static readonly string ZipCodePattern = @"^AZ\d{4,5}$"; // AZ1001 or az1001
 
     public string City { get; private set; }
     public string District { get; private set; }
     public string Street { get; private set; }
     public string ZipCode { get; private set; }
-
-    public Address()
-    {
-        
-    }
 
     public Address(string city, string district, string street, string zipCode)
     {

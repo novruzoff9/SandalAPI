@@ -97,7 +97,7 @@ public class EmployeeController : BaseController
         Response<Shared.ResultTypes.NoContent> result;
 
         result = response.Success
-            ? Response<Shared.ResultTypes.NoContent>.Success(200) 
+            ? Response<Shared.ResultTypes.NoContent>.Success(201) 
             : Response<Shared.ResultTypes.NoContent>.Fail(response.Message, 400);
 
         return Ok(result);
@@ -114,7 +114,7 @@ public class EmployeeController : BaseController
 
 
         result = response.IsSuccessStatusCode
-            ? Response<Shared.ResultTypes.NoContent>.Success(200)
+            ? Response<Shared.ResultTypes.NoContent>.Success(201)
             : Response<Shared.ResultTypes.NoContent>.Fail("Error oldu", 400);
         return Ok(result);
     }
@@ -128,7 +128,7 @@ public class EmployeeController : BaseController
         Response<Shared.ResultTypes.NoContent> result;
 
         result = response.IsSuccessStatusCode
-            ? Response<Shared.ResultTypes.NoContent>.Success(200)
+            ? Response<Shared.ResultTypes.NoContent>.Success(201)
             : Response<Shared.ResultTypes.NoContent>.Fail($"Error oldu {response}", 400);
         return Ok(result);
     }

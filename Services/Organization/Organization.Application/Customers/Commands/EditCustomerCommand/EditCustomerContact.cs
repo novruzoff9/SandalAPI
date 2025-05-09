@@ -1,7 +1,9 @@
 
+using Organization.Domain.ValueObjects;
+
 namespace Organization.Application.Customers.Commands.EditCustomerCommand;
 
-public record EditCustomerContactCommand(string Id, string email, string phone) : IRequest<bool>;
+public record EditCustomerContactCommand(string Id, string email, string phone, Address Address) : IRequest<bool>;
 
 public class EditCustomerContactCommandHandler : IRequestHandler<EditCustomerContactCommand, bool>
 {
@@ -21,6 +23,8 @@ public class EditCustomerContactCommandHandler : IRequestHandler<EditCustomerCon
         if (customer == null) { return false; }
 
         customer.UpdateContactInfo(request.email, request.phone);
+
+        customer.UpdateAddress(request.Address);
 
         _context.Customers.Update(customer);
 

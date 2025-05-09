@@ -26,14 +26,15 @@ public class CustomerController : BaseController
     public async Task<IActionResult> Get(string id)
     {
         var customer = await Mediator.Send(new GetCustomerQuery(id));
-        return Ok(customer);
+        var response = Response<Customer>.Success(customer, 200);
+        return Ok(response);
     }
 
     [HttpPost]
     public async Task<IActionResult> Post(CreateCustomerCommand command)
     {
         var customer = await Mediator.Send(command);
-        var response = Response<bool>.Success(customer, 200);
+        var response = Response<bool>.Success(customer, 201);
         return Ok(response);
     }
 
@@ -44,14 +45,24 @@ public class CustomerController : BaseController
         {
             return BadRequest();
         }
-        var customer = await Mediator.Send(command);
-        return Ok(customer);
+        var result = await Mediator.Send(command);
+        if (result == false)
+        {
+            return NotFound();
+        }
+        var response = Response<bool>.Success(result, 201);
+        return Ok(response);
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
-        await Mediator.Send(new DeleteCustomerCommand(id));
-        return NoContent();
+        var result = await Mediator.Send(new DeleteCustomerCommand(id));
+        if (result == false)
+        {
+            return NotFound();
+        }
+        var response = Response<NoContent>.Success(204);
+        return Ok(response);
     }
 }
