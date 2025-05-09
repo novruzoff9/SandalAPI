@@ -29,7 +29,7 @@ public class EventBusRabbitMQ : BaseEventBus
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             });
 
-            _connectionFactory = JsonConvert.DeserializeObject<ConnectionFactory>(connJson);
+            _connectionFactory = config.Connection;
         }
         else
             _connectionFactory = new ConnectionFactory();

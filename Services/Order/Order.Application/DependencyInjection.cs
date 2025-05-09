@@ -6,6 +6,7 @@ using EventBus.Base.Abstraction;
 using EventBus.Base;
 using Order.Application.IntegratonEvents.Handlers;
 using EventBus.Factory;
+using RabbitMQ.Client;
 
 namespace Order.Application;
 
@@ -29,7 +30,11 @@ public static class DependencyInjection
                 EventNameSuffix = "IntegrationEvent",
                 SubscribeClientAppName = "OrderService",
                 EventBusType = EventBusType.RabbitMQ,
-                DefaultTopicName = "SandalEventBus"
+                DefaultTopicName = "SandalEventBus",
+                Connection = new ConnectionFactory()
+                {
+                    HostName = configuration["EventBus:HostName"],
+                }
             };
 
             return EventBusFactory.Create(config, options);

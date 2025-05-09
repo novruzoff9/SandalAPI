@@ -33,18 +33,19 @@ namespace IdentityServer.Extensions
             var features = app.Properties["server.Features"] as FeatureCollection;
             var addresses = features.Get<IServerAddressesFeature>();
             var addess = addresses.Addresses.FirstOrDefault();
-            var uri = new Uri(addess);
+            //var uri = new Uri(addess);
 
             var serviceName = configuration["ConsulConfig:ServiceName"];
-            var serviceId = $"{serviceName}_{Environment.MachineName}";
+            //var serviceId = $"{serviceName}_{Environment.MachineName}";
+            var serviceId = configuration["ConsulConfig:ServiceName"];
             var serviceAddress = configuration["ConsulConfig:ServiceAddress"];
             var servicePort = int.Parse(configuration["ConsulConfig:ServicePort"]);
             var registration = new AgentServiceRegistration()
             {
                 ID = serviceId,
                 Name = serviceName,
-                //Address = serviceAddress,
-                Address = $"{uri.Host}",
+                Address = serviceAddress,
+                //Address = $"{uri.Host}",
                 Port = servicePort,
                 Tags = new[] { "identity", "identity service" }
             };

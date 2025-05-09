@@ -1,8 +1,8 @@
 {
   "Routes": [
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "IdentityServer",
+      //"UseServiceDiscovery": true,
+      //"ServiceName": "IdentityServer",
       "DownstreamPathTemplate": "/connect/token",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -15,8 +15,20 @@
       "UpstreamHttpMethod": [ "Post" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
+      "DownstreamPathTemplate": "/api/roles/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5001
+        }
+      ],
+      "UpstreamPathTemplate": "/roles/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+    },
+    {
+      //"UseServiceDiscovery": true,
+      //"ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/company/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -29,8 +41,6 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/product/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -43,8 +53,6 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/employee/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -57,8 +65,6 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/customer/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -71,8 +77,6 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/warehouse/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -85,8 +89,6 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrganizationService",
       "DownstreamPathTemplate": "/api/shelf/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -99,8 +101,6 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
-      "UseServiceDiscovery": true,
-      "ServiceName": "OrderService",
       "DownstreamPathTemplate": "/api/order/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
@@ -116,9 +116,9 @@
   "GlobalConfiguration": {
     "BaseUrl": "http://localhost:5000",
     "ServiceDiscoveryProvider": {
-      Host: "localhost",
-      Port: 8500,
-      Type: "Consul"
+      "Host": "localhost",
+      "Port": 8500,
+      "Type": "Consul"
     }
   }
 }

@@ -1,0 +1,96 @@
+services:
+  identityserver:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+    ports:
+      - "5001:5001"
+      - "5003:5003"
+    networks:
+      - net_backendservices
+    depends_on:
+      - web.apigateway
+    external_links:
+      - rabbitmq
+      - mssql
+
+  organization.webapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "5002:8080"
+    networks:
+      - net_backendservices
+    depends_on:
+      - web.apigateway
+    external_links:
+      - rabbitmq
+      - mssql
+
+  order.webapi:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "5004:8080"
+    networks:
+      - net_backendservices
+    depends_on:
+      - web.apigateway
+    external_links:
+      - rabbitmq
+      - mssql
+      - redis
+
+  web.apigateway:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_HTTP_PORTS=8080
+    ports:
+      - "5000:8080"
+    networks:
+      - net_backendservices
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+  
+  consul:
+    ports:
+      - 8500:8500
+      - 8600:8600/tcp
+      - 8600:8600/udp
+    networks:
+      - net_frontend
+      - net_backendservices
+
+  mssql:
+    user: root
+    ports:
+      - 1433:1433
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Salih123!
+    volumes:
+      - sqlserver_data:/var/opt/mssql/data
+      - sqlserver_log:/var/opt/mssql/log
+    networks:
+      - net_backendservices
+
+  RabbitMQ:
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    networks:
+      - net_backendservices
+      - net_frontend
+
+  redis:
+    ports:
+      - 6379:6379
+    volumes:
+      - /opt/app_data/redis/:/data
+    networks:
+      - net_backendservices
+

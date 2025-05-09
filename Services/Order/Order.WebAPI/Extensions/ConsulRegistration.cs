@@ -35,7 +35,7 @@ public static class ConsulRegistration
         var servicePort = int.Parse(configuration["ConsulConfig:ServicePort"]);
         var registration = new AgentServiceRegistration()
         {
-            ID = serviceId,
+            ID = serviceName,
             Name = serviceName,
             Address = serviceAddress,
             //Address = $"{uri.Host}",

@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  identityserver:
+    image: ${DOCKER_REGISTRY-}identityserver
+    build:
+      context: .
+      dockerfile: Services/IdentityServer/Dockerfile
+
+  organization.webapi:
+    image: ${DOCKER_REGISTRY-}organizationwebapi
+    build:
+      context: .
+      dockerfile: Services/Organization/Organization.WebAPI/Dockerfile
+
+  order.webapi:
+    image: ${DOCKER_REGISTRY-}orderwebapi
+    build:
+      context: .
+      dockerfile: Services/Order/Order.WebAPI/Dockerfile
+
+  web.apigateway:
+    image: ${DOCKER_REGISTRY-}webapigateway
+    build:
+      context: .
+      dockerfile: src/ApiGateways/WebApiGateway/Web.ApiGateway/Dockerfile
+      
+  redis:
+    container_name: redis
+    image: redis
+
+  RabbitMQ:
+    container_name: RabbitMQ
+    image: rabbitmq:3-management
+
+  mssql:
+    container_name: mssql
+    image: mcr.microsoft.com/mssql/server:2019-latest
+
+  consul:
+    container_name: consul
+    image: consul:1.15
+
+networks:
+  net_frontend:
+    driver: bridge
+    external: true
+  net_backendservices:
+    driver: bridge
+    external: true
+
+volumes:
+  rabbitmq:
+  sqlserver_data:
+  sqlserver_log:

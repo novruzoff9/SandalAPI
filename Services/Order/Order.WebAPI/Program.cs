@@ -10,6 +10,7 @@ using Order.Application.IntegratonEvents.Handlers;
 using Shared.Events.Events;
 using Shared.Middlewares;
 using Order.WebAPI.Extensions;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared.Events", "src\Shared
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer", "Services\IdentityServer\IdentityServer.csproj", "{1746A1D4-456F-4152-9611-DBED5489610A}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{A2112D1C-614D-448F-B4F8-5CFFDA07C9A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -125,6 +127,10 @@ Global
 		{1746A1D4-456F-4152-9611-DBED5489610A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1746A1D4-456F-4152-9611-DBED5489610A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1746A1D4-456F-4152-9611-DBED5489610A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2112D1C-614D-448F-B4F8-5CFFDA07C9A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2112D1C-614D-448F-B4F8-5CFFDA07C9A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2112D1C-614D-448F-B4F8-5CFFDA07C9A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2112D1C-614D-448F-B4F8-5CFFDA07C9A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

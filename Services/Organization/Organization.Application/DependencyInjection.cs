@@ -12,6 +12,7 @@ using Organization.Application.Common.Behaviors;
 using Shared.Events.Events;
 using System.ComponentModel;
 using QuestPDF.Infrastructure;
+using RabbitMQ.Client;
 
 namespace Organization.Application;
 
@@ -43,7 +44,11 @@ public static class DependencyInjection
                 EventNameSuffix = "IntegrationEvent",
                 SubscribeClientAppName = "OrganizationService",
                 EventBusType = EventBusType.RabbitMQ,
-                DefaultTopicName = "SandalEventBus"
+                DefaultTopicName = "SandalEventBus",
+                Connection = new ConnectionFactory()
+                {
+                    HostName = configuration["EventBus:HostName"],
+                }
             };
 
             return EventBusFactory.Create(config, options);
