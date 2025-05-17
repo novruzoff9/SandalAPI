@@ -1,11 +1,6 @@
 ﻿using StackExchange.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Order.Infrastructure.Redis;
+namespace Shared.Extensions.Redis;
 
 public class RedisService
 {

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Services;
 using System;
 using System.Text;
 
@@ -29,6 +30,7 @@ public static class AuthRegistration
                 IssuerSigningKey = signingKey
             };
         });
+        services.AddScoped<ISharedIdentityService, SharedIdentityService>();
 
         return services;
     }

@@ -1,4 +1,4 @@
-﻿namespace Order.Infrastructure.Redis;
+﻿namespace Shared.Extensions.Redis;
 
 public class RedisConfiguration
 {

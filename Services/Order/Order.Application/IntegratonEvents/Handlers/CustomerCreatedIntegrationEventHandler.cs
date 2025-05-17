@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Order.Application.Common.DTOs.Customer;
 using Shared.Events;
+using Shared.Extensions.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;

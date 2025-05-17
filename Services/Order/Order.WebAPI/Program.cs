@@ -3,9 +3,9 @@ using Order.Application;
 using Order.Application.IntegratonEvents.Handlers;
 using Order.Infrastructure;
 using Order.Infrastructure.Redis;
-using Order.WebAPI.Extensions;
 using Shared.Events;
 using Shared.Extensions;
+using Shared.Extensions.Redis;
 using Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,7 +26,6 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.Configure<RedisConfiguration>(builder.Configuration.GetSection("RedisConfiguration"));
 builder.Services.AddApplication(builder.Configuration);
 
 builder.Services.AddHttpClient();
@@ -34,12 +33,13 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.ConfigureAuth(builder.Configuration);
+builder.Services.AddConsul(builder.Configuration);
+builder.Services.AddRedis(builder.Configuration);
 
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddConsul(builder.Configuration);
 
 var app = builder.Build();
 
@@ -57,6 +57,7 @@ _eventBus.Subscribe<OrderStockConfirmedIntegrationEvent, OrderStockConfirmedInte
 
 app.RegisterConsulService(builder.Configuration, app.Lifetime);
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseMiddleware<RestrictAccessMiddleware>();

@@ -1,23 +1,12 @@
-using Consul;
-using EventBus.Base;
 using EventBus.Base.Abstraction;
-using EventBus.Factory;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Tokens;
 using Organization.Application;
 using Organization.Application.Common.Middlewares;
-using Organization.Application.Common.Services;
 using Organization.Application.IntegrationEvent.Handlers;
 using Organization.Infrastructure;
 using Organization.Infrastructure.Telegram;
-using Organization.WebAPI.Extensions;
 using Shared.Events;
-using Shared.Middlewares;
-using System.Text;
 using Shared.Extensions;
+using Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,11 +37,11 @@ builder.Services.Configure<TelegramConfiguration>(
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.ConfigureAuth(builder.Configuration);
+builder.Services.AddConsul(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddConsul(builder.Configuration);
 
 var app = builder.Build();
 

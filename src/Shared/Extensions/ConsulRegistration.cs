@@ -1,8 +1,18 @@
 ﻿using Consul;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Organization.WebAPI.Extensions;
+namespace Shared.Extensions;
 
 public static class ConsulRegistration
 {
@@ -32,6 +42,7 @@ public static class ConsulRegistration
         var serviceId = $"{serviceName}_{Environment.MachineName}";
         var serviceAddress = configuration["ConsulConfig:ServiceAddress"];
         var servicePort = int.Parse(configuration["ConsulConfig:ServicePort"]);
+        var serviceTags = configuration["ConsulConfig:ServiceTags"]?.Split(',') ?? Array.Empty<string>();
         var registration = new AgentServiceRegistration()
         {
             ID = serviceName,
@@ -39,7 +50,7 @@ public static class ConsulRegistration
             Address = serviceAddress,
             //Address = $"{uri.Host}",
             Port = servicePort,
-            Tags = new[] { "organization", "organization service" }
+            Tags = serviceTags
         };
         logger.LogInformation("Registering service {ServiceName} with ID {ServiceId} at {ServiceAddress}:{ServicePort}", serviceName, serviceId, serviceAddress, servicePort);
         consulClient.Agent.ServiceDeregister(registration.ID).Wait();
@@ -54,4 +65,3 @@ public static class ConsulRegistration
         return app;
     }
 }
-

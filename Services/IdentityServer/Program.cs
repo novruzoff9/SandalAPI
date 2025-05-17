@@ -34,11 +34,13 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRoleService, UserRoleService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
-builder.Services.AddScoped<ISharedIdentityService, SharedIdentityService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.ConfigureAuth(builder.Configuration);
+builder.Services.AddConsul(builder.Configuration);
+
 
 builder.Services.AddScoped<JwtTokenGenerator>();
 
@@ -56,8 +58,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-app.UseAuthorization();
+app.RegisterConsulService(builder.Configuration, app.Lifetime);
 
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

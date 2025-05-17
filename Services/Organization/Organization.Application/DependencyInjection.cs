@@ -30,7 +30,6 @@ public static class DependencyInjection
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
         });
 
-        services.AddScoped<ISharedIdentityService, SharedIdentityService>();
         services.AddScoped<IExcelService, ExcelService>();
 
         services.AddSingleton<IEventBus>(options =>
