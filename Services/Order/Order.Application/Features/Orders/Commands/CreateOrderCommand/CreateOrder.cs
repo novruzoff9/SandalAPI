@@ -45,7 +45,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, boo
 
         await _context.Orders.AddAsync(newOrder, cancellationToken);
 
-        bool success = await _context.SaveChangesAsync(cancellationToken) > 0;
+        bool success = await _context.SaveChangesAsync(cancellationToken) > 0; 
 
         OrderCreatedIntegrationEvent orderCreatedEvent = new(
             newOrder.Id, request.customerId, request.warehouseId,

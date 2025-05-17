@@ -1,11 +1,9 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
+﻿using AutoMapper.QueryableExtensions;
 using Consul;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using IdentityServer.Protos;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Order.Application.Common.Services;
 using Order.Application.DTOs.Order;
@@ -21,14 +19,6 @@ using Shared.Interceptors;
 using Shared.ResultTypes;
 
 namespace Order.WebAPI.Controllers;
-
-public class BaseController : ControllerBase
-{
-    private IMediator _mediator;
-    protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
-    private IMapper _mapper;
-    protected IMapper Mapper => _mapper ??= HttpContext.RequestServices.GetService<IMapper>();
-}
 
 
 [Route("api/[controller]")]

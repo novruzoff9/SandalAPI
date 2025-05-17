@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Organization.Application.Companies.Commands.CreateCompanyCommand;
@@ -14,12 +13,6 @@ namespace Organization.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-
-public class BaseController : ControllerBase
-{
-    private IMediator _mediator;
-    protected IMediator Mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
-}
 
 [Authorize(Roles="admin")]
 public class CompanyController : BaseController

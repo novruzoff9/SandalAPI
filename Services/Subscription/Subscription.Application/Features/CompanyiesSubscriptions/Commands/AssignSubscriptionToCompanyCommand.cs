@@ -1,0 +1,42 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Subscription.Application.Features.CompanyiesSubscriptions.Commands;
+
+public record AssignSubscriptionToCompanyCommand(string CompanyId, string PackageCode) : IRequest<string>;
+
+public class AssignSubscriptionToCompanyCommandHandler : IRequestHandler<AssignSubscriptionToCompanyCommand, string>
+{
+    private readonly IApplicationDbContext _context;
+
+    public AssignSubscriptionToCompanyCommandHandler(IApplicationDbContext context)
+    {
+        _context = context;
+    }
+
+    public async Task<string> Handle(AssignSubscriptionToCompanyCommand request, CancellationToken cancellationToken)
+    {
+        var package = await _context.SubscriptionPackages
+            .FirstOrDefaultAsync(x => x.Code == request.PackageCode, cancellationToken);
+        if (package == null)
+        {
+            return new Common.Exceptions.NotFoundException("Abunelik")
+                .ToString();
+            //throw new NotFoundException(nameof(SubscriptionPackage), request.PackageCode);
+        }
+
+        //var companySubscription = await _context.CompanySubscriptions
+            //.FirstOrDefaultAsync(x => x.CompanyId == request.CompanyId && x.EndDate > DateTime.Now);
+
+
+        int durationInDays = package.DurationInDays;
+        var subscription = new CompanySubscription(request.CompanyId, package.Id, DateTime.Now, DateTime.Now.AddDays(durationInDays));
+
+        await _context.CompanySubscriptions.AddAsync(subscription);
+        await _context.SaveChangesAsync(cancellationToken);
+        return subscription.Id;
+    }
+}
