@@ -1,132 +1,63 @@
-﻿// Copyright (c) Brock Allen & Dominick Baier. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
-
-
-using IdentityServer.Data;
-using IdentityServer.Models;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
+using FluentValidation;
+using IdentityServer.Configurations;
+using IdentityServer.Context;
+using IdentityServer.Helpers;
+using IdentityServer.Middlewares;
+using IdentityServer.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.SystemConsole.Themes;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
+using Shared.Services;
+using System.Reflection;
+using Shared.Extensions;
 
-namespace IdentityServer
+var builder = WebApplication.CreateBuilder(args);
+
+var env = builder.Environment.EnvironmentName;
+
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{env}.json", optional: true)
+    .AddEnvironmentVariables();
+
+
+// Add services to the container.
+builder.Services.AddControllers();
+
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<IdentityDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRoleService, UserRoleService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ISharedIdentityService, SharedIdentityService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.ConfigureAuth(builder.Configuration);
+
+builder.Services.AddScoped<JwtTokenGenerator>();
+
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
+builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
 {
-    public class Program
-    {
-        public static async Task<int> Main(string[] args)
-        {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-                .MinimumLevel.Override("System", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-                .Enrich.FromLogContext()
-                // uncomment to write to Azure diagnostics stream
-                //.WriteTo.File(
-                //    @"D:\home\LogFiles\Application\identityserver.txt",
-                //    fileSizeLimitBytes: 1_000_000,
-                //    rollOnFileSizeLimit: true,
-                //    shared: true,
-                //    flushToDiskInterval: TimeSpan.FromSeconds(1))
-                .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
-                .CreateLogger();
-
-            try
-            {
-                /*var seed = args.Contains("/seed");
-                if (seed)
-                {
-                    args = args.Except(new[] { "/seed" }).ToArray();
-                }*/
-
-                var host = CreateHostBuilder(args).Build();
-
-                using (var scope = host.Services.CreateScope())
-                {
-                    var services = scope.ServiceProvider;
-                    var context = services.GetRequiredService<ApplicationDbContext>();
-
-                    context.Database.Migrate();
-
-                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
-                    var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
-                    if (!userManager.Users.Any())
-                    {
-                        var user = new ApplicationUser
-                        {
-                            Id = Guid.NewGuid().ToString(),
-                            UserName = "novruzoff",
-                            Email = "yagmurnov2@gmail.com"
-                        };
-
-                        var result = await userManager.CreateAsync(user, "Nov2005!!");
-                        if (result.Succeeded)
-                        {
-                            // Admin rolü oluşturma
-                            var adminRole = new ApplicationRole
-                            {
-                                Id = Guid.NewGuid().ToString(),
-                                Name = "admin"
-                            };
-
-                            await roleManager.CreateAsync(adminRole);
-                            await userManager.AddToRoleAsync(user, "admin");
-                        }
-
-                    }
-                }
-
-                    /*if (seed)
-                    {
-                        Log.Information("Seeding database...");
-                        var config = host.Services.GetRequiredService<IConfiguration>();
-                        var connectionString = config.GetConnectionString("DefaultConnection");
-                        SeedData.EnsureSeedData(connectionString);
-                        Log.Information("Done seeding database.");
-                        return 0;
-                    }*/
-
-                    Log.Information("Starting host...");
-                host.Run();
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Host terminated unexpectedly.");
-                return 1;
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
-        }
-
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .UseSerilog()
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.ConfigureKestrel(options =>
-                    {
-                        options.ListenAnyIP(5001, listenoptions =>
-                        {
-                            listenoptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http1;
-                        });
-                        options.ListenAnyIP(5003, listenoptions =>
-                        {
-                            listenoptions.Protocols = Microsoft.AspNetCore.Server.Kestrel.Core.HttpProtocols.Http2;
-                        });
-                    });
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();

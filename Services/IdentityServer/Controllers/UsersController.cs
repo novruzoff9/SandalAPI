@@ -1,203 +1,49 @@
-﻿using IdentityServer.DTOs.User;
-using IdentityServer.Models;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using IdentityServer.DTOs;
+using IdentityServer.Services;
+using IdentityServer.Validations;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Shared.Services;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace IdentityServer.Controllers
+namespace IdentityServer.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class UsersController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class UsersController : ControllerBase
+    private readonly IUserService _userService;
+    private readonly IUserRoleService _userRoleService;
+    public UsersController(IUserService userService, IUserRoleService userRoleService)
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly ISharedIdentityService _identityService;
+        _userService = userService;
+        _userRoleService = userRoleService;
+    }
+    [HttpPost]
+    public async Task<IActionResult> CreateUser(CreateUserDto userDto)
+    {
+        var user = await _userService.CreateUser(userDto);
 
-        public UsersController(UserManager<ApplicationUser> userManager, ISharedIdentityService identityService)
-        {
-            _userManager = userManager;
-            _identityService = identityService;
-        }
+        return Ok(user);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserDto request)
-        {
-            var user = new ApplicationUser
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserName = request.UserName,
-                Email = request.Email,
-                CompanyId = request.CompanyId
-            };
+    [HttpPost("assignrole")]
+    public async Task<IActionResult> AssignUserToRole(AssignUserToRoleDto dto)
+    {
+        var result = await _userRoleService.AddUserToRoleAsync(dto.UserId, dto.RoleId);
+        return Ok(result);
+    }
 
-            var result = await _userManager.CreateAsync(user, request.Password);
+    [HttpPut("{userId}")]
+    public async Task<IActionResult> UpdateUser(string userId, [FromBody] UpdateUserDto userDto)
+    {
+        var updatedUser = await _userService.UpdateUser(userId, userDto);
+        return Ok(updatedUser);
+    }
 
-            if (!result.Succeeded)
-            {
-                var errors = result.Errors.Select(e => e.Description).ToList();
-                return Ok(new
-                {
-                    Errors = errors
-                });
-            }
-
-            return Ok();
-        }
-
-        [HttpGet("WithToken")]
-        public async Task<IActionResult> GetUser()
-        {
-            var user1 = User;
-            var claims = user1.Claims;
-            var userIdClaims = claims.FirstOrDefault(x => x.Type == "sub");
-
-            if (userIdClaims == null)
-            {
-                return BadRequest("Id degeri tapilmadi");
-            }
-
-            var user = await _userManager.FindByIdAsync(userIdClaims.Value);
-
-            if (user == null)
-            {
-                return BadRequest();
-            }
-
-            var roles = await _userManager.GetRolesAsync(user);
-
-            return Ok(new UserDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email,
-                CompanyId = user.CompanyId,
-                Roles = roles.ToList() ?? Array.Empty<string>().ToList()
-            });
-        }
-
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(string Id)
-        {
-
-            if (Id == null)
-            {
-                return BadRequest("Id degeri tapilmadi");
-            }
-
-            var user = await _userManager.FindByIdAsync(Id);
-
-            if (user == null)
-            {
-                return BadRequest();
-            }
-
-            var roles = await _userManager.GetRolesAsync(user);
-
-            return Ok(new UserDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                Email = user.Email,
-                CompanyId = user.CompanyId,
-                Roles = roles.ToList() ?? Array.Empty<string>().ToList()
-            });
-        }
-
-        [HttpGet("AllUsers")]
-        public async Task<IActionResult> GetUsers()
-        {
-            var users = await _userManager.Users.ToListAsync();
-            var userslist = new List<UserDto>();
-
-            foreach (var user in users)
-            {
-                var roles = await _userManager.GetRolesAsync(user);
-                userslist.Add(new UserDto
-                {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    CompanyId = user.CompanyId,
-                    WarehouseId = user.WarehouseId,
-                    Roles = roles.ToList() ?? Array.Empty<string>().ToList()
-                });
-            }
-
-            return Ok(userslist);
-        }
-
-        [HttpGet("Employees")]
-        public async Task<IActionResult> GetEmployees(string companyId)
-        {
-            var users = await _userManager.Users.Where(x=>x.CompanyId == companyId).ToListAsync();
-            var userslist = new List<UserDto>();
-
-            foreach (var user in users)
-            {
-                var roles = await _userManager.GetRolesAsync(user);
-                userslist.Add(new UserDto
-                {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                    Email = user.Email,
-                    CompanyId = user.CompanyId,
-                    WarehouseId = user.WarehouseId,
-                    Roles = roles.ToList() ?? Array.Empty<string>().ToList()
-                });
-            }
-
-            return Ok(userslist);
-        }
-
-        [HttpPost("AddEmployee")]
-        public async Task<IActionResult> CreateEmployee([FromBody] SignUpDto request)
-        {
-            var user = new ApplicationUser
-            {
-                Id = Guid.NewGuid().ToString(),
-                UserName = request.UserName,
-                Email = request.Email,
-                //CompanyId = _identityService.GetCompanyId
-            };
-
-            var result = await _userManager.CreateAsync(user, request.Password);
-
-            if (!result.Succeeded)
-            {
-                var errors = result.Errors.Select(e => e.Description).ToList();
-                return BadRequest(new
-                {
-                    Errors = errors
-                });
-            }
-
-            return Ok();
-        }
-
-        [HttpPost("UpdateBranch")]
-        public async Task<IActionResult> UpdateBranch(string userId, string branchId)
-        {
-            var user = _userManager.Users.FirstOrDefault(x => x.Id == userId);
-            user.WarehouseId = branchId;
-            var result = await _userManager.UpdateAsync(user);
-            
-            if (!result.Succeeded)
-            {
-                var errors = result.Errors.Select(e => e.Description).ToList();
-                return Ok(new
-                {
-                    Errors = errors
-                });
-            }
-            
-            return Ok();
-        }
+    [HttpGet]
+    public async Task<IActionResult> GetUsers()
+    {
+        var role = await _userService.GetUsersAync();
+        return Ok(role);
     }
 }

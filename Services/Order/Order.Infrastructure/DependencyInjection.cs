@@ -20,7 +20,7 @@ public static class DependencyInjection
         
         services.AddScoped<IOrderDbContext, OrderDbContext>();
 
-        services.Configure<RedisConfiguration>(configuration.GetSection("RedisConfiguration"));
+        //services.Configure<RedisConfiguration>(configuration.GetSection("RedisConfiguration"));
 
         services.AddSingleton<RedisService>(sp =>
         {

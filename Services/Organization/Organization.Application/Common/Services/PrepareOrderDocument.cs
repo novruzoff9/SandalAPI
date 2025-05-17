@@ -1,6 +1,6 @@
 ﻿using QuestPDF.Fluent;
 using QuestPDF.Infrastructure;
-using Shared.Events.Events;
+using Shared.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;

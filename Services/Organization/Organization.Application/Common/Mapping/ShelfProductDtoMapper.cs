@@ -11,7 +11,7 @@ public class ShelfProductDtoMapper : Profile
 {
     public ShelfProductDtoMapper()
     {
-        CreateMap<DTOs.Shelf.ShelfProductDTO, Shared.Events.DTOs.ShelfProduct.ShelfProductDTO>()
+        CreateMap<DTOs.Shelf.ShelfProductDTO, Shared.DTOs.ShelfProduct.ShelfProductDTO>()
             .ReverseMap();
     }
 }

@@ -1,9 +1,5 @@
-
 using AutoMapper;
-using Organization.Application.Common.Interfaces;
 using Organization.Application.DTOs.Company;
-using Organization.Domain.Entities;
-using Shared.ResultTypes;
 
 namespace Organization.Application.Companies.Queries.GetCompaniesQuery;
 

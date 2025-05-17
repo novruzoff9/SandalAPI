@@ -1,16 +1,12 @@
 using EventBus.Base.Abstraction;
-using EventBus.Base;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Tokens;
 using Order.Application;
-using Order.Infrastructure;
-using EventBus.Factory;
 using Order.Application.IntegratonEvents.Handlers;
-using Shared.Events.Events;
-using Shared.Middlewares;
+using Order.Infrastructure;
+using Order.Infrastructure.Redis;
 using Order.WebAPI.Extensions;
-using System;
+using Shared.Events;
+using Shared.Extensions;
+using Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,30 +26,14 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
 builder.Services.AddInfrastructure(builder.Configuration);
-
+builder.Services.Configure<RedisConfiguration>(builder.Configuration.GetSection("RedisConfiguration"));
 builder.Services.AddApplication(builder.Configuration);
 
 builder.Services.AddHttpClient();
 
 builder.Services.AddHttpContextAccessor();
-JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
-JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("roles");
 
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Authority = builder.Configuration["Services:IdentityService"];
-        options.Audience = "OrganizationAPIFullAccess";
-        options.RequireHttpsMetadata = false;
-
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            NameClaimType = "sub",
-            RoleClaimType = "roles",
-            ValidateAudience = true
-        };
-    });
+builder.Services.ConfigureAuth(builder.Configuration);
 
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();

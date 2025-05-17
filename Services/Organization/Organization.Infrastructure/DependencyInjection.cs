@@ -21,7 +21,8 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
 
-        services.Configure<TelegramConfiguration>(configuration.GetSection("TelegramConfiguration"));
+        
+
         services.AddScoped<ITelegramService, TelegramService>();
 
         return services;

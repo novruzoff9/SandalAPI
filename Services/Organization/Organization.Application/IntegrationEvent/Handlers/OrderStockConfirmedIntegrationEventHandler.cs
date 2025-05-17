@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Organization.Application.Common.Services;
 using QuestPDF.Companion;
 using QuestPDF.Fluent;
-using Shared.Events.Events;
+using Shared.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;

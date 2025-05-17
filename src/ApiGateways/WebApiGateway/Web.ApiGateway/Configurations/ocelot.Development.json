@@ -3,7 +3,7 @@
     {
       //"UseServiceDiscovery": true,
       //"ServiceName": "IdentityServer",
-      "DownstreamPathTemplate": "/connect/token",
+      "DownstreamPathTemplate": "/api/auth/login",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -53,12 +53,12 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
-      "DownstreamPathTemplate": "/api/employee/{everything}",
+      "DownstreamPathTemplate": "/api/employees/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 5002
+          "Port": 5001
         }
       ],
       "UpstreamPathTemplate": "/employee/{everything}",
@@ -110,6 +110,18 @@
         }
       ],
       "UpstreamPathTemplate": "/order/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/companysubscription/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5005
+        }
+      ],
+      "UpstreamPathTemplate": "/companysubscription/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     }
   ],

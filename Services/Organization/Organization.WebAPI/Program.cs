@@ -1,3 +1,4 @@
+using Consul;
 using EventBus.Base;
 using EventBus.Base.Abstraction;
 using EventBus.Factory;
@@ -11,9 +12,12 @@ using Organization.Application.Common.Middlewares;
 using Organization.Application.Common.Services;
 using Organization.Application.IntegrationEvent.Handlers;
 using Organization.Infrastructure;
+using Organization.Infrastructure.Telegram;
 using Organization.WebAPI.Extensions;
-using Shared.Events.Events;
+using Shared.Events;
 using Shared.Middlewares;
+using System.Text;
+using Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,26 +41,13 @@ builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddHttpClient();
 
+builder.Services.Configure<TelegramConfiguration>(
+    builder.Configuration.GetSection("TelegramConfiguration")
+);
+
 builder.Services.AddHttpContextAccessor();
 
-JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
-JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("roles");
-
-builder.Services
-    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.Authority = builder.Configuration["Services:IdentityService"];
-        options.Audience = "OrganizationAPIFullAccess";
-        options.RequireHttpsMetadata = false;
-
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            NameClaimType = "sub",
-            RoleClaimType = "roles",
-            ValidateAudience = true
-        };
-    });
+builder.Services.ConfigureAuth(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

@@ -1,7 +1,6 @@
-
 using EventBus.Base.Abstraction;
 using Organization.Domain.ValueObjects;
-using Shared.Events.Events;
+using Shared.Events;
 
 namespace Organization.Application.Customers.Commands.CreateCustomerCommand;
 

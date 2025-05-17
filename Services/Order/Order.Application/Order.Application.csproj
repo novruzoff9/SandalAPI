@@ -16,10 +16,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\src\Shared\Shared.Events\Shared.Events.csproj" />
-	  <ProjectReference Include="..\..\..\src\Shared\Shared\Shared.csproj" />
 	  <ProjectReference Include="..\..\..\src\BuildingBlocks\EventBus\EventBus.Base\EventBus.Base.csproj" />
 	  <ProjectReference Include="..\..\..\src\BuildingBlocks\EventBus\EventBus.Factory\EventBus.Factory.csproj" />
+	  <ProjectReference Include="..\..\..\src\Shared\Shared.csproj" />
 	  <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
 	</ItemGroup>
 

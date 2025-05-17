@@ -1,18 +1,15 @@
-using EventBus.Base.Abstraction;
 using EventBus.Base;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Organization.Application.Common.Services;
-using Organization.Application.IntegrationEvent.Handlers;
-using Shared.Services;
-using System.Reflection;
+using EventBus.Base.Abstraction;
 using EventBus.Factory;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Organization.Application.Common.Behaviors;
-using Shared.Events.Events;
-using System.ComponentModel;
+using Organization.Application.Common.Services;
+using Organization.Application.IntegrationEvent.Handlers;
 using QuestPDF.Infrastructure;
 using RabbitMQ.Client;
+using System.Reflection;
 
 namespace Organization.Application;
 

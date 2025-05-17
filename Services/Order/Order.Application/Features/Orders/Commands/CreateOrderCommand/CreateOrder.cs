@@ -3,7 +3,7 @@ using Order.Application.Common.DTOs.Address;
 using Order.Application.DTOs.Order;
 using Order.Domain.Entities;
 using Order.Domain.ValueObjects;
-using Shared.Events.Events;
+using Shared.Events;
 
 namespace Order.Application.Features.Orders.Commands.CreateOrderCommand;
 
@@ -49,7 +49,7 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, boo
 
         OrderCreatedIntegrationEvent orderCreatedEvent = new(
             newOrder.Id, request.customerId, request.warehouseId,
-            newOrder.Products.Select(p => new Shared.Events.Events.OrderItemDto
+            newOrder.Products.Select(p => new Shared.Events.OrderItemDto
             {
                 ProductId = p.ProductId,
                 Quantity = p.Quantity

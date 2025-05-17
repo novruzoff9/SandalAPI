@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Order.Application.Common.DTOs.Customer;
-using Shared.Events.Events;
+using Shared.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;

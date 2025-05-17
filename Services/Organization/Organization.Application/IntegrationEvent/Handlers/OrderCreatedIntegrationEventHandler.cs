@@ -4,8 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Organization.Application.Common.Services;
 using Organization.Application.DTOs.Shelf;
-using Shared.Events.Events;
-using Shared.ResultTypes;
+using Shared.Events;
 
 namespace Organization.Application.IntegrationEvent.Handlers;
 
@@ -56,7 +55,7 @@ public class OrderCreatedIntegrationEventHandler : IIntegrationEventHandler<Orde
         {
             var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
-            var shelfProductsDto = mapper.Map<List<Shared.Events.DTOs.ShelfProduct.ShelfProductDTO>>(shelfProducts);
+            var shelfProductsDto = mapper.Map<List<Shared.DTOs.ShelfProduct.ShelfProductDTO>>(shelfProducts);
 
             var stockConfirmedEvent = new OrderStockConfirmedIntegrationEvent(@event.OrderId, shelfProductsDto);
 

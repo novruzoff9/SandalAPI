@@ -1,5 +1,5 @@
 ﻿using EventBus.Base.Abstraction;
-using Shared.Events.Events;
+using Shared.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
