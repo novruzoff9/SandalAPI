@@ -43,6 +43,10 @@ public class AddProductsToShelfHandler : IRequestHandler<AddProductsToShelf, boo
                     ProductID = product.Key
                 });
             }
+
+            var productEntity = products.FirstOrDefault(x => x.Id == product.Key);
+            productEntity.Quantity += product.Value;
+            _context.Products.Update(productEntity);
         }
         await _context.ShelfProducts.AddRangeAsync(shelfProducts);
         await _context.SaveChangesAsync(cancellationToken);

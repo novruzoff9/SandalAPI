@@ -11,6 +11,7 @@ using Organization.Application.Common.Models.ShelfProducts;
 using Organization.Application.Common.Models.Shelf;
 using Organization.Domain.Entities;
 using Shared.ResultTypes;
+using Organization.Application.Shelves.Commands.RemoveProductsFromShelf;
 
 namespace Organization.WebAPI.Controllers;
 
@@ -45,7 +46,8 @@ public class ShelfController : BaseController
     [HttpPost]
     public async Task<IActionResult> Create(CreateShelf command)
     {
-        var response = await Mediator.Send(command);
+        var result = await Mediator.Send(command);
+        var response = Response<bool>.Success(result, 201);
         return Ok(response);
     }
 
@@ -58,6 +60,14 @@ public class ShelfController : BaseController
         return Ok(response);
     }
 
+    [HttpPost("products/remove")]
+    public async Task<IActionResult> RemoveProductFromShelf(RemoveProductsFromShelfDTO request)
+    {
+        var shelves = await Mediator.Send(new GetShelves());
+        var shelf = shelves.FirstOrDefault(x => x.Code == request.ShelfCode);
+        var response = await Mediator.Send(new RemoveProductsFromShelf(request.ShelfCode, request.Products));
+        return Ok(response);
+    }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(string id, EditShelf command)

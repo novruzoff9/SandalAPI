@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Subscription.Application.DTOs.CompanySubscription;
 using Subscription.Application.Features.CompanyiesSubscriptions.Commands;
 using Subscription.Application.Features.CompanyiesSubscriptions.Queries;
+using Shared.ResultTypes;
 
 namespace Subscription.WebAPI.Controllers;
 
@@ -15,6 +17,14 @@ public class CompanySubscriptionController : BaseController
     {
         var companySubscription = await Mediator.Send(new GetCompanyActiveSubscriptionQuery(id));
         return Ok(companySubscription);
+    }
+
+    [HttpGet("company/my")]
+    public async Task<IActionResult> GetMySubscription()
+    {
+        var mySubscriptions = await Mediator.Send(new GetMyCompanySubscriptionQuery());
+        var response = Response<CompanySubscriptionDto>.Success(mySubscriptions, 200);
+        return Ok(mySubscriptions);
     }
     [HttpPost]
     public async Task<IActionResult> Create(AssignSubscriptionToCompanyCommand command)

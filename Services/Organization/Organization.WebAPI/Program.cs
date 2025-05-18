@@ -6,6 +6,7 @@ using Organization.Infrastructure;
 using Organization.Infrastructure.Telegram;
 using Shared.Events;
 using Shared.Extensions;
+using Shared.Extensions.Redis;
 using Shared.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,6 +39,7 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.ConfigureAuth(builder.Configuration);
 builder.Services.AddConsul(builder.Configuration);
+builder.Services.AddRedis(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -55,6 +57,7 @@ if (app.Environment.IsDevelopment())
 IEventBus _eventBus = app.Services.GetRequiredService<IEventBus>();
 _eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
 _eventBus.Subscribe<OrderStockConfirmedIntegrationEvent, OrderStockConfirmedIntegrationEventHandler>();
+_eventBus.Subscribe<CompanyAssignedPackIntegrationEvent, CompanyAssignedPackIntegrationEventHandler>();
 
 app.RegisterConsulService(builder.Configuration, app.Lifetime);
 

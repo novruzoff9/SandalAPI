@@ -1,4 +1,6 @@
-﻿using System;
+﻿using EventBus.Base.Abstraction;
+using Shared.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,10 +13,12 @@ public record AssignSubscriptionToCompanyCommand(string CompanyId, string Packag
 public class AssignSubscriptionToCompanyCommandHandler : IRequestHandler<AssignSubscriptionToCompanyCommand, string>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IEventBus _eventBus;
 
-    public AssignSubscriptionToCompanyCommandHandler(IApplicationDbContext context)
+    public AssignSubscriptionToCompanyCommandHandler(IApplicationDbContext context, IEventBus eventBus)
     {
         _context = context;
+        _eventBus = eventBus;
     }
 
     public async Task<string> Handle(AssignSubscriptionToCompanyCommand request, CancellationToken cancellationToken)
@@ -37,6 +41,11 @@ public class AssignSubscriptionToCompanyCommandHandler : IRequestHandler<AssignS
 
         await _context.CompanySubscriptions.AddAsync(subscription);
         await _context.SaveChangesAsync(cancellationToken);
+
+        // Publish an integration event
+        var @event = new CompanyAssignedPackIntegrationEvent(request.CompanyId, package.Id, package.Name, subscription.EndDate);
+        _eventBus.Publish(@event);
+
         return subscription.Id;
     }
 }

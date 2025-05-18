@@ -9,7 +9,6 @@ public class GetCompaniesQueryHandler : IRequestHandler<GetCompanies, List<Compa
 {
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
-
     public GetCompaniesQueryHandler(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;

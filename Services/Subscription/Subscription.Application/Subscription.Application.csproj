@@ -27,6 +27,7 @@
     <Folder Include="Common\Behaviors\" />
     <Folder Include="Common\Mapping\" />
     <Folder Include="Common\Models\" />
+    <Folder Include="IntegrationEvent\Handlers\" />
   </ItemGroup>
 
 </Project>

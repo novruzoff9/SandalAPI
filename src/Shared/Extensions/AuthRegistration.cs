@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using Shared.Services;
 using System;
@@ -13,7 +14,8 @@ public static class AuthRegistration
     public static IServiceCollection ConfigureAuth(this IServiceCollection services, IConfiguration configuration)
     {
         var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["AuthConfig:Secret"]));
-
+        JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+        JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("roles");
         services.AddAuthentication(opt =>
         {
             opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

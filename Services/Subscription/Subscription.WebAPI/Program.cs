@@ -4,6 +4,7 @@ using Subscription.Application;
 using Subscription.Infrastructure;
 using Subscription.Infrastructure.Data;
 using Shared.Extensions;
+using Shared.Extensions.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +14,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddApplication(builder.Configuration);
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddConsul(builder.Configuration);
+builder.Services.ConfigureAuth(builder.Configuration);
+builder.Services.AddRedis(builder.Configuration);
 
 var app = builder.Build();
 

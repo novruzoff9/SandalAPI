@@ -8,13 +8,14 @@ using Organization.Application.Companies.Queries.GetCompaniesQuery;
 using Organization.Application.Companies.Queries.GetCompanyQuery;
 using Organization.Application.DTOs.Company;
 using Shared.ResultTypes;
+using Shared.Services;
 
 namespace Organization.WebAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 
-[Authorize(Roles="admin")]
+//[Authorize(Roles="admin")]
 public class CompanyController : BaseController
 {
     [HttpGet]

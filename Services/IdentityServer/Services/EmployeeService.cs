@@ -44,6 +44,7 @@ public class EmployeeService : IEmployeeService
         }
         user.WarehouseId = warehouseId;
         _context.Users.Update(user);
+        await _context.SaveChangesAsync();
         return true;
     }
 

@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Order.Application.Common.Interfaces;
 using Order.Infrastructure.Data;
-using Order.Infrastructure.Redis;
 
 namespace Order.Infrastructure;
 

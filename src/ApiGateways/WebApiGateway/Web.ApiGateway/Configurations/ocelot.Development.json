@@ -121,7 +121,7 @@
           "Port": 5005
         }
       ],
-      "UpstreamPathTemplate": "/companysubscription/{everything}",
+      "UpstreamPathTemplate": "/subscription/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     }
   ],

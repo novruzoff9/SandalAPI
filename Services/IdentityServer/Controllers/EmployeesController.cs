@@ -37,8 +37,9 @@ public class EmployeesController : ControllerBase
     {
         string companyId = _sharedIdentityService.GetCompanyId;
         employeeDto.CompanyId = companyId;
-        var employee = await _userService.CreateUser(employeeDto);
-        return Ok(employee);
+        UserShowDto employee = await _userService.CreateUser(employeeDto);
+        var response = Response<UserShowDto>.Success(employee, 201);
+        return Ok(response);
     }
 
     [HttpPost("update-branch")]

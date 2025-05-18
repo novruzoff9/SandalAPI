@@ -22,7 +22,7 @@ public static class DependencyInjection
             {
                 ConnectionRetryCount = 3,
                 EventNameSuffix = "IntegrationEvent",
-                SubscribeClientAppName = "OrganizationService",
+                SubscribeClientAppName = "SubscriptionService",
                 EventBusType = EventBusType.RabbitMQ,
                 DefaultTopicName = "SandalEventBus",
                 Connection = new ConnectionFactory()

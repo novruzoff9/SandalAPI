@@ -2,7 +2,6 @@ using EventBus.Base.Abstraction;
 using Order.Application;
 using Order.Application.IntegratonEvents.Handlers;
 using Order.Infrastructure;
-using Order.Infrastructure.Redis;
 using Shared.Events;
 using Shared.Extensions;
 using Shared.Extensions.Redis;

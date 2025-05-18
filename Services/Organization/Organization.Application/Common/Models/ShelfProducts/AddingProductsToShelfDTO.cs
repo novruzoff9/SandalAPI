@@ -11,3 +11,15 @@ public class AddingProductsToShelfDTO
     public string ShelfCode { get; set; }
     public Dictionary<string, int> ProductIds { get; set; }
 }
+
+public class RemoveProductsFromShelfDTO
+{
+    public string ShelfCode { get; set; }
+    public List<ProductWithQuantity> Products { get; set; }
+}
+
+public class ProductWithQuantity
+{
+    public string ProductId { get; set; }
+    public int Quantity { get; set; }
+}
