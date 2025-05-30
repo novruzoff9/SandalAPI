@@ -11,18 +11,24 @@ public record GetCompany(string Id) : IRequest<CompanyDto>;
 public class GetCompanyQueryHandler : IRequestHandler<GetCompany, CompanyDto>
 {
     private readonly IApplicationDbContext _context;
+    private readonly ISharedSubscriptionService _sharedSubscriptionService;
     private readonly IMapper _mapper;
 
-    public GetCompanyQueryHandler(IApplicationDbContext context, IMapper mapper)
+    public GetCompanyQueryHandler(IApplicationDbContext context, IMapper mapper, ISharedSubscriptionService sharedSubscriptionService)
     {
         _context = context;
         _mapper = mapper;
+        _sharedSubscriptionService = sharedSubscriptionService;
     }
 
     public async Task<CompanyDto> Handle(GetCompany request, CancellationToken cancellationToken)
     {
-        var company = await _context.Companies.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        var company = await _context.Companies
+            .Include(x=>x.Warehouses)
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
         CompanyDto companyDto = _mapper.Map<CompanyDto>(company);
+        string subscription = await _sharedSubscriptionService.GetSubscriptionOfCompany(company.Id);
+        companyDto.Subscription = subscription;
         return companyDto;
     }
 }

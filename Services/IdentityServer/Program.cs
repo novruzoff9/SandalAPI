@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Shared.Services;
 using System.Reflection;
 using Shared.Extensions;
+using IdentityServer.ProtoServices;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,20 +50,38 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSet
 
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(5001, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http1;
+    });
+    options.ListenAnyIP(5003, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http2;
+    });
+});
+
+builder.Services.AddGrpc();
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.RegisterConsulService(builder.Configuration, app.Lifetime);
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
+app.MapGrpcService<IdentityProtoService>();
 
 app.Run();

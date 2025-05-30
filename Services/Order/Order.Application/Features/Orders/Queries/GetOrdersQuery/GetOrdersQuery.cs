@@ -17,7 +17,16 @@ public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, List<Domain
     {
         string companyId = _identityService.GetCompanyId;
         var orders = await _context.Orders.Where(x => x.CompanyId == companyId)
+            .Include(x=>x.Products)
             .ToListAsync(cancellationToken);
+
+        foreach (var order in orders)
+        {
+            foreach (var item in order.Products)
+            {
+                item.Order = null;
+            }
+        }
         return orders;
     }
 }

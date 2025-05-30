@@ -22,4 +22,9 @@ public class CompanySubscription : BaseEntity
         StartDate = startDate;
         EndDate = endDate;
     }
+
+    public void TerminateCurrentSubscription()
+    {
+        EndDate = DateTime.Now;
+    }
 }

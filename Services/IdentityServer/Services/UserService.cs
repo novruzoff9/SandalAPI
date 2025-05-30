@@ -12,8 +12,10 @@ public interface IUserService
     Task<UserShowDto> CreateUser(CreateUserDto request);
     Task<UserShowDto> UpdateUser(string userId, UpdateUserDto requet);
     Task<UserDetailedDto> GetUserByEmailAsync(string email);
+    Task<UserDetailedDto> GetUserByIdAsync(string id);
     Task<IdentityRole> GetUserRole(string userId);
     Task<List<UserShowDto>> GetUsersAync();
+    Task<bool> ChangePassword(ChangePasswordDto request);
 }
 public class UserService : IUserService
 {
@@ -26,6 +28,24 @@ public class UserService : IUserService
         _createUserValidator = createUserValidator;
         _updateUserValidator = updateUserValidator;
     }
+
+    public async Task<bool> ChangePassword(ChangePasswordDto request)
+    {
+        var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == request.UserId);
+        if (user == null)
+        {
+            throw new NotFoundException("İstifadəçi tapılmadı");
+        }
+        var pass = BCrypt.Net.BCrypt.Verify(request.OldPassword, user.HashedPassword);
+        if (!pass)
+        {
+            throw new ValidationException("Köhnə şifrə yanlışdır");
+        }
+        user.ChangePassword(request.NewPassword);
+        await _context.SaveChangesAsync();
+        return true;
+    }
+
     public async Task<UserShowDto> CreateUser(CreateUserDto request)
     {
         var valResult = _createUserValidator.Validate(request);
@@ -62,6 +82,31 @@ public class UserService : IUserService
             .Include(u => u.Roles.Where(ur => !ur.Revoked.HasValue))
             .ThenInclude(ur => ur.Role)
             .FirstOrDefaultAsync(u => u.NormalizedEmail == email.Trim().ToLower());
+        if (user == null)
+        {
+            throw new NotFoundException("İstifadəçi tapılmadı");
+        }
+        var userDto = new UserDetailedDto
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
+            HashedPassword = user.HashedPassword,
+            CompanyId = user.CompanyId,
+            WarehouseId = user.WarehouseId,
+            Roles = user.Roles.Select(r => r.Role.RoleName).ToList()
+        };
+        return userDto;
+    }
+
+    public async Task<UserDetailedDto> GetUserByIdAsync(string id)
+    {
+        var user = await _context.Users
+            .Include(u => u.Roles.Where(ur => !ur.Revoked.HasValue))
+            .ThenInclude(ur => ur.Role)
+            .FirstOrDefaultAsync(u => u.Id == id);
         if (user == null)
         {
             throw new NotFoundException("İstifadəçi tapılmadı");

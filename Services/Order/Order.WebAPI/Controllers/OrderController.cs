@@ -211,6 +211,21 @@ public class OrderController : BaseController
         return Ok(monthlySalesInOutCome);
     }
 
+    [HttpGet("top5Products")]
+    public async Task<IActionResult> GetTop5Products()
+    {
+        var orders = await Mediator.Send(new GetOrdersQuery());
+        var top5Items = orders
+            .SelectMany(o => o.Products)
+            .GroupBy(p => p)
+            .Select(g => new { Product = g.Key, Count = g.Count() })
+            .OrderByDescending(x => x.Count)
+            .Take(5)
+            .Select(x => x.Product)
+            .ToList();
+        return Ok(top5Items);
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {

@@ -16,6 +16,7 @@ public static class AuthRegistration
         var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["AuthConfig:Secret"]));
         JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
         JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("roles");
+        JsonWebTokenHandler.DefaultInboundClaimTypeMap.Remove("email");
         services.AddAuthentication(opt =>
         {
             opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

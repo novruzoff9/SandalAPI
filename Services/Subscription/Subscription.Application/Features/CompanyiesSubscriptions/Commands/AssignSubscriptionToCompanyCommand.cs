@@ -32,9 +32,21 @@ public class AssignSubscriptionToCompanyCommandHandler : IRequestHandler<AssignS
             //throw new NotFoundException(nameof(SubscriptionPackage), request.PackageCode);
         }
 
-        //var companySubscription = await _context.CompanySubscriptions
-            //.FirstOrDefaultAsync(x => x.CompanyId == request.CompanyId && x.EndDate > DateTime.Now);
+        var companySubscription = await _context.CompanySubscriptions
+            .FirstOrDefaultAsync(x => x.CompanyId == request.CompanyId && x.EndDate > DateTime.Now);
 
+        if(companySubscription != null)
+        {
+            if(companySubscription.SubscriptionPackageId == package.Id)
+            {
+                return companySubscription.Id;
+            }
+            else
+            {
+                companySubscription.TerminateCurrentSubscription();
+                _context.CompanySubscriptions.Update(companySubscription);
+            }
+        }
 
         int durationInDays = package.DurationInDays;
         var subscription = new CompanySubscription(request.CompanyId, package.Id, DateTime.Now, DateTime.Now.AddDays(durationInDays));

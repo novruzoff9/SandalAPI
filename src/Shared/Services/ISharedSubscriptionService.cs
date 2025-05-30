@@ -11,6 +11,7 @@ public interface ISharedSubscriptionService
 {
     Task<string> GetSubscriptionName();
     Task<string> GetSubscriptionId();
+    Task<string> GetSubscriptionOfCompany(string companyId);
     Task<DateTime> GetSubscriptionExpire();
 }
 
@@ -52,6 +53,17 @@ public class SharedSubscriptionService : ISharedSubscriptionService
     public async Task<string> GetSubscriptionName()
     {
         string companyId = _sharedIdentityService.GetCompanyId;
+        string cacheKey = $"subscriptions:{companyId}";
+        var subscription = await _redisCacheService.GetAsync<CompanySubscriptionRedisDto>(cacheKey);
+        if (subscription.IsSuccess)
+        {
+            return subscription.Data.PackageName;
+        }
+        return string.Empty;
+    }
+
+    public async Task<string> GetSubscriptionOfCompany(string companyId)
+    {
         string cacheKey = $"subscriptions:{companyId}";
         var subscription = await _redisCacheService.GetAsync<CompanySubscriptionRedisDto>(cacheKey);
         if (subscription.IsSuccess)

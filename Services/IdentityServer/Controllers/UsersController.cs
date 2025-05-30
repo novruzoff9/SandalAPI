@@ -4,6 +4,7 @@ using IdentityServer.DTOs;
 using IdentityServer.Services;
 using IdentityServer.Validations;
 using Microsoft.AspNetCore.Mvc;
+using Shared.Services;
 
 namespace IdentityServer.Controllers;
 
@@ -13,10 +14,12 @@ public class UsersController : ControllerBase
 {
     private readonly IUserService _userService;
     private readonly IUserRoleService _userRoleService;
-    public UsersController(IUserService userService, IUserRoleService userRoleService)
+    private readonly ISharedIdentityService _sharedIdentityService;
+    public UsersController(IUserService userService, IUserRoleService userRoleService, ISharedIdentityService sharedIdentityService)
     {
         _userService = userService;
         _userRoleService = userRoleService;
+        _sharedIdentityService = sharedIdentityService;
     }
     [HttpPost]
     public async Task<IActionResult> CreateUser(CreateUserDto userDto)
@@ -45,5 +48,24 @@ public class UsersController : ControllerBase
     {
         var role = await _userService.GetUsersAync();
         return Ok(role);
+    }
+
+    [HttpGet("current")]
+    public async Task<IActionResult> GetCurrentUser()
+    {
+        string id = _sharedIdentityService.GetUserId;
+        if (string.IsNullOrEmpty(id))
+        {
+            return Unauthorized($"İstifadəçi identifikasiyası tapılmadı. {id}");
+        }
+        var user = await _userService.GetUserByIdAsync(id);
+        return Ok(user);
+    }
+
+    [HttpPost("change-password")]
+    public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
+    {
+        var response = await _userService.ChangePassword(changePasswordDto);
+        return Ok("Şifrə uğurla dəyişdirildi.");
     }
 }

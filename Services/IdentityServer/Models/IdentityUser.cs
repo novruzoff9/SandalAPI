@@ -53,4 +53,11 @@ public class IdentityUser
         NormalizedEmail = email.Trim().ToLower();
         PhoneNumber = phoneNumber;
     }
+
+    public void ChangePassword(string newPassword)
+    {
+        if (string.IsNullOrWhiteSpace(newPassword))
+            throw new ArgumentException("New password cannot be empty.", nameof(newPassword));
+        HashedPassword = BCrypt.Net.BCrypt.HashPassword(newPassword);
+    }
 }
