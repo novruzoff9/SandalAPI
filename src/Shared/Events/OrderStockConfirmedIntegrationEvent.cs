@@ -1,5 +1,4 @@
-﻿using EventBus.Base.Events;
-using Shared.DTOs.ShelfProduct;
+﻿using Shared.DTOs.ShelfProduct;
 
 namespace Shared.Events;
 

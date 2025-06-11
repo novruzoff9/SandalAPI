@@ -20,7 +20,7 @@ public static class LocalizationDictionary
         },
         ["en"] = new Dictionary<string, string>
         {
-            // Optional - fallback to original names
+            
         }
     };
 

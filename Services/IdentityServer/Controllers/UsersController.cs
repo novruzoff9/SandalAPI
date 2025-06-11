@@ -3,6 +3,7 @@ using FluentValidation.Results;
 using IdentityServer.DTOs;
 using IdentityServer.Services;
 using IdentityServer.Validations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shared.Services;
 
@@ -50,6 +51,7 @@ public class UsersController : ControllerBase
         return Ok(role);
     }
 
+    [Authorize]
     [HttpGet("current")]
     public async Task<IActionResult> GetCurrentUser()
     {

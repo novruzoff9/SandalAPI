@@ -94,6 +94,7 @@ public class ProductController : BaseController
                 PurchasePrice: product.PurchasePrice,
                 SellPrice: product.SellPrice,
                 Quantity: product.Quantity,
+                MinRequire: product.MinRequire,
                 ImageUrl: product.ImageUrl
             ));
         }

@@ -1,7 +1,7 @@
 
 namespace Organization.Application.Products.Commands.EditProductCommand;
 
-public record EditProduct(string Id, string Name, string Description, decimal PurchasePrice, decimal SellPrice, int Quantity, string? ImageUrl
+public record EditProduct(string Id, string Name, string Description, decimal PurchasePrice, decimal SellPrice, int Quantity, int MinRequire, string? ImageUrl
     ) : IRequest<bool>;
 
 public class EditProductCommandHandler : IRequestHandler<EditProduct, bool>
@@ -31,6 +31,7 @@ public class EditProductCommandHandler : IRequestHandler<EditProduct, bool>
         product.PurchasePrice = request.PurchasePrice;
         product.SellPrice = request.SellPrice;
         product.Quantity = request.Quantity;
+        product.MinRequire = request.MinRequire;
         product.ImageUrl = request.ImageUrl;
 
 

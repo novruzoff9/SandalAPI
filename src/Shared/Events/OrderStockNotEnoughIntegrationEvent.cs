@@ -1,6 +1,4 @@
-﻿using EventBus.Base.Events;
-
-namespace Shared.Events;
+﻿namespace Shared.Events;
 
 public class OrderStockNotEnoughIntegrationEvent : IntegrationEvent
 {

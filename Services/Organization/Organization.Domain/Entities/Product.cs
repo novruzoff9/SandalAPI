@@ -10,6 +10,7 @@ public class Product : BaseEntity
     public decimal PurchasePrice { get; set; }
     public decimal SellPrice { get; set; }
     public int Quantity { get; set; }
+    public int MinRequire { get; set; }
     public string CompanyId { get; set; }
     public Company Company { get; set; }
     public List<ShelfProduct> ShelfProducts { get; set; }

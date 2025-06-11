@@ -31,8 +31,8 @@ builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddHttpClient();
 
-builder.Services.Configure<TelegramConfiguration>(
-    builder.Configuration.GetSection("TelegramConfiguration")
+builder.Services.Configure<TelegramConfiguration>(options =>
+    builder.Configuration.GetSection(nameof(TelegramConfiguration)).Bind(options)
 );
 
 builder.Services.AddHttpContextAccessor();
@@ -63,6 +63,7 @@ app.RegisterConsulService(builder.Configuration, app.Lifetime);
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseMiddleware<OrganizationDomainExceptionHandlingMiddleware>();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<RestrictAccessMiddleware>();
 app.UseMiddleware<TokenCheckerMiddleware>();

@@ -5,7 +5,7 @@ namespace Organization.Infrastructure.Data.Configurations;
 
 public class CompanyMapping : BaseEntityMapping<Company>
 {
-    public void Configure(EntityTypeBuilder<Company> builder)
+    public override void Configure(EntityTypeBuilder<Company> builder)
     {
         base.Configure(builder);
         builder.Property(e => e.Name).HasMaxLength(256).IsRequired();

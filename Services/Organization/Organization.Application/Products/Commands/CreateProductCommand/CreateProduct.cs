@@ -3,7 +3,7 @@ using Organization.Application.Common.Services;
 namespace Organization.Application.Products.Commands.CreateProductCommand;
 
 public record CreateProduct(
-    string Name, string Description, decimal PurchasePrice, decimal SellPrice, int Quantity, string? ImageUrl
+    string Name, string Description, decimal PurchasePrice, decimal SellPrice, int Quantity, int MinRequire, string? ImageUrl
     ) : IRequest<bool>;
 
 public class CreateProductCommandHandler : IRequestHandler<CreateProduct, bool>
@@ -30,6 +30,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProduct, bool>
             PurchasePrice = request.PurchasePrice,
             SellPrice = request.SellPrice,
             Quantity = request.Quantity,
+            MinRequire = request.MinRequire,
             ImageUrl = request.ImageUrl
         };
 

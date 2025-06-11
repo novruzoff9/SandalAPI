@@ -147,6 +147,18 @@
       ],
       "UpstreamPathTemplate": "/subscription/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/templates/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5006
+        }
+      ],
+      "UpstreamPathTemplate": "/templates/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     }
   ],
   "GlobalConfiguration": {

@@ -6,7 +6,7 @@ namespace Order.Infrastructure.Data.Configurations
 {
     public abstract class BaseEntityMapping<T> : IEntityTypeConfiguration<T> where T : BaseEntity
     {
-        public void Configure(EntityTypeBuilder<T> builder)
+        public virtual void Configure(EntityTypeBuilder<T> builder)
         {
             builder.HasKey(e => e.Id);
         }

@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
+using Shared.ResultTypes;
 using Shared.Services;
 using System;
 using System.Text;
@@ -30,7 +32,29 @@ public static class AuthRegistration
                 ValidateAudience = false,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = signingKey
+                IssuerSigningKey = signingKey,
+                ClockSkew = TimeSpan.Zero,
+            };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    if (context.Exception is SecurityTokenExpiredException)
+                    {
+                        context.NoResult();
+                        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        context.Response.ContentType = "application/json";
+                        context.Response.Headers["Token-Expired"] = "true";
+
+                        var response = Response<string>.Fail("Token expired", 401);
+
+                        var json = System.Text.Json.JsonSerializer.Serialize(response);
+
+                        return context.Response.WriteAsync(json);
+                    }
+                    return Task.CompletedTask;
+                }
             };
         });
         services.AddScoped<ISharedIdentityService, SharedIdentityService>();

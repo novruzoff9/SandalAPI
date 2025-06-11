@@ -25,8 +25,14 @@ public class SharedIdentityService : ISharedIdentityService
 
     public ClaimsPrincipal GetUser => _httpContextAccessor.HttpContext.User;
 
-    public string GetUserId => _httpContextAccessor.HttpContext.User.FindFirst("sub").Value;
-    public string GetCompanyId => _httpContextAccessor.HttpContext.User.FindFirst("company").Value;
-    public string GetWarehouseId => _httpContextAccessor.HttpContext.User.FindFirst("warehouse").Value;
-    public string GetSubscription => _httpContextAccessor.HttpContext.User.FindFirst("subscription").Value;
+    public string GetUserId => GetClaimValue("sub");
+    public string GetCompanyId => GetClaimValue("company");
+    public string GetWarehouseId => GetClaimValue("warehouse");
+    public string GetSubscription => GetClaimValue("subscription");
+
+    private string GetClaimValue(string claimType)
+    {
+        var claim = _httpContextAccessor.HttpContext?.User?.FindFirst(claimType);
+        return claim?.Value;
+    }
 }

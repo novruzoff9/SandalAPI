@@ -26,7 +26,7 @@ public class AuthenticationService : IAuthenticationService
         var pass = BCrypt.Net.BCrypt.Verify(password, user.HashedPassword);
         if (!pass)
         {
-            throw new UnauthorizedAccessException("Şifrə yanlışdır");
+            throw new UnauthorizedAccessException("İstifadəçi adı və ya şifrə yanlışdır");
         }
         List<Claim> claims = new List<Claim>
         {

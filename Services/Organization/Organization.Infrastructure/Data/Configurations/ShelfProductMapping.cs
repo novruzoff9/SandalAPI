@@ -6,11 +6,9 @@ namespace Organization.Infrastructure.Data.Configurations;
 
 public class ShelfProductMapping : BaseEntityMapping<ShelfProduct>
 {
-    public void Configure(EntityTypeBuilder<ShelfProduct> builder)
+    public override void Configure(EntityTypeBuilder<ShelfProduct> builder)
     {
         base.Configure(builder);
-        builder.Property(e => e.ShelfID).HasMaxLength(36).IsRequired();
-        builder.Property(e => e.ProductID).HasMaxLength(36).IsRequired();
         builder.Property(e => e.Quantity).IsRequired();
 
         builder

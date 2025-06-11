@@ -1,22 +1,21 @@
 ﻿using AutoMapper;
+using EventBus.Base.Abstraction;
 using Organization.Application.DTOs.Shelf;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Shared.Events;
 
 namespace Organization.Application.Common.Services;
 
 public class ShelfProductService
 {
     private readonly IApplicationDbContext _context;
+    private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
 
-    public ShelfProductService(IApplicationDbContext context, IMapper mapper)
+    public ShelfProductService(IApplicationDbContext context, IMapper mapper, IEventBus eventBus)
     {
         _context = context;
         _mapper = mapper;
+        _eventBus = eventBus;
     }
 
     public async Task<ShelfProductDTO> GetShelfProduct(string productId, int quantity)
@@ -71,6 +70,13 @@ public class ShelfProductService
         }
         shelfProduct.Quantity -= quantity;
         product.Quantity -= quantity;
+
+        if(product.Quantity < product.MinRequire)
+        {
+            _eventBus.Publish(
+                new ProductStockBelowMinimumIntegrationEvent(productId, product.MinRequire, product.Quantity)
+                );
+        }
         _context.ShelfProducts.Update(shelfProduct);
         _context.Products.Update(product);
         await _context.SaveChangesAsync(cancellationToken);
