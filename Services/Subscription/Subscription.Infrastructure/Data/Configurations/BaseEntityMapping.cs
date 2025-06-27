@@ -4,7 +4,7 @@ using Subscription.Domain.Common;
 
 namespace Subscription.Infrastructure.Data.Configurations;
 
-public class BaseEntityMapping<T> : IEntityTypeConfiguration<T> where T : BaseEntity
+public abstract class BaseEntityMapping<T> : IEntityTypeConfiguration<T> where T : BaseEntity
 {
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {

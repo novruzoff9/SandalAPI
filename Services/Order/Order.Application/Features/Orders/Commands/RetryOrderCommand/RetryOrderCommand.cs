@@ -26,7 +26,7 @@ public class RetryOrderCommandHandler : IRequestHandler<RetryOrderCommand, bool>
         var order = await _context.Orders.Include(x=>x.Products)
             .FirstOrDefaultAsync(x => x.Id == request.Id);
         if (order == null) return false;
-        OrderCreatedIntegrationEvent orderCreatedIntegrationEvent = new(request.Id, order.CustomerId, order.WarehouseId, order.Products.Select(p => new OrderItemDto
+        OrderCreatedIntegrationEvent orderCreatedIntegrationEvent = new(request.Id, order.CustomerId, order.WarehouseId, order.Products.Select(p => new Shared.Events.OrderItemDto
         {
             ProductId = p.ProductId,
             Quantity = p.Quantity

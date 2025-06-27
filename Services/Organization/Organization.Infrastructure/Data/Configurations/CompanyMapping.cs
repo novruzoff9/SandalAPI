@@ -20,5 +20,3 @@ public class CompanyMapping : BaseEntityMapping<Company>
             .HasForeignKey(e => e.CompanyId);
     }
 }
-
-

@@ -19,7 +19,7 @@ public static class DependencyInjection
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 
         services.AddScoped<IExcelService, ExcelService>();
-        services.AddScoped<CustomerService>();
+        services.AddScoped<ICustomerService ,CustomerService>();
 
         services.AddSingleton<IEventBus>(options =>
         {

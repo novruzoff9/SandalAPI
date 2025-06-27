@@ -400,3 +400,5 @@ FodyWeavers.xsd
 appsettings.Production.json
 ocelot.Production.json
 secrets.json
+
+manage-migrations.ps1

@@ -19,9 +19,9 @@ public class OrderShowDto
     public string Id { get; set; } = null!;
     public string Warehouse { get; set; } = null!;
     public string Customer { get; set; } = null!;
-    public string Opened { get; set; } = null!;
+    public DateTime Opened { get; set; } //= null!;
     public string OpenedBy { get; set; } = null!;
-    public string? Closed { get; set; }
+    public DateTime? Closed { get; set; }
     public string? ClosedBy { get; set; }
     public string Status { get; set; } = null!;
     public int Quantity { get; set; }

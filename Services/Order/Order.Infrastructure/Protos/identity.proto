@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "IdentityServer.Protos";
+option csharp_namespace = "OrderService.Protos.Identity";
 
 package IdentityServer;
 

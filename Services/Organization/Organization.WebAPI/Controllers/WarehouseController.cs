@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Organization.Application.Common.Services;
 using Organization.Application.DTOs.Warehouse;
-using Organization.Application.Products.Commands.CreateProductCommand;
 using Organization.Application.Shelves.Queries.GetShelvesQuery;
 using Organization.Application.Warehouses.Commands.CreateWarehouseCommand;
 using Organization.Application.Warehouses.Commands.DeleteWarehouseCommand;
@@ -54,12 +52,12 @@ public class WarehouseController : BaseController
     [HttpPost]
     public async Task<IActionResult> Create(CreateWarehouse command)
     {
-        var response = await Mediator.Send(command);
-        if (response == false)
+        var result = await Mediator.Send(command);
+        if (result == null)
         {
             return BadRequest();
         }
-        var result = Response<bool>.Success(response, 201);
+        var response = Response<Warehouse>.Success(result, 201);
         return Ok(response);
     }
 

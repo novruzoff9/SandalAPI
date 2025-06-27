@@ -4,7 +4,7 @@ using Organization.Domain.Common;
 
 namespace Organization.Infrastructure.Data.Configurations;
 
-public class BaseAuditableEntityMapping<T> : IEntityTypeConfiguration<T> where T : BaseAuditableEntity
+public abstract class BaseAuditableEntityMapping<T> : IEntityTypeConfiguration<T> where T : BaseAuditableEntity
 {
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {

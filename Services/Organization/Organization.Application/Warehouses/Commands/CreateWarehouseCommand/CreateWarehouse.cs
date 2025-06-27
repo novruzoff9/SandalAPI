@@ -5,9 +5,9 @@ string? GoogleMaps,
 string City,
 string State,
 string Street,
-string ZipCode) : IRequest<bool>;
+string ZipCode) : IRequest<Warehouse>;
 
-public class CreateWarehouseCommandHandler : IRequestHandler<CreateWarehouse, bool>
+public class CreateWarehouseCommandHandler : IRequestHandler<CreateWarehouse, Warehouse>
 {
     private readonly IApplicationDbContext _context;
     private readonly ISharedIdentityService _sharedIdentityService;
@@ -18,7 +18,7 @@ public class CreateWarehouseCommandHandler : IRequestHandler<CreateWarehouse, bo
         _sharedIdentityService = sharedIdentityService;
     }
 
-    public async Task<bool> Handle(CreateWarehouse request, CancellationToken cancellationToken)
+    public async Task<Warehouse> Handle(CreateWarehouse request, CancellationToken cancellationToken)
     {
         Guard.Against.Null(request, nameof(CreateWarehouse));
 
@@ -35,11 +35,13 @@ public class CreateWarehouseCommandHandler : IRequestHandler<CreateWarehouse, bo
             companyId
         );
 
-        await _context.Warehouses.AddAsync(warehouse, cancellationToken);
+        var response = await _context.Warehouses.AddAsync(warehouse, cancellationToken);
+
+        var addedWarehouse = response.Entity;
 
         var success = await _context.SaveChangesAsync(cancellationToken) > 0;
 
-        return success;
+        return success ? addedWarehouse : null;
     }
 }
 

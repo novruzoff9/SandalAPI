@@ -6,3 +6,5 @@ global using Order.Domain.Entities;
 global using Order.Application.Common.Interfaces;
 global using Microsoft.EntityFrameworkCore;
 global using Shared.Services;
+global using Order.Application.DTOs.Order;
+global using Order.Application.Common.Services;

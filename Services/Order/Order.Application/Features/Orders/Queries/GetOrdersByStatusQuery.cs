@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Order.Application.Features.Orders.Queries;
 
-namespace Order.Application.Features.Orders.Queries;
+public record GetOrdersByStatusQuery(string status) : IRequest<List<OrderShowDto>>;
 
-public record GetOrdersByStatusQuery(string status) : IRequest<List<Domain.Entities.Order>>;
-
-public class GetOrdersByStatusQueryHandler : IRequestHandler<GetOrdersByStatusQuery, List<Domain.Entities.Order>>
+public class GetOrdersByStatusQueryHandler : IRequestHandler<GetOrdersByStatusQuery, List<OrderShowDto>>
 {
+    private readonly IMapper _mapper;
     private readonly IOrderDbContext _context;
+    private readonly ICustomerService _customerService;
     private readonly ISharedIdentityService _sharedIdentityService;
-    public GetOrdersByStatusQueryHandler(IOrderDbContext context, ISharedIdentityService sharedIdentityService)
+    public GetOrdersByStatusQueryHandler(IOrderDbContext context, ISharedIdentityService sharedIdentityService, IMapper mapper, ICustomerService customerService)
     {
+        _mapper = mapper;
         _context = context;
+        _customerService = customerService;
         _sharedIdentityService = sharedIdentityService;
     }
-    public async Task<List<Domain.Entities.Order>> Handle(GetOrdersByStatusQuery request, CancellationToken cancellationToken)
+    public async Task<List<OrderShowDto>> Handle(GetOrdersByStatusQuery request, CancellationToken cancellationToken)
     {
         var status = OrderStatus.FromName(request.status);
         string companyId = _sharedIdentityService.GetCompanyId;
@@ -27,6 +25,12 @@ public class GetOrdersByStatusQueryHandler : IRequestHandler<GetOrdersByStatusQu
             .Where(x => x.CompanyId == companyId && x.Status == status)
             .ToListAsync(cancellationToken);
 
-        return orders;
+        var orderDtos = _mapper.Map<List<OrderShowDto>>(orders);
+        foreach (var item in orderDtos)
+        {
+            item.Customer = await _customerService.GetCustomerFullNameAsync(item.Customer);
+        }
+
+        return orderDtos;
     }
 }

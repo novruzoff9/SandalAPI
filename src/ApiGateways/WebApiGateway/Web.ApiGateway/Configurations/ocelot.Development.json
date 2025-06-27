@@ -36,7 +36,7 @@
         }
       ],
       "UpstreamPathTemplate": "/change-password",
-      "UpstreamHttpMethod": [ "Post"]
+      "UpstreamHttpMethod": [ "Post" ]
     },
     {
       "DownstreamPathTemplate": "/api/roles/{everything}",
@@ -134,6 +134,18 @@
         }
       ],
       "UpstreamPathTemplate": "/order/{everything}",
+      "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/WarehousemanOrders/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5004
+        }
+      ],
+      "UpstreamPathTemplate": "/warehousemanorders/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {

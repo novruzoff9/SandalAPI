@@ -1,11 +1,4 @@
-﻿using Subscription.Application.DTOs.CompanySubscription;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Subscription.Application.Features.CompanyiesSubscriptions.Queries;
+﻿namespace Subscription.Application.Features.CompanyiesSubscriptions.Queries;
 
 public record GetCompanyActiveSubscriptionQuery(string CompanyId) : IRequest<CompanySubscriptionDto>;
 

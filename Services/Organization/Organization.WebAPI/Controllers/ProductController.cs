@@ -70,7 +70,16 @@ public class ProductController : BaseController
     public async Task<IActionResult> Delete(string id)
     {
         var product = await Mediator.Send(new DeleteProduct(id));
-        return Ok(product);
+        if (product == null)
+        {
+            return NotFound();
+        }
+        if (!product)
+        {
+            return BadRequest("Product could not be deleted.");
+        }
+        var response = Response<bool>.Success(product, 204);
+        return Ok(response);
     }
 
     [HttpPost("{id}/increase")]

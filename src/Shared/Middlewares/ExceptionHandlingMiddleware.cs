@@ -40,11 +40,12 @@ public class ExceptionHandlingMiddleware
             NotFoundException _ => (int)HttpStatusCode.NotFound,
             ConflictException _ => (int)HttpStatusCode.Conflict,
             UnauthorizedAccessException _ => (int)HttpStatusCode.Unauthorized,
+            ArgumentNullException _ => (int)HttpStatusCode.BadRequest,
             //ValidationException _ => (int)HttpStatusCode.BadRequest, 
             _ => (int)HttpStatusCode.InternalServerError
         };
 
-        var response = Response<string>.Fail(ex.Message, statusCode);
+        var response = Response<string>.Fail($"{ex.Message}", statusCode);
 
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;

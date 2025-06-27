@@ -28,11 +28,11 @@ public class OrganizationDomainExceptionHandlingMiddleware
         }
     }
 
-    private static async Task HandleExceptionAsync(HttpContext context, string message, int statusCode)
+    private static Task HandleExceptionAsync(HttpContext context, string message, int statusCode)
     {
         var response = Response<string>.Fail(message, statusCode);
         context.Response.ContentType = "application/json";
         context.Response.StatusCode = statusCode;
-        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        return context.Response.WriteAsync(JsonSerializer.Serialize(response));
     }
 }

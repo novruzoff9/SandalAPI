@@ -6,6 +6,7 @@ using Ocelot.Middleware;
 using Ocelot.Provider.Consul;
 using Web.ApiGateway.Middlewares;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 //builder.Services.AddEndpointsApiExplorer();

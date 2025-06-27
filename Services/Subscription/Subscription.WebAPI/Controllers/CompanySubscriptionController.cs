@@ -19,12 +19,20 @@ public class CompanySubscriptionController : BaseController
         return Ok(companySubscription);
     }
 
-    [HttpGet("company/my")]
-    public async Task<IActionResult> GetMySubscription()
+    [HttpGet("my/active")]
+    public async Task<IActionResult> GetMyCompanyActiveSubscription()
     {
-        var mySubscriptions = await Mediator.Send(new GetMyCompanySubscriptionQuery());
+        var mySubscriptions = await Mediator.Send(new GetMyCompanyActiveSubscriptionQuery());
         var response = Response<CompanySubscriptionDto>.Success(mySubscriptions, 200);
-        return Ok(mySubscriptions);
+        return Ok(response);
+    }
+
+    [HttpGet("my/history")]
+    public async Task<IActionResult> GetMyCompanySubscriptionHistory()
+    {
+        var companySubscriptions = await Mediator.Send(new GetMyCompanySubscriptionHistoryQuery());
+        var response = Response<List<CompanySubscriptionHistoryDto>>.Success(companySubscriptions, 200);
+        return Ok(response);
     }
     [HttpPost]
     public async Task<IActionResult> Create(AssignSubscriptionToCompanyCommand command)

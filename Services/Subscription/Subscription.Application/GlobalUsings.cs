@@ -5,3 +5,4 @@ global using Ardalis.GuardClauses;
 global using Subscription.Domain.Entities;
 global using Subscription.Application.Common.Interfaces;
 global using Microsoft.EntityFrameworkCore;
+global using Subscription.Application.DTOs.CompanySubscription;

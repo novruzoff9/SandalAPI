@@ -1,15 +1,9 @@
 ﻿using Order.Application.Common.DTOs.Customer;
-using Order.Application.IntegratonEvents.Handlers;
 using Shared.Extensions.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Order.Application.Common.Services;
 
-public class CustomerService
+public class CustomerService : ICustomerService
 {
     private IRedisCacheService _redisCacheService;
     private ISharedIdentityService _sharedIdentityService;
@@ -20,7 +14,7 @@ public class CustomerService
         _sharedIdentityService = sharedIdentityService;
     }
 
-    public async Task<string> GetCustomerFullName(string customerId)
+    public async Task<string> GetCustomerFullNameAsync(string customerId)
     {
         string companyId = _sharedIdentityService.GetCompanyId;
         string cacheKey = $"customer:{companyId}:{customerId}";

@@ -1,12 +1,14 @@
 ﻿using IdentityServer.DTOs;
 using IdentityServer.Exceptions;
 using IdentityServer.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace IdentityServer.Controllers;
 
 [Route("api/[controller]")]
+[AllowAnonymous]
 [ApiController]
 public class AuthController : ControllerBase
 {

@@ -1,16 +1,10 @@
 ﻿using Shared.Services;
-using Subscription.Application.DTOs.CompanySubscription;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Subscription.Application.Features.CompanyiesSubscriptions.Queries;
 
-public record GetMyCompanySubscriptionQuery() : IRequest<CompanySubscriptionDto>;
+public record GetMyCompanyActiveSubscriptionQuery() : IRequest<CompanySubscriptionDto>;
 
-public class GetMyCompanySubscriptionQueryHandler : IRequestHandler<GetMyCompanySubscriptionQuery, CompanySubscriptionDto>
+public class GetMyCompanySubscriptionQueryHandler : IRequestHandler<GetMyCompanyActiveSubscriptionQuery, CompanySubscriptionDto>
 {
     private readonly ISharedIdentityService _sharedIdentity; 
     private readonly IApplicationDbContext _context;
@@ -23,7 +17,7 @@ public class GetMyCompanySubscriptionQueryHandler : IRequestHandler<GetMyCompany
         _mapper = mapper;
     }
 
-    public async Task<CompanySubscriptionDto> Handle(GetMyCompanySubscriptionQuery request, CancellationToken cancellationToken)
+    public async Task<CompanySubscriptionDto> Handle(GetMyCompanyActiveSubscriptionQuery request, CancellationToken cancellationToken)
     {
         var companyId = _sharedIdentity.GetCompanyId;
         var subscription = await _context.CompanySubscriptions

@@ -1,17 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Organization.Application.Common.Models.Shelf;
+using Organization.Application.Common.Models.ShelfProducts;
+using Organization.Application.Shelves.Commands.AddProductsToShelf;
 using Organization.Application.Shelves.Commands.CreateShelfCommand;
 using Organization.Application.Shelves.Commands.DeleteShelfCommand;
 using Organization.Application.Shelves.Commands.EditShelfCommand;
-using Organization.Application.Shelves.Commands.AddProductsToShelf;
+using Organization.Application.Shelves.Commands.RemoveProductsFromShelf;
 using Organization.Application.Shelves.Queries.GetShelfQuery;
 using Organization.Application.Shelves.Queries.GetShelvesQuery;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using Organization.Application.Common.Models.ShelfProducts;
-using Organization.Application.Common.Models.Shelf;
 using Organization.Domain.Entities;
 using Shared.ResultTypes;
-using Organization.Application.Shelves.Commands.RemoveProductsFromShelf;
 
 namespace Organization.WebAPI.Controllers;
 
@@ -39,7 +37,8 @@ public class ShelfController : BaseController
     {
         var shelves = await Mediator.Send(new GetShelves());
         var shelf = shelves.FirstOrDefault(x => x.Code == code);
-        var response = await Mediator.Send(new GetProductsByShelf(shelf.Id));
+        var shelfProducts = await Mediator.Send(new GetProductsByShelf(shelf.Id));
+        var response = Response<List<ShelfProduct>>.Success(shelfProducts, 200);
         return Ok(response);
     }
 

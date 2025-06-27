@@ -59,8 +59,10 @@ app.RegisterConsulService(builder.Configuration, app.Lifetime);
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseMiddleware<RestrictAccessMiddleware>();
 app.UseMiddleware<TokenCheckerMiddleware>();
+
 
 app.MapControllers();
 

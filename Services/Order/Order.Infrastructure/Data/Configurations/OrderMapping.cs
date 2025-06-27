@@ -5,21 +5,12 @@ namespace Order.Infrastructure.Data.Configurations;
 
 public class OrderMapping : BaseEntityMapping<Domain.Entities.Order>
 {
-    private readonly ISharedIdentityService _sharedIdentityService;
-
-    public OrderMapping(ISharedIdentityService sharedIdentityService)
-    {
-        _sharedIdentityService = sharedIdentityService;
-    }
-
     public override void Configure(EntityTypeBuilder<Domain.Entities.Order> builder)
     {
         base.Configure(builder);
-        string companyId = _sharedIdentityService.GetCompanyId;
         builder.ToTable("Orders", OrderDbContext.DEFAULT_SCHEMA);
 
         builder.HasIndex(e => e.CompanyId);
-        builder.HasQueryFilter(e => e.CompanyId == companyId);
 
         builder.HasMany(e => e.Products)
             .WithOne(e => e.Order)
