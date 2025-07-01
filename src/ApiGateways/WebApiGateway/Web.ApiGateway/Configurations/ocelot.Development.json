@@ -137,7 +137,7 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
-      "DownstreamPathTemplate": "/api/WarehousemanOrders/{everything}",
+      "DownstreamPathTemplate": "/api/Tasks/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -145,7 +145,7 @@
           "Port": 5004
         }
       ],
-      "UpstreamPathTemplate": "/warehousemanorders/{everything}",
+      "UpstreamPathTemplate": "/Task/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {

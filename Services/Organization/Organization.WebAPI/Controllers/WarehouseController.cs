@@ -67,7 +67,7 @@ public class WarehouseController : BaseController
         var warehouses = await Mediator.Send(new GetWarehouses());
         var warehouse = warehouses.FirstOrDefault();
         var shelves = await Mediator.Send(new GetShelvesByWarehouse(warehouse.Id));
-        decimal emptySheleves = shelves.Where(x => x.ShelfProducts.Count == 0 || x.ShelfProducts.All(x=>x.Quantity == 0)).Count();
+        decimal emptySheleves = shelves.Where(x => x.ItemsCount == 0).Count();
         decimal totalShelves = shelves.Count;
         decimal fullShelves = totalShelves - emptySheleves;
         decimal occupancyRate = fullShelves / totalShelves;

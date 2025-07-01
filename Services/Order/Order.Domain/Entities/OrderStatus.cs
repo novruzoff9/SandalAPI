@@ -1,17 +1,10 @@
-﻿using Order.Domain.Common;
-using Order.Domain.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Order.Domain.Entities;
+﻿namespace Order.Domain.Entities;
 
 public class OrderStatus : Enumeration
 {
     public static OrderStatus Submitted = new(1, nameof(Submitted).ToLowerInvariant());
     public static OrderStatus StockConfirmed = new(2, nameof(StockConfirmed).ToLowerInvariant());
+    public static OrderStatus InProgress = new(6, nameof(InProgress).ToLowerInvariant());
     public static OrderStatus Prepared = new(3, nameof(Prepared).ToLowerInvariant());
     public static OrderStatus Shipped = new(4, nameof(Shipped).ToLowerInvariant());
     public static OrderStatus Cancelled = new(5, nameof(Cancelled).ToLowerInvariant());
@@ -19,12 +12,12 @@ public class OrderStatus : Enumeration
 
     public OrderStatus(int id, string name) : base(id, name)
     {
-
+        
     }
 
 
     public static IEnumerable<OrderStatus> List() =>
-        new[] { Submitted, StockConfirmed, Prepared, Shipped, Cancelled };
+        new[] { Submitted, StockConfirmed, InProgress, Prepared, Shipped, Cancelled };
 
     public static OrderStatus FromName(string name)
     {

@@ -1,4 +1,3 @@
-
 namespace Organization.Application.Shelves.Queries.GetShelfQuery;
 
 public record GetShelf(string Id) : IRequest<Shelf>;
@@ -14,7 +13,12 @@ public class GetShelfQueryHandler : IRequestHandler<GetShelf, Shelf>
 
     public async Task<Shelf> Handle(GetShelf request, CancellationToken cancellationToken)
     {
-        var shelf = await _context.Shelves.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        var shelf = await _context.Shelves
+            .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        if (shelf == null)
+        {
+            throw new Shared.Exceptions.NotFoundException($"Shelf with ID {request.Id} not found.");
+        }
         return shelf;
     }
 }

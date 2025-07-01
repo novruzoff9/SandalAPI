@@ -1,5 +1,6 @@
 using AutoMapper;
 using Organization.Application.DTOs.Warehouse;
+using Organization.Domain.Entities;
 
 namespace Organization.Application.Warehouses.Queries.GetWarehousesQuery;
 
@@ -27,11 +28,24 @@ public class GetWarehousesQueryHandler : IRequestHandler<GetWarehouses, List<War
         var warehouses = await _context.Warehouses
             .Where(x => x.CompanyID == company)
             .Include(x => x.Shelves)
-            .ToListAsync(cancellationToken);
+            .ThenInclude(s => s.ShelfProducts)
+        .ToListAsync(cancellationToken);
+
+        
 
         foreach (var warehouse in warehouses)
         {
-            var warehouseDto = _mapper.Map<WarehouseDto>(warehouse);
+            decimal emptySheleves = warehouse.Shelves
+            .Where(x => x.ShelfProducts.Sum(x => x.Quantity) == 0).Count();
+            decimal totalShelves = warehouse.Shelves.Count;
+            decimal fullShelves = totalShelves - emptySheleves;
+            decimal occupancyRate = fullShelves / totalShelves;
+
+            WarehouseDto warehouseDto = _mapper.Map<WarehouseDto>(warehouse);
+            warehouseDto.OccupancyRate = occupancyRate;
+            warehouseDto.UsedShelves = (int)fullShelves;
+
+            //TODO: Isci sayini gostermek qalib
             warehousesDto.Add(warehouseDto);
         }
         return warehousesDto;

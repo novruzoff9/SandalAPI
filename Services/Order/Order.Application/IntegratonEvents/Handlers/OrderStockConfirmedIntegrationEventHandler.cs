@@ -25,7 +25,8 @@ public class OrderStockConfirmedIntegrationEventHandler : IIntegrationEventHandl
         var order = await dbContext.Orders.FirstOrDefaultAsync(x => x.Id == @event.OrderId);
         if(order is not null)
         {
-            string orderNote = $"{string.Join(';', @event.ShelfProducts.Select(x => $"{x.ProductName} - {x.ShelfCode}"))}";
+            string orderNote = $"{string.Join('\n', @event.ShelfProducts
+                .Select(x => $"{x.ProductId} : {x.ShelfCode}"))}";
             order.UpdateNote(orderNote);
             order.UpdateStatus(OrderStatus.StockConfirmed);
             await dbContext.SaveChangesAsync(cancellationToken);

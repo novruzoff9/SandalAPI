@@ -32,5 +32,5 @@ public class TemplatesController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-    }
+    }   
 }

@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Shared.ResultTypes;
 using Shared.Services;
 using System;
+using System.Linq;
 using System.Text;
 
 namespace Shared.Extensions;
@@ -34,6 +35,7 @@ public static class AuthRegistration
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = signingKey,
                 ClockSkew = TimeSpan.Zero,
+                RoleClaimType = "roles"
             };
 
             options.Events = new JwtBearerEvents
@@ -54,6 +56,19 @@ public static class AuthRegistration
                         return context.Response.WriteAsync(json);
                     }
                     return Task.CompletedTask;
+                },
+                OnForbidden = context =>
+                {
+                    context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                    context.Response.ContentType = "application/json";
+
+                    var response = Response<string>.Fail(
+                        "You do not have permission to access this resource.", 404
+                        );
+
+                    var json = System.Text.Json.JsonSerializer.Serialize(response);
+
+                    return context.Response.WriteAsync(json);
                 }
             };
         });

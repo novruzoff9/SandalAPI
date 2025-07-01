@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Organization.Application.DTOs.Company;
+﻿using Organization.Application.DTOs.Company;
 
 namespace Organization.Application.Common.Mapping;
 

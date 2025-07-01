@@ -22,8 +22,14 @@ public class GetWarehouseQueryHandler : IRequestHandler<GetWarehouse, WarehouseD
         var warehouse = await _context.Warehouses
             .Include(x=>x.Shelves)
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
+        decimal emptySheleves = warehouse.Shelves
+            .Where(x => x.ShelfProducts.Sum(x=>x.Quantity) == 0).Count();
+        decimal totalShelves = warehouse.Shelves.Count;
+        decimal fullShelves = totalShelves - emptySheleves;
+        decimal occupancyRate = fullShelves / totalShelves;
 
-        var warehouseDto = _mapper.Map<WarehouseDto>(warehouse);
+        WarehouseDto warehouseDto = _mapper.Map<WarehouseDto>(warehouse);
+        warehouseDto.OccupancyRate = occupancyRate;
         return warehouseDto;
     }
 }

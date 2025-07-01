@@ -16,4 +16,6 @@ public class WarehouseDto
     public string State { get; set; } = null!;
     public string Street { get; set; }
     public string ZipCode { get; set; }
+    public decimal OccupancyRate { get; set; }
+    public int UsedShelves { get; set; }
 }

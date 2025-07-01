@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Order.Application.Features.Orders.Commands.CompleteOrderCommand;
 using Order.Application.Features.Orders.Commands.CreateOrderCommand;
 using Order.Application.Features.Orders.Commands.DeleteOrderCommand;
 using Order.Application.Features.Orders.Commands.RetryOrderCommand;
@@ -72,13 +71,6 @@ public class OrderController : BaseController
     public async Task<IActionResult> Create(CreateOrderCommand command)
     {
         var result = await Mediator.Send(command);
-        return Ok(result);
-    }
-
-    [HttpPost("{id}/complete")]
-    public async Task<IActionResult> Close(string id, CompleteOrderRequest request)
-    {
-        var result = await Mediator.Send(new CompleteOrderCommand(id, request.Products));
         return Ok(result);
     }
 

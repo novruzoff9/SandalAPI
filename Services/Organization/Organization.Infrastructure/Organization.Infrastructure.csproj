@@ -16,4 +16,10 @@
     <ProjectReference Include="..\Organization.Domain\Organization.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Protos\identity.proto">
+      <GrpServices>Client</GrpServices>
+    </None>
+  </ItemGroup>
+
 </Project>

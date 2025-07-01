@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Organization.Application.DTOs.Shelf;
+﻿using Organization.Application.DTOs.Shelf;
 
 namespace Organization.Application.Common.Mapping;
 

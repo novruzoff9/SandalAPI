@@ -4,7 +4,8 @@ using Organization.Domain.Common;
 
 namespace Organization.Infrastructure.Data.Configurations;
 
-public abstract class BaseAuditableEntityMapping<T> : IEntityTypeConfiguration<T> where T : BaseAuditableEntity
+public abstract class BaseAuditableEntityMapping<T> : IEntityTypeConfiguration<T> 
+    where T : BaseAuditableEntity
 {
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {
@@ -13,5 +14,3 @@ public abstract class BaseAuditableEntityMapping<T> : IEntityTypeConfiguration<T
         builder.Property(e => e.LastModifiedBy).HasMaxLength(256);
     }
 }
-
-

@@ -28,7 +28,8 @@ public class ShelfController : BaseController
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
     {
-        var response = await Mediator.Send(new GetShelf(id));
+        var data = await Mediator.Send(new GetShelf(id));
+        var response = Response<Shelf>.Success(data, 200);
         return Ok(response);
     }
 
@@ -55,7 +56,8 @@ public class ShelfController : BaseController
     {
         var shelves = await Mediator.Send(new GetShelves());
         var shelf = shelves.FirstOrDefault(x => x.Code == request.ShelfCode);
-        var response = await Mediator.Send(new AddProductsToShelf(shelf.Id, request.ProductIds));
+        var result = await Mediator.Send(new AddProductsToShelf(shelf.Id, request.ProductIds));
+        var response = Response<NoContent>.Success(204);
         return Ok(response);
     }
 
@@ -64,7 +66,8 @@ public class ShelfController : BaseController
     {
         var shelves = await Mediator.Send(new GetShelves());
         var shelf = shelves.FirstOrDefault(x => x.Code == request.ShelfCode);
-        var response = await Mediator.Send(new RemoveProductsFromShelf(request.ShelfCode, request.Products));
+        var result = await Mediator.Send(new RemoveProductsFromShelf(request.ShelfCode, request.Products));
+        var response = Response<NoContent>.Success(204);
         return Ok(response);
     }
 
@@ -82,14 +85,16 @@ public class ShelfController : BaseController
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id)
     {
-        var response = await Mediator.Send(new DeleteShelf(id));
+        var result = await Mediator.Send(new DeleteShelf(id));
+        var response = Response<NoContent>.Success(204);
         return Ok(response);
     }
 
     [HttpGet("warehouse/{id}")]
     public async Task<IActionResult> GetByWarehouse(string id)
     {
-        var response = await Mediator.Send(new GetShelvesByWarehouse(id));
+        var data = await Mediator.Send(new GetShelvesByWarehouse(id));
+        var response = Response<List<ShelfDTO>>.Success(data, 200);
         return Ok(response);
     }
 }

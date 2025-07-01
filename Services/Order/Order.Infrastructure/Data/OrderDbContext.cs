@@ -15,7 +15,7 @@ namespace Order.Infrastructure.Data
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
 
-        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             return await base.SaveChangesAsync(cancellationToken);
         }

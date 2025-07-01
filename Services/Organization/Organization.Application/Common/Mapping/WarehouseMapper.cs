@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Organization.Application.DTOs.Warehouse;
+﻿using Organization.Application.DTOs.Warehouse;
 
 namespace Organization.Application.Common.Mapping;
 

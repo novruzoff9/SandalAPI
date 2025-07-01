@@ -27,10 +27,10 @@ public class IdentityGrpcClient : IIdentityGrpcClient
         return response.Employee.Email;
     }
 
-    public Task<string> GetUserFullNameAsync(string userId)
+    public async Task<string> GetUserFullNameAsync(string userId)
     {
         GetEmployeeRequest request = new() { Id = userId };
-        GetEmployeeResponse? response = _identityClient.GetEmployee(request);
+        GetEmployeeResponse? response = await _identityClient.GetEmployeeAsync(request);
         if (response == null)
         {
             throw new Exception("User not found");
@@ -39,6 +39,6 @@ public class IdentityGrpcClient : IIdentityGrpcClient
         {
             throw new Exception(response.Message.ToString());
         }
-        return Task.FromResult(response.Employee.Name);
+        return response.Employee.Name;
     }
 }

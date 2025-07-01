@@ -24,7 +24,7 @@ public class GetTasksQueryHandler : IRequestHandler<GetTasksQuery, List<OrderSho
             .Include(x => x.Products)
             .Include(x => x.Status)
             .Where(x => x.WarehouseId == warehouseId && 
-            x.Status == OrderStatus.StockConfirmed).ToListAsync(cancellationToken);
+            (x.Status == OrderStatus.StockConfirmed || x.Status == OrderStatus.InProgress)).ToListAsync(cancellationToken);
 
         var ordersDto = _mapper.Map<List<OrderShowDto>>(orders);
         return ordersDto;

@@ -33,6 +33,7 @@ public class OrderShowDto
 public class OrderItemShowDto
 {
     public string Id { get; set; } = null!;
+    public string ProductId { get; set; }
     public int Quantity { get; set; }
     public decimal UnitPrice { get; set; }
     public string Name { get; set; } = null!;
