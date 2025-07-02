@@ -1,6 +1,3 @@
-using Order.Application.Common.Services;
-using Order.Application.DTOs.Order;
-
 namespace Order.Application.Features.Orders.Queries.GetOrdersQuery;
 
 public record GetOrdersQuery : IRequest<List<OrderShowDto>>;
@@ -29,11 +26,8 @@ public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, List<OrderS
             .ToListAsync(cancellationToken);
 
         var ordersDto = _mapper.Map<List<OrderShowDto>>(orders);
-
-        foreach (var orderDto in ordersDto)
-        {
-            orderDto.Customer = await _customerService.GetCustomerFullNameAsync(orderDto.Customer);
-        }
+        ordersDto.ForEach(async x =>
+            x.Customer = await _customerService.GetCustomerFullNameAsync(x.Customer));
         return ordersDto;
     }
 }

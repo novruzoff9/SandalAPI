@@ -7,7 +7,7 @@ package IdentityServer;
 service Identity {
   rpc GetEmployees (GetEmployeesRequest) returns (GetEmployeesResponse);
   rpc GetEmployee (GetEmployeeRequest) returns (GetEmployeeResponse);
-  rpc CreateEmployee (CreateEmployeeRequest) returns (CreateEmployeeResponse);
+  rpc GetWarehouseEmpCount (GetWarehouseEmpCountRequest) returns (GetWarehouseEmpCountResponse);
 }
 
 message GetEmployeesRequest {
@@ -28,17 +28,14 @@ message GetEmployeeResponse {
   repeated string message = 3;
 }
 
-message CreateEmployeeRequest {
-  string name = 1;
-  string email = 2;
-  string companyId = 3;
-  string warehouseId = 4;
-  string password = 5;
+message GetWarehouseEmpCountRequest {
+  string warehouseId = 1;
 }
 
-message CreateEmployeeResponse {
-  bool success = 1;
-  repeated string message = 2;
+message GetWarehouseEmpCountResponse {
+  int32 count = 1;
+  bool success = 2;
+  repeated string message = 3;
 }
 
 message Employee {

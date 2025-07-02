@@ -1,9 +1,6 @@
-﻿using Google.Protobuf;
-using Grpc.Core;
-using IdentityServer.DTOs;
+﻿using Grpc.Core;
 using IdentityServer.Protos;
 using IdentityServer.Services;
-using Microsoft.AspNetCore.Identity;
 
 namespace IdentityServer.ProtoServices;
 
@@ -28,6 +25,16 @@ public class IdentityProtoService : Identity.IdentityBase
             CompanyId = user.CompanyId ?? string.Empty,
             WarehouseId = user.WarehouseId
         };
+        response.Success = true;
+        return response;
+    }
+
+    public override async Task<GetWarehouseEmpCountResponse> GetWarehouseEmpCount(GetWarehouseEmpCountRequest request, ServerCallContext context)
+    {
+        GetWarehouseEmpCountResponse response = new GetWarehouseEmpCountResponse();
+        var users = await _userService.GetUsersAync();
+        var count = users.Count(u => u.WarehouseId == request.WarehouseId);
+        response.Count = count;
         response.Success = true;
         return response;
     }

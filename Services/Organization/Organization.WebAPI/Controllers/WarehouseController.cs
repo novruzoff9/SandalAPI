@@ -61,19 +61,6 @@ public class WarehouseController : BaseController
         return Ok(response);
     }
 
-    [HttpGet("occupancy-rate")]
-    public async Task<IActionResult> GetOccupancyRate()
-    {
-        var warehouses = await Mediator.Send(new GetWarehouses());
-        var warehouse = warehouses.FirstOrDefault();
-        var shelves = await Mediator.Send(new GetShelvesByWarehouse(warehouse.Id));
-        decimal emptySheleves = shelves.Where(x => x.ItemsCount == 0).Count();
-        decimal totalShelves = shelves.Count;
-        decimal fullShelves = totalShelves - emptySheleves;
-        decimal occupancyRate = fullShelves / totalShelves;
-        return Ok(occupancyRate);
-    }
-
     [HttpPost("import-file")]
     public async Task<IActionResult> ImportWarehouses(IFormFile file)
     {

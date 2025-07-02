@@ -18,4 +18,5 @@ public class WarehouseDto
     public string ZipCode { get; set; }
     public decimal OccupancyRate { get; set; }
     public int UsedShelves { get; set; }
+    public int EmployeeCount { get; set; }
 }

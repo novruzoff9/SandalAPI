@@ -26,7 +26,7 @@ builder.Services
 
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            RoleClaimType = "role",
+            RoleClaimType = "roles",
             NameClaimType = "sub",
             ValidateAudience = true
         };
