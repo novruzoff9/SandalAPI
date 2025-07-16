@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Organization.Application.Common.Services;
 using Organization.Application.Products.Commands.CreateProductCommand;
 using Organization.Application.Products.Commands.DeleteProductCommand;
 using Organization.Application.Products.Commands.EditProductCommand;
+using Organization.Application.Products.Commands.IncreaseProductCommand;
 using Organization.Application.Products.Queries.GetProductQuery;
 using Organization.Application.Products.Queries.GetProductsQuery;
 using Organization.Domain.Entities;
-using Organization.Application.DTOs.General;
-using Organization.Application.DTOs.Product;
+using Shared.DTOs.Export;
+using Shared.DTOs.General;
 using Shared.ResultTypes;
 using Shared.Services;
-using Organization.Application.Products.Commands.IncreaseProductCommand;
+using System.Linq.Expressions;
 
 namespace Organization.WebAPI.Controllers;
 
@@ -111,13 +110,14 @@ public class ProductController : BaseController
         return Ok(response);
     }
 
-    [HttpPost("export-file")]
-    public async Task<IActionResult> ExportProducts([FromBody] DateTimePeriod period)
+    [HttpPost("export-data")]
+    //public async Task<IActionResult> ExportProducts(DateTimePeriod period)
+    public async Task<IActionResult> ExportProducts()
     {
-        //var products = await Mediator.Send(new GetProducts(period.Start, period.End));
         var products = await Mediator.Send(new GetProducts());
         var detailedProducts = products.Select(x => new ExportProductDto
         {
+            Id = x.Id,
             Name = x.Name,
             Description = x.Description,
             PurchasePrice = x.PurchasePrice,
@@ -125,7 +125,7 @@ public class ProductController : BaseController
             Quantity = x.Quantity,
             //Ordered = x.OrderItems.Sum(x=>x.Quantity)
         }).ToList();
-        var fileContent = await _excelService.ExportToExcel(detailedProducts);
-        return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "products.xlsx");
+        var response = Response<List<ExportProductDto>>.Success(detailedProducts, 200);
+        return Ok(response);
     }
 }

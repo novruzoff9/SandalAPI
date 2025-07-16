@@ -1,6 +1,6 @@
 namespace Order.Application.Features.Orders.Queries.GetOrdersQuery;
 
-public record GetOrdersQuery : IRequest<List<OrderShowDto>>;
+public record GetOrdersQuery(Expression<Func<Order.Domain.Entities.Order, bool>>? filter = null) : IRequest<List<OrderShowDto>>;
 
 public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, List<OrderShowDto>>
 {
@@ -20,14 +20,25 @@ public class GetOrdersQueryHandler : IRequestHandler<GetOrdersQuery, List<OrderS
     public async Task<List<OrderShowDto>> Handle(GetOrdersQuery request, CancellationToken cancellationToken)
     {
         string companyId = _identityService.GetCompanyId;
-        var orders = await _context.Orders.Where(x => x.CompanyId == companyId)
+        var ordersQuery = _context.Orders.Where(x => x.CompanyId == companyId)
             .Include(x => x.Products)
             .Include(x => x.Status)
-            .ToListAsync(cancellationToken);
+            .AsQueryable();
+
+        if (request.filter != null)
+        {
+            ordersQuery = ordersQuery.Where(request.filter).AsQueryable();
+        }
+        var orders = await ordersQuery.ToListAsync(cancellationToken);
 
         var ordersDto = _mapper.Map<List<OrderShowDto>>(orders);
-        ordersDto.ForEach(async x =>
-            x.Customer = await _customerService.GetCustomerFullNameAsync(x.Customer));
+        var tasks = ordersDto.Select(async order =>
+        {
+            order.Customer = await _customerService.GetCustomerFullNameAsync(order.Customer);
+        }).ToList();
+
+        await Task.WhenAll(tasks);
+
         return ordersDto;
     }
 }

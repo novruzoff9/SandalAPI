@@ -137,7 +137,7 @@
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
-      "DownstreamPathTemplate": "/api/Tasks/{everything}",
+      "DownstreamPathTemplate": "/api/tasks/{everything}",
       "DownstreamScheme": "http",
       "DownstreamHostAndPorts": [
         {
@@ -145,7 +145,7 @@
           "Port": 5004
         }
       ],
-      "UpstreamPathTemplate": "/Task/{everything}",
+      "UpstreamPathTemplate": "/task/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
     },
     {
@@ -159,6 +159,18 @@
       ],
       "UpstreamPathTemplate": "/subscription/{everything}",
       "UpstreamHttpMethod": [ "Get", "Post", "Delete", "Put" ]
+    },
+    {
+      "DownstreamPathTemplate": "/api/subscription",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5005
+        }
+      ],
+      "UpstreamPathTemplate": "/subscriptionpackages",
+      "UpstreamHttpMethod": [ "Get"]
     },
     {
       "DownstreamPathTemplate": "/api/templates/{everything}",

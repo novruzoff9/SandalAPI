@@ -1,4 +1,4 @@
-﻿namespace Subscription.Application.Features.CompanyiesSubscriptions.Queries;
+﻿namespace Subscription.Application.Features.CompaniesSubscriptions.Queries;
 
 public record GetCompanyActiveSubscriptionQuery(string CompanyId) : IRequest<CompanySubscriptionDto>;
 

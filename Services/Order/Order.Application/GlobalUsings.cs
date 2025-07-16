@@ -8,3 +8,4 @@ global using Microsoft.EntityFrameworkCore;
 global using Shared.Services;
 global using Order.Application.DTOs.Order;
 global using Order.Application.Common.Services;
+global using System.Linq.Expressions;

@@ -1,12 +1,7 @@
 ﻿using EventBus.Base.Abstraction;
 using Shared.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Subscription.Application.Features.CompanyiesSubscriptions.Commands;
+namespace Subscription.Application.Features.CompaniesSubscriptions.Commands;
 
 public record AssignSubscriptionToCompanyCommand(string CompanyId, string PackageCode) : IRequest<string>;
 

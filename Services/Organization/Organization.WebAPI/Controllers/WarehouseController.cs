@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Organization.Application.Common.Services;
 using Organization.Application.DTOs.Warehouse;
+using Organization.Application.Products.Queries.GetProductsQuery;
 using Organization.Application.Shelves.Queries.GetShelvesQuery;
 using Organization.Application.Warehouses.Commands.CreateWarehouseCommand;
 using Organization.Application.Warehouses.Commands.DeleteWarehouseCommand;
@@ -8,6 +9,7 @@ using Organization.Application.Warehouses.Commands.EditWarehouseCommand;
 using Organization.Application.Warehouses.Queries.GetWarehouseQuery;
 using Organization.Application.Warehouses.Queries.GetWarehousesQuery;
 using Organization.Domain.Entities;
+using Shared.DTOs.Export;
 using Shared.ResultTypes;
 using Shared.Services;
 
@@ -107,6 +109,26 @@ public class WarehouseController : BaseController
             return NotFound();
         }
         var response = Response<bool>.Success(result, 204);
+        return Ok(response);
+    }
+
+    [HttpPost("export-data")]
+    public async Task<IActionResult> ExportWarehouses()
+    {
+        var warehouses = await Mediator.Send(new GetWarehouses());
+        var detailedWarehouses = warehouses.Select(w => new ExportWarehouseDto
+        {
+            Id = w.Id,
+            Name = w.Name,
+            GoogleMaps = w.GoogleMaps ??= string.Empty,
+            City = w.City,
+            State = w.State,
+            Street = w.Street,
+            ZipCode = w.ZipCode,
+            Workers = w.EmployeeCount,
+            Capacity = w.Shelves
+        }).ToList();
+        var response = Response<List<ExportWarehouseDto>>.Success(detailedWarehouses, 200);
         return Ok(response);
     }
 }

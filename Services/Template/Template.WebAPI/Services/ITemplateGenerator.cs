@@ -7,7 +7,8 @@ namespace Template.WebAPI.Services;
 
 public interface ITemplateGenerator
 {
-    byte[] GenerateExcelTemplate(ImportType type, string lang = "az");
+    byte[] GenerateExcelImportTemplate(ImportType type, string lang = "az");
+    byte[] GenerateExcelExportTemplate<T>(List<T> data, string lang = "az");
     TemplateDefinitionDto GetTemplateDefinition(ImportType type);
 }
 
@@ -67,7 +68,7 @@ public class TemplateGenerator : ITemplateGenerator
         return template ?? throw new ArgumentException($"Template not found for type: {type}");
     }
 
-    public byte[] GenerateExcelTemplate(ImportType type, string lang = "az")
+    public byte[] GenerateExcelImportTemplate(ImportType type, string lang = "az")
     {
         var template = GetTemplateDefinition(type);
 
@@ -94,6 +95,40 @@ public class TemplateGenerator : ITemplateGenerator
             sheet.Cells[1, i + 1].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
         }
 
+        sheet.Cells.AutoFitColumns();
+        return package.GetAsByteArray();
+    }
+
+    public byte[] GenerateExcelExportTemplate<T>(List<T> data, string lang = "az")
+    {
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+        using var package = new ExcelPackage();
+        var sheet = package.Workbook.Worksheets.Add("ExportedData");
+        if (data == null || !data.Any())
+        {
+            sheet.Cells[1, 1].Value = "No data available";
+            return package.GetAsByteArray();
+        }
+        var properties = typeof(T).GetProperties();
+        for (int i = 0; i < properties.Length; i++)
+        {
+            var property = properties[i];
+            var translatedName = LocalizationDictionary.ColumnTranslations.TryGetValue(lang, out var dict)
+                && dict.TryGetValue(property.Name, out var localized)
+                    ? localized : property.Name;
+            sheet.Cells[1, i + 1].Value = translatedName;
+            sheet.Cells[1, i + 1].Style.Font.Bold = true;
+            sheet.Cells[1, i + 1].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+            sheet.Cells[1, i + 1].Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.LightGray);
+        }
+        for (int rowIndex = 0; rowIndex < data.Count; rowIndex++)
+        {
+            for (int colIndex = 0; colIndex < properties.Length; colIndex++)
+            {
+                var value = properties[colIndex].GetValue(data[rowIndex]);
+                sheet.Cells[rowIndex + 2, colIndex + 1].Value = value?.ToString() ?? string.Empty;
+            }
+        }
         sheet.Cells.AutoFitColumns();
         return package.GetAsByteArray();
     }

@@ -6,6 +6,8 @@ using Order.Application.Features.Orders.Queries;
 using Order.Application.Features.Orders.Queries.GetOrderQuery;
 using Order.Application.Features.Orders.Queries.GetOrdersByWarehouseQuery;
 using Order.Application.Features.Orders.Queries.GetOrdersQuery;
+using Shared.DTOs.Export;
+using Shared.DTOs.General;
 
 namespace Order.WebAPI.Controllers;
 
@@ -57,7 +59,8 @@ public class OrderController : BaseController
     public async Task<IActionResult> GetById(string id)
     {
         var order = await Mediator.Send(new GetOrderQuery(id));
-        return Ok(order);
+        var response = Response<OrderShowDto>.Success(order, 200);
+        return Ok(response);
     }
 
     [HttpGet("{id}/products")]
@@ -86,5 +89,23 @@ public class OrderController : BaseController
     {
         var result = await Mediator.Send(new DeleteOrderCommand(id));
         return Ok(result);
+    }
+
+    [HttpPost("export-data")]
+    public async Task<IActionResult> ExportData(DateTimePeriod period)
+    {
+        var orders = await Mediator.Send(new GetOrdersQuery(x=>x.Opened >= period.Start && x.Opened <= period.End));
+        var detailedOrders = orders.Select(o => new ExportOrderDto
+        {
+            Id = o.Id,
+            OrderDate = o.Opened,
+            CustomerName = o.Customer,
+            WarehouseName = o.Warehouse,
+            Status = o.Status,
+            TotalProduct = o.Quantity,
+            TotalPrice = o.TotalPrice,
+        }).ToList();
+        var response = Response<List<ExportOrderDto>>.Success(detailedOrders, 200);
+        return Ok(response);
     }
 }

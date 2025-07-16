@@ -1,6 +1,6 @@
 ﻿using Shared.Services;
 
-namespace Subscription.Application.Features.CompanyiesSubscriptions.Queries;
+namespace Subscription.Application.Features.CompaniesSubscriptions.Queries;
 
 public record GetMyCompanySubscriptionHistoryQuery() : IRequest<List<CompanySubscriptionHistoryDto>>;
 

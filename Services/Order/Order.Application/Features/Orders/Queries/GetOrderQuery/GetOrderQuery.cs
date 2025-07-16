@@ -1,6 +1,3 @@
-using Order.Application.Common.Services;
-using Order.Application.DTOs.Order;
-
 namespace Order.Application.Features.Orders.Queries.GetOrderQuery;
 
 public record GetOrderQuery(string Id) : IRequest<OrderShowDto>;
@@ -37,12 +34,33 @@ public class GetOrderQueryHandler : IRequestHandler<GetOrderQuery, OrderShowDto>
 
         var orderDto = _mapper.Map<OrderShowDto>(order);
         orderDto.Customer = await _customerService.GetCustomerFullNameAsync(order.CustomerId);
+
         orderDto.OpenedBy = await _identityGrpcClient.GetUserFullNameAsync(order.OpenedBy);
 
         if (order.Closed.HasValue) 
         {
             orderDto.ClosedBy = await _identityGrpcClient.GetUserFullNameAsync(order.ClosedBy!);
         }
+        //foreach (string shelfOfProduct in orderDto.Note.Split('\n'))
+        //{
+        //    int colonIndex = shelfOfProduct.IndexOf(':');
+        //    if (colonIndex > 0)
+        //    {
+        //        string productId = shelfOfProduct.Substring(0, colonIndex - 1).Trim();
+        //        string shelfCode = shelfOfProduct.Substring(colonIndex + 1 + 1).Trim();
+        //        var orderItem = orderDto.Products?.FirstOrDefault(p => p.ProductId == productId);
+        //        if (orderItem is null)
+        //        {
+        //            throw new Shared.Exceptions.NotFoundException($"Order item with product ID {productId} not found in task.");
+        //        }
+        //        var orderDtoItem = orderDto.Products?.FirstOrDefault(p => p.Id == orderItem.Id);
+        //        if (orderDtoItem != null)
+        //        {
+        //            orderDtoItem.ShelfCode = shelfCode;
+        //        }
+        //    }
+        //}
+
         return orderDto;
     }
 }

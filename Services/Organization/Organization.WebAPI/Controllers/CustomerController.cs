@@ -6,6 +6,7 @@ using Organization.Application.Customers.Commands.EditCustomerCommand;
 using Organization.Application.Customers.Queries.GetCustomerQuery;
 using Organization.Application.Customers.Queries.GetCustomersQuery;
 using Organization.Domain.Entities;
+using Shared.DTOs.Export;
 using Shared.ResultTypes;
 
 namespace Organization.WebAPI.Controllers;
@@ -63,6 +64,22 @@ public class CustomerController : BaseController
             return NotFound();
         }
         var response = Response<NoContent>.Success(204);
+        return Ok(response);
+    }
+
+    [HttpPost("export-data")]
+    public async Task<IActionResult> ExportData()
+    {
+        var customers = await Mediator.Send(new GetCustomersQuery());
+        var detailedCustomers = customers.Select(c => new ExportCustomerDto
+        {
+            Id = c.Id,
+            FullName = $"{c.FirstName} {c.LastName}",
+            Email = c.Email,
+            Phone = c.Phone,
+            Address = $"{c.Address.City}, {c.Address.District}, {c.Address.Street}, {c.Address.ZipCode}"
+        }).ToList();
+        var response = Response<List<ExportCustomerDto>>.Success(detailedCustomers, 200);
         return Ok(response);
     }
 }

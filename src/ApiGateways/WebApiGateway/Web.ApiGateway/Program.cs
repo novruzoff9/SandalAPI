@@ -46,6 +46,7 @@ var app = builder.Build();
 app.UseCors("AllowAll");
 
 app.UseMiddleware<InterceptionMiddleware>();
+//app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();

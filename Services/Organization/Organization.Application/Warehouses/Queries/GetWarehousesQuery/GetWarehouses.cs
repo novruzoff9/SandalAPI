@@ -45,7 +45,6 @@ public class GetWarehousesQueryHandler : IRequestHandler<GetWarehouses, List<War
             warehouseDto.OccupancyRate = occupancyRate;
             warehouseDto.UsedShelves = (int)fullShelves;
 
-            //TODO: Isci sayini gostermek qalib
             warehouseDto.EmployeeCount = await _identityGrpcClient.GetEmployeeCountOfWarehouseAsync(warehouse.Id);
             warehousesDto.Add(warehouseDto);
         }

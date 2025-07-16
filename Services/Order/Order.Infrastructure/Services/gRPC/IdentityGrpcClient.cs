@@ -30,11 +30,21 @@ public class IdentityGrpcClient : IIdentityGrpcClient
     public async Task<string> GetUserFullNameAsync(string userId)
     {
         GetEmployeeRequest request = new() { Id = userId };
-        GetEmployeeResponse? response = await _identityClient.GetEmployeeAsync(request);
-        if (response == null)
+        GetEmployeeResponse? response = new();
+        try
         {
-            throw new Exception("User not found");
+            response = await _identityClient.GetEmployeeAsync(request);
         }
+        catch (Exception)
+        {
+            response.Employee = new();
+            response.Success = true;
+        }
+        //TODO: Bununla bagli nese fikirles
+        //if (response == null)
+        //{
+        //    throw new Exception("User not found");
+        //}
         if(!response.Success)
         {
             throw new Exception(response.Message.ToString());

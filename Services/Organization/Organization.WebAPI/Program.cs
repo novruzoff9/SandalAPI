@@ -1,4 +1,5 @@
 using EventBus.Base.Abstraction;
+using OfficeOpenXml;
 using Organization.Application;
 using Organization.Application.Common.Middlewares;
 using Organization.Application.IntegrationEvent.Handlers;
@@ -29,8 +30,6 @@ builder.Services.AddInfrastructureServices(builder.Configuration);
 
 builder.Services.AddApplicationServices(builder.Configuration);
 
-builder.Services.AddHttpClient();
-
 builder.Services.Configure<TelegramConfiguration>(options =>
     builder.Configuration.GetSection(nameof(TelegramConfiguration)).Bind(options)
 );
@@ -43,6 +42,10 @@ builder.Services.AddRedis(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+
+// Configure EPPlus to use non-commercial license context
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
 
 var app = builder.Build();

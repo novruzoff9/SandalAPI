@@ -1,6 +1,6 @@
 ﻿using Shared.Services;
 
-namespace Subscription.Application.Features.CompanyiesSubscriptions.Queries;
+namespace Subscription.Application.Features.CompaniesSubscriptions.Queries;
 
 public record GetMyCompanyActiveSubscriptionQuery() : IRequest<CompanySubscriptionDto>;
 
@@ -20,18 +20,17 @@ public class GetMyCompanySubscriptionQueryHandler : IRequestHandler<GetMyCompany
     public async Task<CompanySubscriptionDto> Handle(GetMyCompanyActiveSubscriptionQuery request, CancellationToken cancellationToken)
     {
         var companyId = _sharedIdentity.GetCompanyId;
+        //TODO: Subscription melumati Redis-den gelecek
         var subscription = await _context.CompanySubscriptions
            .Where(x => x.CompanyId == companyId && x.EndDate >= DateTime.UtcNow)
            .OrderByDescending(x => x.EndDate)
            .FirstOrDefaultAsync(cancellationToken);
 
-        if (subscription == null)
-        {
-            throw new NotFoundException(nameof(CompanySubscription), companyId);
-        }
+        Guard.Against.Null(subscription, nameof(subscription), "No active subscription found for the company");
 
         var package = await _context.SubscriptionPackages
             .FirstOrDefaultAsync(x => x.Id == subscription.SubscriptionPackageId, cancellationToken);
+        Guard.Against.Null(package, nameof(package), "Subscription package not found");
 
         var companySubscriptionDto = new CompanySubscriptionDto
         {
