@@ -31,6 +31,7 @@ public static class DependencyInjection
         });
 
         services.AddScoped<IExcelService, ExcelService>();
+        services.AddScoped<IStockHistoryService, StockHistoryService>();
         services.AddScoped<ISharedSubscriptionService, SharedSubscriptionService>();
 
         services.AddSingleton<IEventBus>(options =>
@@ -52,10 +53,10 @@ public static class DependencyInjection
         });
 
 
+        services.AddScoped<ShelfProductService>();
         services.AddTransient<OrderCreatedIntegrationEventHandler>();
         services.AddTransient<OrderStockConfirmedIntegrationEventHandler>();
         services.AddTransient<CompanyAssignedPackIntegrationEventHandler>();
-        services.AddScoped<ShelfProductService>();
 
         QuestPDF.Settings.License = LicenseType.Community;
 

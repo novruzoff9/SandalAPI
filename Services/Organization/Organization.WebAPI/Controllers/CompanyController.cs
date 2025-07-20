@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Organization.Application.Companies.Commands.CreateCompanyCommand;
-using Organization.Application.Companies.Commands.DeleteCompanyCommand;
-using Organization.Application.Companies.Commands.EditCompanyCommand;
-using Organization.Application.Companies.Queries.GetCompaniesQuery;
-using Organization.Application.Companies.Queries.GetCompanyQuery;
 using Organization.Application.DTOs.Company;
+using Organization.Application.Features.Companies.Commands.CreateCompanyCommand;
+using Organization.Application.Features.Companies.Commands.DeleteCompanyCommand;
+using Organization.Application.Features.Companies.Commands.EditCompanyCommand;
+using Organization.Application.Features.Companies.Queries.GetCompaniesQuery;
+using Organization.Application.Features.Companies.Queries.GetCompanyQuery;
 using Shared.ResultTypes;
-using Shared.Services;
 
 namespace Organization.WebAPI.Controllers;
 

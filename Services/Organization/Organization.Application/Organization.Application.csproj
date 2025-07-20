@@ -29,7 +29,7 @@
   <ItemGroup>
     <Folder Include="DTOs\Product\" />
     <Folder Include="IntegrationEvent\Events\" />
-    <Folder Include="Warehouses\Queries\GetOccupancyRate\" />
+    <Folder Include="Features\Warehouses\Queries\GetOccupancyRate\" />
   </ItemGroup>
 
 </Project>

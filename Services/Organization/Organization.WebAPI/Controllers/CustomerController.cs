@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Organization.Application.Customers.Commands.CreateCustomerCommand;
-using Organization.Application.Customers.Commands.DeleteCustomerCommand;
-using Organization.Application.Customers.Commands.EditCustomerCommand;
-using Organization.Application.Customers.Queries.GetCustomerQuery;
-using Organization.Application.Customers.Queries.GetCustomersQuery;
+﻿using Microsoft.AspNetCore.Mvc;
+using Organization.Application.Features.Customers.Commands.CreateCustomerCommand;
+using Organization.Application.Features.Customers.Commands.DeleteCustomerCommand;
+using Organization.Application.Features.Customers.Commands.EditCustomerCommand;
+using Organization.Application.Features.Customers.Queries.GetCustomerQuery;
+using Organization.Application.Features.Customers.Queries.GetCustomersQuery;
 using Organization.Domain.Entities;
 using Shared.DTOs.Export;
 using Shared.ResultTypes;

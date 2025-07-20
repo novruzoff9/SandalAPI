@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Organization.Application.Common.Models.Shelf;
 using Organization.Application.Common.Models.ShelfProducts;
-using Organization.Application.Shelves.Commands.AddProductsToShelf;
-using Organization.Application.Shelves.Commands.CreateShelfCommand;
-using Organization.Application.Shelves.Commands.DeleteShelfCommand;
-using Organization.Application.Shelves.Commands.EditShelfCommand;
-using Organization.Application.Shelves.Commands.RemoveProductsFromShelf;
-using Organization.Application.Shelves.Queries.GetShelfQuery;
-using Organization.Application.Shelves.Queries.GetShelvesQuery;
+using Organization.Application.Features.Shelves.Commands.AddProductsToShelf;
+using Organization.Application.Features.Shelves.Commands.CreateShelfCommand;
+using Organization.Application.Features.Shelves.Commands.DeleteShelfCommand;
+using Organization.Application.Features.Shelves.Commands.EditShelfCommand;
+using Organization.Application.Features.Shelves.Commands.RemoveProductsFromShelf;
+using Organization.Application.Features.Shelves.Queries.GetShelfQuery;
+using Organization.Application.Features.Shelves.Queries.GetShelvesQuery;
+using Organization.Application.Features.Shelves.Queries.ProductsofShelf;
 using Organization.Domain.Entities;
 using Shared.ResultTypes;
 

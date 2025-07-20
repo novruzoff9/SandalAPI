@@ -1,4 +1,5 @@
-﻿using Organization.Domain.Common;
+﻿using Microsoft.EntityFrameworkCore;
+using Organization.Domain.Common;
 
 namespace Organization.Domain.Entities;
 
@@ -12,6 +13,6 @@ public class Product : BaseEntity
     public int Quantity { get; set; }
     public int MinRequire { get; set; }
     public string CompanyId { get; set; }
-    public Company Company { get; set; }
-    public List<ShelfProduct> ShelfProducts { get; set; }
+    public Company? Company { get; set; }
+    public List<ShelfProduct>? ShelfProducts { get; set; }
 }
