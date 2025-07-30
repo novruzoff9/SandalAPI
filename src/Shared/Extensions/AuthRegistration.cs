@@ -73,6 +73,7 @@ public static class AuthRegistration
             };
         });
         services.AddScoped<ISharedIdentityService, SharedIdentityService>();
+        services.AddScoped<ISharedSubscriptionService, SharedSubscriptionService>();
 
         return services;
     }

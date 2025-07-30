@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Text;
 
 namespace Shared.Services;
 
 public interface ISharedIdentityService
 {
+    public string GetRole { get; }
     public string GetUserId { get; }
     public string GetCompanyId { get; }
     public string GetWarehouseId { get; }
@@ -27,8 +25,8 @@ public class SharedIdentityService : ISharedIdentityService
 
     public string GetUserId => GetClaimValue("sub");
     public string GetCompanyId => GetClaimValue("company");
+    public string GetRole => GetClaimValue("roles");
     public string GetWarehouseId => GetClaimValue("warehouse");
-    public string GetSubscription => GetClaimValue("subscription");
 
     private string GetClaimValue(string claimType)
     {

@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore.Storage;
 using Organization.Application.Common.Interfaces;
 using System.Reflection;
 
@@ -38,6 +39,10 @@ namespace Organization.Infrastructure.Data
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
+        }
+        public async Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken)
+        {
+            return await Database.BeginTransactionAsync(cancellationToken);
         }
     }
 }

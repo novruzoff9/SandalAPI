@@ -16,17 +16,3 @@ public class CompanyDetailsDto
     public string Subscription { get; set; }
     public List<string> WarehousesList { get; set; }
 }
-
-public class CompanySubscriptionRedisDto
-{
-    public CompanySubscriptionRedisDto(string packageId, string packageName, DateTime expiredTime)
-    {
-        PackageId = packageId;
-        PackageName = packageName;
-        ExpiredTime = expiredTime;
-    }
-
-    public string PackageId { get; private set; }
-    public string PackageName { get; private set; }
-    public DateTime ExpiredTime { get; private set; }
-}

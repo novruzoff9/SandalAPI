@@ -27,7 +27,7 @@ public class GetCompanyQueryHandler : IRequestHandler<GetCompany, CompanyDto>
             .Include(x => x.Warehouses)
             .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken);
         CompanyDto companyDto = _mapper.Map<CompanyDto>(company);
-        string subscription = await _sharedSubscriptionService.GetSubscriptionOfCompany(company.Id);
+        string subscription = await _sharedSubscriptionService.GetSubscriptionOfCompanyAsync(company.Id);
         companyDto.Subscription = subscription;
         return companyDto;
     }

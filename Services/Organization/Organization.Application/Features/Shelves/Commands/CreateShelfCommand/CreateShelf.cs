@@ -19,12 +19,7 @@ public class CreateShelfCommandHandler : IRequestHandler<CreateShelf, bool>
 
         string warehouseId = _sharedIdentityService.GetWarehouseId;
 
-        var shelf = new Shelf
-        {
-            Id = Guid.NewGuid().ToString(),
-            Code = request.Code,
-            WarehouseID = warehouseId
-        };
+        var shelf = new Shelf(request.Code, warehouseId);
 
         await _context.Shelves.AddAsync(shelf, cancellationToken);
 

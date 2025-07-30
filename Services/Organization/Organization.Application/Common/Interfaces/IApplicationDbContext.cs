@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore.Storage;
+
 namespace Organization.Application.Common.Interfaces;
 
 public interface IApplicationDbContext
@@ -10,4 +12,5 @@ public interface IApplicationDbContext
     public DbSet<Customer> Customers { get; set; }
     public DbSet<StockHistory> StockHistories { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);
 }

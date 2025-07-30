@@ -17,6 +17,7 @@ public class BulkDecreaseProductsCommandHandler : IRequestHandler<BulkDecreasePr
     {
         Guard.Against.Null(request.DecreaseProductDtos, nameof(request.DecreaseProductDtos), "DecreaseProductDtos cannot be null");
 
+        //TODO: ShelfProduct-danda sil
         foreach (var decreaseProductDto in request.DecreaseProductDtos)
         {
             var product = _context.Products.FirstOrDefault(x => x.Id == decreaseProductDto.ProductId);

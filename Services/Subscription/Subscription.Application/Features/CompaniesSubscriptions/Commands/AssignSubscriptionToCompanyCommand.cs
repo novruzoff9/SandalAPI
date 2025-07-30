@@ -7,8 +7,8 @@ public record AssignSubscriptionToCompanyCommand(string CompanyId, string Packag
 
 public class AssignSubscriptionToCompanyCommandHandler : IRequestHandler<AssignSubscriptionToCompanyCommand, string>
 {
-    private readonly IApplicationDbContext _context;
     private readonly IEventBus _eventBus;
+    private readonly IApplicationDbContext _context;
 
     public AssignSubscriptionToCompanyCommandHandler(IApplicationDbContext context, IEventBus eventBus)
     {
@@ -20,12 +20,9 @@ public class AssignSubscriptionToCompanyCommandHandler : IRequestHandler<AssignS
     {
         var package = await _context.SubscriptionPackages
             .FirstOrDefaultAsync(x => x.Code == request.PackageCode, cancellationToken);
-        if (package == null)
-        {
-            return new Common.Exceptions.NotFoundException("Abunelik")
-                .ToString();
+        if (package is null)
+            throw new Common.Exceptions.NotFoundException("Abunelik");
             //throw new NotFoundException(nameof(SubscriptionPackage), request.PackageCode);
-        }
 
         var companySubscription = await _context.CompanySubscriptions
             .FirstOrDefaultAsync(x => x.CompanyId == request.CompanyId && x.EndDate > DateTime.Now);
@@ -43,14 +40,15 @@ public class AssignSubscriptionToCompanyCommandHandler : IRequestHandler<AssignS
             }
         }
 
-        int durationInDays = package.DurationInDays;
-        var subscription = new CompanySubscription(request.CompanyId, package.Id, DateTime.Now, DateTime.Now.AddDays(durationInDays));
+        DateTime lastDate = DateTime.Now.AddDays(package.DurationInDays);
+        var subscription = new CompanySubscription(
+            request.CompanyId, package.Id, DateTime.Now, lastDate);
 
         await _context.CompanySubscriptions.AddAsync(subscription);
         await _context.SaveChangesAsync(cancellationToken);
 
         // Publish an integration event
-        var @event = new CompanyAssignedPackIntegrationEvent(request.CompanyId, package.Id, package.Name, subscription.EndDate);
+        var @event = new CompanyAssignedPackIntegrationEvent(request.CompanyId, package.Id, package.Code, package.Name, subscription.EndDate);
         _eventBus.Publish(@event);
 
         return subscription.Id;

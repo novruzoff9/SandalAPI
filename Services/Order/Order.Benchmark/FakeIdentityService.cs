@@ -17,5 +17,6 @@ public class FakeIdentityService : ISharedIdentityService
     public string GetWarehouseId => throw new NotImplementedException();
 
     public ClaimsPrincipal GetUser => throw new NotImplementedException();
+    public string GetRole => "Admin";
 }
 

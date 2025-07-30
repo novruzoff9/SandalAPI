@@ -19,11 +19,7 @@ public class EditShelfCommandHandler : IRequestHandler<EditShelf, bool>
 
         if (shelf == null) { return false; }
 
-        shelf = new Shelf
-        {
-            Code = request.Code,
-            WarehouseID = request.WarehouseID
-        };
+        shelf.Update(request.Code, request.WarehouseID);
 
         _context.Shelves.Update(shelf);
 

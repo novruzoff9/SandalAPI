@@ -9,10 +9,7 @@ public class CompanySubscription : BaseEntity
     public DateTime StartDate { get; private set; }
     public DateTime EndDate { get; private set; }
     public bool IsActive => EndDate > DateTime.UtcNow;
-    private CompanySubscription()
-    {
-        
-    }
+    private CompanySubscription() { }
 
     public CompanySubscription(string companyId, string subscriptionPackageId, DateTime startDate, DateTime endDate)
     {

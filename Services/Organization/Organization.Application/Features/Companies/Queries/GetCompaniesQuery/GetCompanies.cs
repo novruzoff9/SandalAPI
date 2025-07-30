@@ -24,7 +24,7 @@ public class GetCompaniesQueryHandler : IRequestHandler<GetCompanies, List<Compa
         foreach (var company in companies)
         {
             CompanyDto companyDto = _mapper.Map<CompanyDto>(company);
-            string subscription = await _sharedSubscriptionService.GetSubscriptionOfCompany(company.Id);
+            string subscription = await _sharedSubscriptionService.GetSubscriptionOfCompanyAsync(company.Id);
             companyDto.Subscription = subscription;
             companiesDto.Add(companyDto);
         }

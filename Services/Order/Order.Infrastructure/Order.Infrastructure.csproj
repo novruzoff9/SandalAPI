@@ -27,6 +27,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="Data\Interceptors\" />
 		<Folder Include="Extensions\" />
 	</ItemGroup>
 

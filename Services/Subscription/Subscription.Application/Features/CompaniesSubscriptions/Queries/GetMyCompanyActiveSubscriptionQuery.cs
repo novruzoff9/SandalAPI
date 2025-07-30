@@ -6,37 +6,35 @@ public record GetMyCompanyActiveSubscriptionQuery() : IRequest<CompanySubscripti
 
 public class GetMyCompanySubscriptionQueryHandler : IRequestHandler<GetMyCompanyActiveSubscriptionQuery, CompanySubscriptionDto>
 {
-    private readonly ISharedIdentityService _sharedIdentity; 
-    private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IApplicationDbContext _context;
+    private readonly ISharedIdentityService _sharedIdentity; 
+    private readonly ISharedSubscriptionService _sharedSubscription;
 
-    public GetMyCompanySubscriptionQueryHandler(ISharedIdentityService sharedIdentity, IApplicationDbContext context, IMapper mapper)
+    public GetMyCompanySubscriptionQueryHandler(ISharedIdentityService sharedIdentity, IApplicationDbContext context, IMapper mapper, ISharedSubscriptionService sharedSubscriptionService)
     {
-        _sharedIdentity = sharedIdentity;
-        _context = context;
         _mapper = mapper;
+        _context = context;
+        _sharedIdentity = sharedIdentity;
+        _sharedSubscription = sharedSubscriptionService;
     }
 
     public async Task<CompanySubscriptionDto> Handle(GetMyCompanyActiveSubscriptionQuery request, CancellationToken cancellationToken)
     {
         var companyId = _sharedIdentity.GetCompanyId;
-        //TODO: Subscription melumati Redis-den gelecek
-        var subscription = await _context.CompanySubscriptions
-           .Where(x => x.CompanyId == companyId && x.EndDate >= DateTime.UtcNow)
-           .OrderByDescending(x => x.EndDate)
-           .FirstOrDefaultAsync(cancellationToken);
+        var subscription = await _sharedSubscription.GetSubscriptionAsync();
 
         Guard.Against.Null(subscription, nameof(subscription), "No active subscription found for the company");
 
         var package = await _context.SubscriptionPackages
-            .FirstOrDefaultAsync(x => x.Id == subscription.SubscriptionPackageId, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == subscription.PackageId, cancellationToken);
         Guard.Against.Null(package, nameof(package), "Subscription package not found");
 
         var companySubscriptionDto = new CompanySubscriptionDto
         {
             PackageName = package.Name,
-            ExpirationDate = subscription.EndDate,
-            IsActive = subscription.IsActive
+            ExpirationDate = subscription.ExpiredTime,
+            IsActive = subscription.ExpiredTime >= DateTime.UtcNow,
         };
         return companySubscriptionDto;
     }

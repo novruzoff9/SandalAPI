@@ -1,18 +1,16 @@
-﻿using Shared.Extensions.Redis;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Shared.DTOs.Subscription;
+using Shared.Extensions.Redis;
 
 namespace Shared.Services;
 
 public interface ISharedSubscriptionService
 {
-    Task<string> GetSubscriptionName();
-    Task<string> GetSubscriptionId();
-    Task<string> GetSubscriptionOfCompany(string companyId);
-    Task<DateTime> GetSubscriptionExpire();
+    Task<string> GetSubscriptionIdAsync();
+    Task<string> GetSubscriptionNameAsync();
+    Task<string> GetSubscriptionCodeAsync();
+    Task<DateTime> GetSubscriptionExpireAsync();
+    Task<CompanySubscriptionRedisDto> GetSubscriptionAsync();
+    Task<string> GetSubscriptionOfCompanyAsync(string companyId);
 }
 
 public class SharedSubscriptionService : ISharedSubscriptionService
@@ -26,10 +24,34 @@ public class SharedSubscriptionService : ISharedSubscriptionService
         _sharedIdentityService = sharedIdentityService;
     }
 
-    public async Task<DateTime> GetSubscriptionExpire()
+    public async Task<CompanySubscriptionRedisDto> GetSubscriptionAsync()
     {
         string companyId = _sharedIdentityService.GetCompanyId;
-        string cacheKey = $"subscription:{companyId}";
+        string cacheKey = $"subscriptions:{companyId}";
+        var subscription = await _redisCacheService.GetAsync<CompanySubscriptionRedisDto>(cacheKey);
+        if(subscription.IsSuccess)
+        {
+            return subscription.Data;
+        }
+        return new CompanySubscriptionRedisDto(string.Empty, string.Empty, string.Empty, DateTime.MinValue);
+    }
+
+    public async Task<string> GetSubscriptionCodeAsync()
+    {
+        string companyId = _sharedIdentityService.GetCompanyId;
+        string cacheKey = $"subscriptions:{companyId}";
+        var subscription = await _redisCacheService.GetAsync<CompanySubscriptionRedisDto>(cacheKey);
+        if (subscription.IsSuccess)
+        {
+            return subscription.Data.PackageCode;
+        }
+        return string.Empty;
+    }
+
+    public async Task<DateTime> GetSubscriptionExpireAsync()
+    {
+        string companyId = _sharedIdentityService.GetCompanyId;
+        string cacheKey = $"subscriptions:{companyId}";
         var subscription = await _redisCacheService.GetAsync<CompanySubscriptionRedisDto>(cacheKey);
         if (subscription.IsSuccess)
         {
@@ -38,10 +60,10 @@ public class SharedSubscriptionService : ISharedSubscriptionService
         return new DateTime();
     }
 
-    public async Task<string> GetSubscriptionId()
+    public async Task<string> GetSubscriptionIdAsync()
     {
         string companyId = _sharedIdentityService.GetCompanyId;
-        string cacheKey = $"subscription:{companyId}";
+        string cacheKey = $"subscriptions:{companyId}";
         var subscription = await _redisCacheService.GetAsync<CompanySubscriptionRedisDto>(cacheKey);
         if (subscription.IsSuccess)
         {
@@ -50,7 +72,7 @@ public class SharedSubscriptionService : ISharedSubscriptionService
         return string.Empty;
     }
 
-    public async Task<string> GetSubscriptionName()
+    public async Task<string> GetSubscriptionNameAsync()
     {
         string companyId = _sharedIdentityService.GetCompanyId;
         string cacheKey = $"subscriptions:{companyId}";
@@ -62,7 +84,7 @@ public class SharedSubscriptionService : ISharedSubscriptionService
         return string.Empty;
     }
 
-    public async Task<string> GetSubscriptionOfCompany(string companyId)
+    public async Task<string> GetSubscriptionOfCompanyAsync(string companyId)
     {
         string cacheKey = $"subscriptions:{companyId}";
         var subscription = await _redisCacheService.GetAsync<CompanySubscriptionRedisDto>(cacheKey);
@@ -71,18 +93,5 @@ public class SharedSubscriptionService : ISharedSubscriptionService
             return subscription.Data.PackageName;
         }
         return string.Empty;
-    }
-}
-
-internal class CompanySubscriptionRedisDto
-{
-    public string PackageId { get; set; }
-    public string PackageName { get; set; }
-    public DateTime ExpiredTime { get; set; }
-    public CompanySubscriptionRedisDto(string packageId, string packageName, DateTime expiredTime)
-    {
-        PackageId = packageId;
-        PackageName = packageName;
-        ExpiredTime = expiredTime;
     }
 }

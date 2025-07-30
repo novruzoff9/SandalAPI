@@ -15,12 +15,9 @@ public class Warehouse : BaseEntity
     public Company Company { get; set; }
     public List<Shelf>? Shelves { get; set; }
 
-    private Warehouse()
-    {
-        
-    }
+    private Warehouse() { }
 
-    public Warehouse(string name, string? googleMaps, string city, string state, string street, string zipCode, string companyId)
+    public Warehouse(string name, string city, string state, string street, string zipCode, string companyId, string? googleMaps = null)
     {
         Id = Guid.NewGuid().ToString();
         Name = name;
@@ -32,7 +29,7 @@ public class Warehouse : BaseEntity
         CompanyID = companyId;
     }
 
-    public void Update(string name, string city, string state, string street, string zipCode, string? googleMaps)
+    public void Update(string name, string city, string state, string street, string zipCode, string? googleMaps = null)
     {
         Name = name;
         GoogleMaps = googleMaps ?? string.Empty;
